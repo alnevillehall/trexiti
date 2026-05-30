@@ -1,0 +1,31 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+          <stop offset="0" stop-color="#16243A"/>
+          <stop offset="0.45" stop-color="#0D1117"/>
+          <stop offset="1" stop-color="#05070B"/>
+        </radialGradient>
+        <linearGradient id="blueGrad" x1="140" y1="235" x2="940" y2="380" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#00AEEF"/>
+          <stop offset="0.55" stop-color="#0A7DFF"/>
+          <stop offset="1" stop-color="#00E5FF"/>
+        </linearGradient>
+        <linearGradient id="silverGrad" x1="300" y1="425" x2="790" y2="805" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#FFFFFF"/>
+          <stop offset="0.28" stop-color="#D9DEE5"/>
+          <stop offset="0.58" stop-color="#8F98A3"/>
+          <stop offset="1" stop-color="#F5F7FA"/>
+        </linearGradient>
+        <filter id="shadow" x="60" y="130" width="960" height="820" filterUnits="userSpaceOnUse">
+          <feDropShadow dx="0" dy="28" stdDeviation="35" flood-color="#000000" flood-opacity="0.5"/>
+        </filter>
+      </defs>
+      <rect width="1080" height="1080" rx="210" fill="url(#bg)"/>
+      <path opacity="0.22" d="M0 760C190 650 350 705 540 610C730 515 850 360 1080 420" stroke="#00AEEF" stroke-width="2"/>
+      <path opacity="0.18" d="M0 820C220 695 380 770 560 665C760 548 870 450 1080 510" stroke="#00E5FF" stroke-width="2"/>
+      <g filter="url(#shadow)" transform="translate(28, 20)">
+        <path d="M125 190H899L827 292H602L512 400L422 292H197L125 190Z" fill="url(#blueGrad)" stroke="#06131F" stroke-width="14" stroke-linejoin="round"/>
+        <path d="M255 365H415L512 492L609 365H769L594 578L785 824H625L512 677L399 824H239L430 578L255 365Z" fill="url(#silverGrad)" stroke="#101820" stroke-width="14" stroke-linejoin="round"/>
+        <path d="M512 492L594 578L512 677L430 578L512 492Z" fill="#0D1117" opacity="0.17"/>
+      </g>
+    </svg>

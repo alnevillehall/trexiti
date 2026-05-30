@@ -1,0 +1,30 @@
+<svg width="1800" height="520" viewBox="0 0 1800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Trexiti Horizontal Logo</title>
+  <desc>Trexiti horizontal logo for website navigation and headers.</desc>
+  <defs>
+    <linearGradient id="blueGrad" x1="70" y1="95" x2="515" y2="175" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00AEEF"/>
+      <stop offset="0.55" stop-color="#0A7DFF"/>
+      <stop offset="1" stop-color="#00E5FF"/>
+    </linearGradient>
+    <linearGradient id="silverGrad" x1="160" y1="210" x2="440" y2="425" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.28" stop-color="#D9DEE5"/>
+      <stop offset="0.58" stop-color="#8F98A3"/>
+      <stop offset="1" stop-color="#F5F7FA"/>
+    </linearGradient>
+  </defs>
+
+  <g>
+    <path d="M60 80H540L495 145H355L310 200L265 145H105L60 80Z" fill="url(#blueGrad)" stroke="#06131F" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M145 190H245L310 275L375 190H475L360 330L485 490H385L310 392L235 490H135L260 330L145 190Z" fill="url(#silverGrad)" stroke="#101820" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M310 275L360 330L310 392L260 330L310 275Z" fill="#0D1117" opacity="0.17"/>
+  </g>
+
+  <text x="665" y="288"
+        font-family="Orbitron, Rajdhani, Montserrat, Arial, sans-serif"
+        font-size="118" font-weight="600" letter-spacing="42" fill="#F8FBFF">TREXITI</text>
+  <text x="670" y="370"
+        font-family="Inter, Montserrat, Arial, sans-serif"
+        font-size="28" font-weight="500" letter-spacing="14" fill="#00AEEF">ENGINEERING INTELLIGENT SYSTEMS</text>
+</svg>

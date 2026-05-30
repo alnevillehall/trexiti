@@ -1,0 +1,28 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Trexiti Icon</title>
+  <desc>Trexiti futuristic T and X lettermark icon.</desc>
+  <defs>
+    <linearGradient id="blueGrad" x1="120" y1="180" x2="900" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00AEEF"/>
+      <stop offset="0.55" stop-color="#0A7DFF"/>
+      <stop offset="1" stop-color="#00E5FF"/>
+    </linearGradient>
+    <linearGradient id="silverGrad" x1="270" y1="370" x2="760" y2="750" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.28" stop-color="#D9DEE5"/>
+      <stop offset="0.58" stop-color="#8F98A3"/>
+      <stop offset="1" stop-color="#F5F7FA"/>
+    </linearGradient>
+    <filter id="shadow" x="60" y="120" width="904" height="760" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="28" stdDeviation="30" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <path d="M125 190H899L827 292H602L512 400L422 292H197L125 190Z" fill="url(#blueGrad)" stroke="#06131F" stroke-width="14" stroke-linejoin="round"/>
+    <path d="M255 365H415L512 492L609 365H769L594 578L785 824H625L512 677L399 824H239L430 578L255 365Z" fill="url(#silverGrad)" stroke="#101820" stroke-width="14" stroke-linejoin="round"/>
+    <path d="M512 492L594 578L512 677L430 578L512 492Z" fill="#0D1117" opacity="0.17"/>
+    <path d="M512 492L594 578" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="6"/>
+    <path d="M430 578L512 677" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="6"/>
+  </g>
+</svg>

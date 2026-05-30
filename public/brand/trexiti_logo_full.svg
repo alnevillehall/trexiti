@@ -1,0 +1,35 @@
+<svg width="1600" height="1100" viewBox="0 0 1600 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Trexiti Full Logo</title>
+  <desc>Trexiti futuristic logo with T and X lettermark, wordmark, and tagline.</desc>
+  <defs>
+    <linearGradient id="blueGrad" x1="350" y1="120" x2="1250" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00AEEF"/>
+      <stop offset="0.55" stop-color="#0A7DFF"/>
+      <stop offset="1" stop-color="#00E5FF"/>
+    </linearGradient>
+    <linearGradient id="silverGrad" x1="520" y1="310" x2="1040" y2="730" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.28" stop-color="#D9DEE5"/>
+      <stop offset="0.58" stop-color="#8F98A3"/>
+      <stop offset="1" stop-color="#F5F7FA"/>
+    </linearGradient>
+    <filter id="shadow" x="250" y="80" width="1100" height="740" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.38"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <path d="M420 150H1180L1110 250H885L815 335L745 250H490L420 150Z" fill="url(#blueGrad)" stroke="#06131F" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M560 320H715L815 450L915 320H1070L890 540L1085 790H930L815 640L700 790H545L740 540L560 320Z" fill="url(#silverGrad)" stroke="#101820" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M815 450L890 540L815 640L740 540L815 450Z" fill="#0D1117" opacity="0.17"/>
+    <path d="M815 450L890 540" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="6"/>
+    <path d="M740 540L815 640" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="6"/>
+  </g>
+
+  <text x="800" y="930" text-anchor="middle"
+        font-family="Orbitron, Rajdhani, Montserrat, Arial, sans-serif"
+        font-size="92" font-weight="600" letter-spacing="38" fill="#F8FBFF">TREXITI</text>
+  <text x="800" y="1005" text-anchor="middle"
+        font-family="Inter, Montserrat, Arial, sans-serif"
+        font-size="30" font-weight="500" letter-spacing="15" fill="#00AEEF">ENGINEERING INTELLIGENT SYSTEMS</text>
+</svg>
