@@ -62,6 +62,13 @@ const systemSignals = [
   ["Execution layer", "Reliable software"],
 ];
 
+const serviceOutcomes = [
+  ["For revenue teams", "Lead tracking, pipeline visibility, client follow-up, deal workflows, automated reminders, and performance dashboards."],
+  ["For property operators", "Maintenance workflows, tenant communication, contractor dispatch, inspections, owner reporting, and portfolio dashboards."],
+  ["For executives", "Operational visibility, KPI dashboards, exception reporting, approval systems, and cleaner decision support."],
+  ["For growing companies", "Internal platforms that reduce manual coordination, connect tools, and make the business easier to manage at scale."],
+];
+
 function Brand() {
   return (
     <a className="brand" href="/" aria-label="Trexiti home">
@@ -298,8 +305,8 @@ export default function ServicesPage() {
             </div>
             <h1>Technology services built for real business operations.</h1>
             <p className="hero-subtitle">
-              From custom software to AI automation, Trexiti designs and builds the systems businesses need to operate smarter, faster, and with
-              greater control.
+              From custom software to AI automation, Trexiti designs and builds the systems real estate and corporate teams need to control
+              workflows, revenue visibility, reporting, service quality, and scale.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#audit">
@@ -340,6 +347,31 @@ export default function ServicesPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="services-page-section section-shell" id="buyers">
+          <div className="section-heading reveal">
+            <p className="eyebrow">Commercial Use Cases</p>
+            <h2>Technology services tied to money, visibility, and operational control.</h2>
+            <p>
+              Trexiti is strongest where software can improve how revenue is tracked, service is delivered, teams are managed, and executives make
+              decisions.
+            </p>
+          </div>
+
+          <div className="services-page-grid">
+            {serviceOutcomes.map(([title, copy], index) => (
+              <article className="services-page-card reveal" key={title}>
+                <div className="service-icon" aria-hidden="true">
+                  <span />
+                  <span />
+                </div>
+                <span className="service-number">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -398,7 +430,7 @@ export default function ServicesPage() {
               Trexiti reviews your current workflows, identifies operational bottlenecks, and shows where software, automation, dashboards, and AI
               can improve how your company runs.
             </p>
-            <a className="button button-primary" href="mailto:hello@trexiti.com?subject=Trexiti%20Systems%20Audit">
+            <a className="button button-primary" href="/contact">
               Book a Systems Audit
             </a>
           </div>

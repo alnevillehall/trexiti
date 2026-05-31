@@ -15,35 +15,35 @@ const primaryNav = [
 
 const industries = [
   [
-    "Real Estate Operations",
-    "Property managers, landlords, developers, and service teams that need one operating system for tenants, maintenance, contractors, owners, inspections, and reporting.",
+    "Brokerages and Realtor Teams",
+    "Teams that need stronger control over lead flow, listing activity, client follow-up, showing coordination, deal tasks, and sales visibility.",
   ],
   [
-    "Property Services & Contractors",
+    "Property Management Companies",
+    "Operators managing tenants, rent status, maintenance, contractors, owner communication, inspections, documents, and recurring service requests.",
+  ],
+  [
+    "Developers and Asset Owners",
+    "Real estate groups that need project updates, inspection records, capital improvement visibility, documents, stakeholder reports, and portfolio control.",
+  ],
+  [
+    "Corporate Operations Teams",
+    "Companies still depending on spreadsheets, calls, paper forms, inboxes, approvals, and manual follow-ups to keep daily work moving.",
+  ],
+  [
+    "Field Service and Contractor Networks",
     "Teams coordinating site visits, work orders, job status, proof of completion, customer communication, and repeatable dispatch workflows.",
   ],
   [
-    "Logistics & Field Teams",
-    "Businesses moving work across locations, vehicles, staff, assets, delivery windows, approvals, and live operational updates.",
-  ],
-  [
-    "Operations-Heavy Service Businesses",
-    "Companies still depending on spreadsheets, calls, paper forms, inboxes, and manual follow-ups to keep daily work moving.",
-  ],
-  [
-    "Diagnostics & Inspection Workflows",
-    "Organizations that need structured checklists, records, photos, reports, issue routing, and visibility across technical or field inspections.",
-  ],
-  [
-    "AI Infrastructure for Growing Companies",
+    "AI Infrastructure for Enterprise Teams",
     "Businesses ready to use AI for routing, summaries, communication support, reporting, knowledge access, and decision support inside real workflows.",
   ],
 ];
 
 const processSteps = [
-  ["01", "Audit", "Review workflows, tools, handoffs, communication paths, data gaps, and the places where work currently slows down."],
-  ["02", "Map", "Turn operational friction into a clear systems map: users, actions, data, automations, dashboards, and integration points."],
-  ["03", "Design", "Shape the product architecture, user flows, dashboards, permissions, and automation logic around how the business actually works."],
+  ["01", "Audit", "Review workflows, tools, handoffs, communication paths, data gaps, revenue signals, and where work currently slows down."],
+  ["02", "Map", "Turn operational friction into a clear systems map: users, actions, data, automations, dashboards, ownership, and integration points."],
+  ["03", "Design", "Shape the product architecture, user flows, executive dashboards, permissions, and automation logic around how the business works."],
   ["04", "Build", "Develop the platform, app, dashboard, integration layer, or automation system with a practical release path."],
   ["05", "Automate", "Add AI-assisted routing, reminders, reporting, communication support, and workflow triggers where they remove real manual drag."],
   ["06", "Scale", "Improve the system with usage feedback, better visibility, new modules, tighter integrations, and broader operational control."],
@@ -167,9 +167,10 @@ export function IndustriesPage() {
         <section className="services-product-hero section-shell" id="overview">
           <div className="services-hero-copy reveal">
             <p className="eyebrow">Industries</p>
-            <h1>Intelligent systems for businesses with real operational complexity.</h1>
+            <h1>Intelligent systems for real estate portfolios and corporate operations.</h1>
             <p className="hero-subtitle">
-              Trexiti builds for companies where work moves through people, properties, requests, assets, approvals, data, deadlines, and decisions.
+              Trexiti builds for companies where money, property, clients, requests, approvals, reporting, field teams, and executive decisions all
+              depend on better systems.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="/contact">
@@ -186,8 +187,8 @@ export function IndustriesPage() {
             label="Industry Operating Map"
             nodes={["Requests", "Assets", "Teams", "Reports"]}
             signals={[
-              ["Real estate", "PropertyOS"],
-              ["Field teams", "Dispatch"],
+              ["Brokerage", "Pipeline"],
+              ["Portfolio", "PropertyOS"],
               ["Visibility", "Dashboards"],
               ["AI layer", "Routing"],
             ]}
@@ -197,10 +198,10 @@ export function IndustriesPage() {
         <section className="services-page-section section-shell" id="industries">
           <div className="section-heading reveal">
             <p className="eyebrow">Where Trexiti Fits</p>
-            <h2>For companies where a basic website cannot fix the real operational problem.</h2>
+            <h2>For buyers where a basic website cannot fix the expensive operational problem.</h2>
             <p>
               The best Trexiti clients are not just looking for a new digital presence. They need systems that organize work, expose hidden friction,
-              automate repeatable steps, and make performance visible.
+              automate repeatable steps, protect service quality, and make performance visible to the people responsible for the money.
             </p>
           </div>
 
@@ -277,10 +278,10 @@ export function ProcessPage() {
         <section className="services-product-hero section-shell" id="overview">
           <div className="services-hero-copy reveal">
             <p className="eyebrow">Process</p>
-            <h1>From operational chaos to intelligent infrastructure.</h1>
+            <h1>From operational chaos to boardroom-ready infrastructure.</h1>
             <p className="hero-subtitle">
-              Trexiti starts by understanding how the business actually works, then designs and builds the software, automation, dashboards, and AI
-              workflows that make it easier to control.
+              Trexiti starts by understanding how the business actually makes money, serves clients, reports to owners, and executes work, then
+              designs the software, automation, dashboards, and AI workflows that make it easier to control.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="/contact">
@@ -308,10 +309,10 @@ export function ProcessPage() {
         <section className="services-page-section section-shell" id="process">
           <div className="section-heading reveal">
             <p className="eyebrow">Execution Model</p>
-            <h2>A practical path from diagnosis to working systems.</h2>
+            <h2>A practical path from diagnosis to systems leaders can actually run the business on.</h2>
             <p>
               Trexiti does not start with a template. The process starts with the operation, then turns the highest-friction workflows into software
-              infrastructure the business can actually use.
+              infrastructure the business can actually use, measure, and justify.
             </p>
           </div>
 
@@ -335,8 +336,8 @@ export function ProcessPage() {
             <p className="eyebrow">Audit Output</p>
             <h2>The first deliverable is clarity.</h2>
             <p>
-              A Systems Audit helps leaders understand what should be automated, what should become a dashboard, what needs a custom platform, and
-              where AI can support real operational decisions.
+              A Systems Audit helps leaders understand what is costing time, where reporting is weak, what should become a dashboard, what needs a
+              custom platform, and where AI can support real operational decisions.
             </p>
           </div>
           <div className="lead-trigger-panel reveal">

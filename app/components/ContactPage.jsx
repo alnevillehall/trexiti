@@ -15,10 +15,10 @@ const auditFindings = [
   "Manual processes slowing your team down",
   "Tools that are disconnected",
   "Repetitive tasks that can be automated",
-  "Data your business is not properly tracking",
+  "Revenue, portfolio, or client data your business is not properly tracking",
   "Customer or tenant communication gaps",
   "Workflow opportunities for custom software",
-  "Areas where AI can improve speed and visibility",
+  "Areas where AI can improve speed, reporting, and visibility",
 ];
 
 function Brand() {
@@ -193,6 +193,8 @@ export default function ContactPage() {
       `Phone / WhatsApp: ${data.get("phone")}`,
       `Industry: ${data.get("industry")}`,
       `Business size: ${data.get("businessSize")}`,
+      `Portfolio / company scale: ${data.get("scale")}`,
+      `Investment readiness: ${data.get("readiness")}`,
       `Trying to improve: ${data.get("improvement")}`,
       `Interest: ${data.get("interest")}`,
       `Preferred contact method: ${data.get("contactMethod")}`,
@@ -250,12 +252,12 @@ export default function ContactPage() {
             </div>
             <h1>Book a Trexiti Systems Audit.</h1>
             <p className="hero-subtitle">
-              We'll review your current workflows, identify operational bottlenecks, and show where software, automation, and AI can improve your
-              business.
+              We'll review your current workflows, identify operational bottlenecks, and show where software, automation, dashboards, and AI can help
+              your real estate or corporate operation protect time, revenue, visibility, and service quality.
             </p>
             <div className="trust-copy">
-              <strong>No pressure. No generic pitch.</strong>
-              <span>The audit is designed to help you clearly understand where your business can operate smarter.</span>
+              <strong>Built for serious operators.</strong>
+              <span>No generic pitch. The audit is designed to show where your company can operate with more control, clearer reporting, and less manual drag.</span>
             </div>
           </div>
 
@@ -310,7 +312,7 @@ export default function ContactPage() {
               </label>
               <label>
                 <span>Industry</span>
-                <input name="industry" type="text" placeholder="Real estate, logistics, services..." />
+                <input name="industry" type="text" placeholder="Brokerage, property management, development, corporate..." />
               </label>
               <label>
                 <span>Business size</span>
@@ -324,9 +326,25 @@ export default function ContactPage() {
                   <option>200+ people</option>
                 </select>
               </label>
+              <label>
+                <span>Portfolio / company scale</span>
+                <input name="scale" type="text" placeholder="Units, listings, properties, locations, or team size" />
+              </label>
+              <label>
+                <span>Investment readiness</span>
+                <select name="readiness" defaultValue="">
+                  <option value="" disabled>
+                    Select readiness
+                  </option>
+                  <option>Exploring options</option>
+                  <option>Ready to scope a system</option>
+                  <option>Need urgent operational fix</option>
+                  <option>Corporate planning / budget review</option>
+                </select>
+              </label>
               <label className="form-wide">
                 <span>What are you trying to improve?</span>
-                <textarea name="improvement" placeholder="Describe the workflow, team, property operation, or system problem you want to improve." />
+                <textarea name="improvement" placeholder="Describe the revenue, reporting, property, client, team, or workflow problem you want to improve." />
               </label>
               <label className="form-wide">
                 <span>What are you interested in?</span>

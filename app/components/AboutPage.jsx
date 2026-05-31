@@ -257,8 +257,8 @@ export default function AboutPage() {
             </div>
             <h1>Building the operating systems behind modern business.</h1>
             <p className="hero-subtitle">
-              Trexiti was created to help businesses move beyond manual workflows, disconnected tools, and outdated processes by building
-              intelligent systems that create clarity, speed, and scale.
+              Trexiti was created to help real estate and corporate operators move beyond manual workflows, disconnected tools, and outdated
+              processes by building intelligent systems that create clarity, speed, control, and scale.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#audit">
@@ -312,8 +312,8 @@ export default function AboutPage() {
             <p className="eyebrow">Our Mission</p>
             <h2>Our Mission</h2>
             <p>
-              Trexiti exists to engineer intelligent systems for the real world. We help companies turn fragmented operations into connected,
-              automated, and data-driven infrastructure.
+              Trexiti exists to engineer intelligent systems for the real world. We help companies with real assets, revenue pressure, teams, clients,
+              owners, and reporting needs turn fragmented operations into connected, automated, and data-driven infrastructure.
             </p>
           </div>
           <div className="about-signal-card reveal">
@@ -344,7 +344,7 @@ export default function AboutPage() {
             <h2>Our Vision</h2>
             <p>
               The future belongs to businesses that can see clearly, move quickly, and adapt intelligently. Trexiti is building toward a future where
-              software, automation, and AI become the operational backbone of modern companies.
+              software, automation, dashboards, and AI become the operational backbone of modern real estate and enterprise companies.
             </p>
           </div>
         </section>
@@ -354,9 +354,9 @@ export default function AboutPage() {
             <p className="eyebrow">Founder-Led</p>
             <h2>Founder-Led. Systems-Driven.</h2>
             <p>
-              Trexiti is led by a builder's mindset: solve real operational problems, design practical technology, and create systems that businesses
-              can depend on. The company starts with real estate operations and expands into broader intelligent infrastructure for the future of
-              business.
+              Trexiti is led by a builder's mindset: solve real operational problems, design practical technology, and create systems businesses can
+              depend on. The company starts with real estate operations because the pain is concrete: properties, owners, tenants, contractors,
+              reporting, revenue, and time-sensitive service all need better infrastructure.
             </p>
           </div>
           <div className="founder-principles reveal">
@@ -396,7 +396,7 @@ export default function AboutPage() {
             <p className="eyebrow">Work with Trexiti</p>
             <h2>Work with Trexiti</h2>
             <p>If your business is ready to replace manual chaos with intelligent systems, start with a Systems Audit.</p>
-            <a className="button button-primary" href="mailto:hello@trexiti.com?subject=Trexiti%20Systems%20Audit">
+            <a className="button button-primary" href="/contact">
               Book a Systems Audit
             </a>
           </div>

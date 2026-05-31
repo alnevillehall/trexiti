@@ -15,9 +15,9 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata = {
   metadataBase: new URL("https://trexiti.com"),
-  title: "Trexiti | Engineering Intelligent Systems for the Real World",
+  title: "Trexiti | AI Systems for Real Estate and Enterprise Operations",
   description:
-    "Trexiti builds AI-powered software, automation platforms, and operational infrastructure for real estate companies and modern businesses.",
+    "Trexiti builds AI-powered operating systems, PropertyOS, automation, dashboards, and custom software for real estate portfolios, brokerages, developers, and corporate teams.",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -28,9 +28,9 @@ export const metadata = {
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
-    title: "Trexiti | Engineering Intelligent Systems for the Real World",
+    title: "Trexiti | AI Systems for Real Estate and Enterprise Operations",
     description:
-      "Trexiti builds AI-powered operational systems, custom software, workflow automation, dashboards, and intelligent platforms.",
+      "AI-powered operational systems, PropertyOS, automation, dashboards, and custom software for real estate and corporate teams.",
     images: [
       {
         url: "/brand/trexiti_social_banner_1500x500.png",
@@ -43,9 +43,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trexiti | Engineering Intelligent Systems for the Real World",
+    title: "Trexiti | AI Systems for Real Estate and Enterprise Operations",
     description:
-      "AI-powered operational systems, custom software, workflow automation, dashboards, and intelligent platforms.",
+      "AI-powered operational systems for real estate portfolios, brokerages, developers, and corporate teams.",
     images: ["/brand/trexiti_social_banner_1500x500.png"],
   },
 };

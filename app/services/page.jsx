@@ -1,9 +1,9 @@
 import ServicesPage from "../components/ServicesPage";
 
 export const metadata = {
-  title: "Services | Trexiti",
+  title: "Services | Trexiti Real Estate and Enterprise Systems",
   description:
-    "Trexiti builds intelligent business systems, AI-powered software, automation workflows, dashboards, and operational infrastructure.",
+    "Trexiti builds custom software, AI automation, dashboards, workflow systems, and integrations for real estate operators, brokerages, and corporate teams.",
 };
 
 export default function Page() {

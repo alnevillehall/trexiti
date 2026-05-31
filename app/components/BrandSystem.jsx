@@ -93,6 +93,84 @@ export function StatsStrip({ stats }) {
   );
 }
 
+export function ExecutiveBuyerBlock() {
+  const buyers = [
+    [
+      "Brokerages and realtor teams",
+      "Bring lead flow, listings, showings, client follow-up, transaction tasks, and team reporting into one controlled operating layer.",
+    ],
+    [
+      "Property managers and landlords",
+      "Centralize tenant requests, maintenance, contractors, rent status, owner updates, inspections, and portfolio performance.",
+    ],
+    [
+      "Developers and asset owners",
+      "Turn project updates, property records, capital improvements, documents, reporting, and operational risk into executive visibility.",
+    ],
+    [
+      "Corporate operators",
+      "Replace disconnected tools with workflow automation, dashboards, approvals, field operations, integrations, and AI-assisted execution.",
+    ],
+  ];
+
+  return (
+    <section className="executive-buyer-block section-shell" id="buyers">
+      <div className="section-heading reveal">
+        <p className="eyebrow">Built For Buyers</p>
+        <h2>For real estate and corporate teams with money, assets, and reputation on the line.</h2>
+        <p>
+          Trexiti speaks to operators who need more than a polished website. The value is control: knowing what is happening across the portfolio,
+          where work is stuck, what revenue is exposed, and which workflows need to be automated before growth becomes expensive.
+        </p>
+      </div>
+
+      <div className="executive-buyer-grid">
+        {buyers.map(([title, copy], index) => (
+          <article className="executive-buyer-card reveal" key={title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function CommercialOutcomesBlock() {
+  const outcomes = [
+    ["Revenue discipline", "Track rent status, deal flow, service delays, open requests, and reporting gaps before they become expensive."],
+    ["Owner confidence", "Give owners, executives, and stakeholders clear visibility without forcing managers to rebuild updates manually."],
+    ["Portfolio control", "See requests, contractors, inspections, documents, approvals, and operational status across properties or teams."],
+    ["Scale without chaos", "Standardize the workflows that currently live in spreadsheets, inboxes, memory, WhatsApp, and disconnected apps."],
+  ];
+
+  return (
+    <section className="money-outcomes section-shell">
+      <div className="money-outcomes-copy reveal">
+        <p className="eyebrow">Commercial Outcomes</p>
+        <h2>Make the money visible. Make the operation controllable.</h2>
+        <p>
+          The strongest buyers care about growth, margins, service quality, reporting, speed, and control. Trexiti turns operational friction into
+          software infrastructure that helps leaders see what is happening and act with confidence.
+        </p>
+        <a className="button button-primary" href="/contact">
+          Book a Systems Audit
+        </a>
+      </div>
+
+      <div className="money-outcomes-grid">
+        {outcomes.map(([title, copy]) => (
+          <article className="money-outcome-card reveal" key={title}>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function GlassFeatureCard({ number, title, copy }) {
   return (
     <article className="build-card reveal">
@@ -217,7 +295,7 @@ export function ClientExampleShowcase() {
         <p>
           A property management company receives tenant requests through WhatsApp, tracks maintenance in spreadsheets, calls contractors manually,
           and sends owners updates only when someone asks. Trexiti turns that scattered operation into a structured system with request intake,
-          AI-assisted routing, contractor dispatch, owner visibility, and management dashboards.
+          AI-assisted routing, contractor dispatch, owner visibility, revenue signals, and management dashboards.
         </p>
         <a className="button button-secondary" href="/propertyos">
           See the PropertyOS Example
@@ -241,7 +319,7 @@ export function ClientExampleShowcase() {
           </article>
           <article>
             <span>Control</span>
-            <strong>Every request visible from intake to resolution</strong>
+            <strong>Every request, cost, and owner update visible</strong>
           </article>
         </div>
       </div>
@@ -251,16 +329,16 @@ export function ClientExampleShowcase() {
 
 export function LeadReadinessBlock() {
   const profiles = [
-    ["Real estate operators", "Property managers, landlords, and developers managing requests, tenants, contractors, owners, and reporting."],
-    ["Operations-heavy businesses", "Companies where work gets stuck between spreadsheets, messages, manual approvals, and disconnected apps."],
-    ["Growing teams", "Owners and managers who need dashboards, automation, and better visibility before complexity becomes expensive."],
+    ["Realtors and brokerages", "Teams that need cleaner lead follow-up, listing workflows, transaction tasks, client updates, and management visibility."],
+    ["Property portfolios", "Managers, landlords, developers, and asset owners handling tenants, contractors, maintenance, owners, rent, and reporting."],
+    ["Corporate operators", "Executives and managers who need dashboards, automation, and better visibility before complexity becomes expensive."],
   ];
 
   const triggers = [
-    "Requests are coming from too many channels.",
-    "Managers cannot see the status of work in one place.",
+    "Requests, leads, or client updates are coming from too many channels.",
+    "Managers cannot see status, revenue signals, or follow-up risk in one place.",
     "Staff spend hours copying data, chasing updates, or sending reminders.",
-    "Owners or customers ask for updates before the team has clear answers.",
+    "Owners, executives, or clients ask for updates before the team has clear answers.",
     "The business has outgrown basic websites and needs operational software.",
   ];
 
@@ -270,8 +348,8 @@ export function LeadReadinessBlock() {
         <p className="eyebrow">Best Fit</p>
         <h2>Built for teams where operations have outgrown scattered tools.</h2>
         <p>
-          The strongest fit is a business that already feels operational friction: requests spread across channels, reporting lagging behind reality,
-          and teams relying on memory to keep work moving. Trexiti gives those companies a clear path from diagnosis to intelligent systems.
+          The strongest fit is a company already feeling operational friction: leads, requests, service issues, reporting, or approvals spread across
+          channels while executives need clean visibility. Trexiti gives those buyers a clear path from diagnosis to intelligent systems.
         </p>
       </div>
 

@@ -13,15 +13,15 @@ const navItems = [
 ];
 
 const heroMetrics = [
-  ["Property portfolio overview", "128", "Assets monitored"],
-  ["Maintenance tickets", "42", "Open work orders"],
-  ["Tenant requests", "316", "This month"],
-  ["Contractor assignments", "18", "Active jobs"],
+  ["Portfolio command", "Live", "Assets monitored"],
+  ["Maintenance tickets", "SLA", "Risk visible"],
+  ["Tenant requests", "Open", "Intake tracked"],
+  ["Contractor assignments", "Ready", "Active jobs"],
   ["AI assistant", "Online", "Routing support"],
-  ["Rent status", "94%", "Current"],
+  ["Rent status", "Current", "Revenue view"],
   ["Owner reports", "Live", "Auto-generated"],
-  ["Inspection schedule", "27", "Upcoming"],
-  ["Task priority levels", "High", "3 flagged"],
+  ["Inspection schedule", "Synced", "Upcoming work"],
+  ["Task priority levels", "High", "Flagged risk"],
 ];
 
 const features = [
@@ -57,6 +57,13 @@ const features = [
 ];
 
 const roles = ["Property Managers", "Tenants", "Contractors", "Owners", "Administrators"];
+
+const portfolioOutcomes = [
+  ["Portfolio visibility", "See maintenance, tenant requests, inspections, rent status, owner updates, and contractor progress in one command layer."],
+  ["Revenue discipline", "Track rent follow-up, balances, service costs, recurring issues, and portfolio signals that affect financial performance."],
+  ["Owner-ready reporting", "Give owners and asset stakeholders clearer updates without rebuilding reports from calls, chats, and spreadsheets."],
+  ["Service quality at scale", "Standardize intake, prioritization, dispatch, status updates, completion proof, and post-work history across the operation."],
+];
 
 function Brand() {
   return (
@@ -265,7 +272,8 @@ export default function PropertyOSPage() {
             </div>
             <h1>PropertyOS - One system for modern real estate operations.</h1>
             <p className="hero-subtitle">
-              Manage tenants, maintenance, contractors, owners, inspections, requests, documents, and reports from one intelligent platform.
+              Manage tenants, maintenance, contractors, owners, inspections, requests, documents, rent visibility, and portfolio reporting from one
+              intelligent platform built for serious real estate operators.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#demo">
@@ -289,8 +297,8 @@ export default function PropertyOSPage() {
               <div className="portfolio-overview">
                 <div>
                   <span>Property portfolio overview</span>
-                  <strong>128 units</strong>
-                  <p>Maintenance, rent, inspections, documents, owners, and contractors in one view.</p>
+                  <strong>Portfolio</strong>
+                  <p>Maintenance, rent signals, inspections, documents, owners, and contractors in one executive view.</p>
                 </div>
                 <div className="portfolio-map" aria-hidden="true">
                   <span className="map-pulse pulse-a" />
@@ -329,8 +337,26 @@ export default function PropertyOSPage() {
           <div className="problem-statement reveal">
             <p>
               Tenant messages live in WhatsApp. Maintenance requests get lost. Owners want updates. Contractors need instructions. Managers rely on
-              memory, calls, and spreadsheets. PropertyOS brings everything into one structured system.
+              memory, calls, and spreadsheets. The result is slower service, weaker owner confidence, and poor visibility into costs and revenue
+              signals. PropertyOS brings everything into one structured system.
             </p>
+          </div>
+        </section>
+
+        <section className="portfolio-outcomes product-features section-shell" id="outcomes">
+          <div className="section-heading reveal">
+            <p className="eyebrow">Portfolio Outcomes</p>
+            <h2>Designed for real estate teams that need control, not another disconnected tool.</h2>
+            <p>PropertyOS is positioned for operators managing real money, real assets, tenant expectations, owner relationships, and service risk.</p>
+          </div>
+          <div className="product-feature-grid">
+            {portfolioOutcomes.map(([title, copy], index) => (
+              <article className="product-feature-card reveal" key={title}>
+                <span className="build-index">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -397,7 +423,7 @@ export default function PropertyOSPage() {
           <div className="cta-content reveal">
             <p className="eyebrow">Request a Demo</p>
             <h2>Bring your property operations into one intelligent system.</h2>
-            <a className="button button-primary" href="mailto:hello@trexiti.com?subject=PropertyOS%20Demo%20Request">
+            <a className="button button-primary" href="/contact">
               Request a PropertyOS Demo
             </a>
           </div>

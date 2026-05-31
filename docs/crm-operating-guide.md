@@ -1,6 +1,24 @@
 # Trexiti CRM Operating Guide
 
-The internal CRM lives at `/crm`.
+The private admin CRM lives at `/admin`.
+
+The legacy `/crm` path is protected and redirects into `/admin`.
+
+## Access
+
+The admin console is intentionally not linked from the public website navigation.
+
+Local fallback credentials:
+
+- User: `admin`
+- Password: `trexiti-local-admin`
+
+For production, set private environment variables:
+
+- `TREXITI_ADMIN_USER`
+- `TREXITI_ADMIN_PASSWORD`
+
+If production credentials are not configured, the admin area stays locked.
 
 ## What It Manages
 
@@ -60,4 +78,4 @@ For a production CRM with real website lead capture, Trexiti should add:
 - Cloud backups
 - Optional CRM integrations
 
-Until then, use `/crm` as the internal lead-hunting command center and export your data regularly.
+Until then, use `/admin` as the internal lead-hunting command center and export your data regularly.

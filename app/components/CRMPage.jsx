@@ -356,6 +356,10 @@ export default function CRMPage() {
     <>
       <header className="crm-header">
         <Brand href="/" />
+        <div className="admin-profile-chip" aria-label="Current admin profile">
+          <span>Admin Profile</span>
+          <strong>Trexiti Operator</strong>
+        </div>
         <nav aria-label="CRM navigation">
           <a href="/">Website</a>
           <a href="/contact">Audit Page</a>
@@ -366,11 +370,11 @@ export default function CRMPage() {
       <main className="crm-shell">
         <section className="crm-hero">
           <div>
-            <p className="eyebrow">Trexiti Command CRM</p>
-            <h1>Manage leads, audits, pipeline, outreach, and next actions.</h1>
+            <p className="eyebrow">Private Admin Console</p>
+            <h1>Manage Trexiti leads, audits, pipeline, outreach, and next actions.</h1>
             <p>
-              A private operating console for hunting leads, tracking Systems Audit opportunities, managing PropertyOS prospects, and keeping every
-              follow-up visible.
+              A hidden operating profile for hunting leads, tracking Systems Audit opportunities, managing PropertyOS prospects, and keeping every
+              follow-up visible behind the public website.
             </p>
           </div>
           <div className="crm-actions">

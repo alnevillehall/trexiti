@@ -1,11 +1,15 @@
-import CRMPage from "../components/CRMPage";
+import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Trexiti CRM | Lead and Systems Audit Command Center",
-  description:
-    "Internal Trexiti CRM for managing leads, Systems Audit opportunities, PropertyOS prospects, outreach, notes, and pipeline stages.",
+  title: "Trexiti Admin | Private Operating Console",
+  description: "Private Trexiti admin console.",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
 };
 
 export default function CRM() {
-  return <CRMPage />;
+  redirect("/admin");
 }

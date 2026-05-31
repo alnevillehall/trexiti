@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import {
   ClientExampleShowcase,
   CTABanner,
+  CommercialOutcomesBlock,
+  ExecutiveBuyerBlock,
   FloatingDashboardMockup,
   Footer,
   FounderMissionBlock,
@@ -27,21 +29,21 @@ const navItems = [
   ["Audit", "/contact"],
 ];
 
-const trustItems = ["Operational software", "Real estate systems", "AI workflow automation", "PropertyOS", "Systems audit"];
+const trustItems = ["Portfolio operations", "Brokerage workflows", "Owner reporting", "Revenue visibility", "Enterprise systems"];
 
 const heroPanels = [
-  ["Property requests", "1,284", "Unified intake"],
-  ["Maintenance tracking", "248", "Live ticket flow"],
-  ["AI workflow routing", "91%", "Auto-classified"],
-  ["Contractor dispatch", "37", "Vendor actions"],
-  ["Owner reporting", "Live", "Portfolio updates"],
-  ["System health", "99.8%", "Stable operations"],
-  ["Revenue visibility", "$4.2M", "Tracked pipeline"],
-  ["Automated communication", "6.8k", "Messages handled"],
+  ["Portfolio requests", "Live", "Unified intake"],
+  ["Maintenance tracking", "SLA", "Risk visible"],
+  ["AI workflow routing", "Auto", "Priority detected"],
+  ["Contractor dispatch", "Ready", "Vendor actions"],
+  ["Owner reporting", "Live", "Boardroom updates"],
+  ["System health", "Stable", "Operational uptime"],
+  ["Revenue visibility", "NOI", "Financial signals"],
+  ["Automated communication", "24/7", "Status updates"],
 ];
 
 const buildItems = [
-  ["01", "Real Estate Operation Systems", "Portfolio platforms for requests, maintenance, tenants, contractors, owners, and reporting."],
+  ["01", "Real Estate Operating Systems", "Portfolio platforms for brokerages, managers, developers, owners, requests, maintenance, and reporting."],
   ["02", "AI Workflow Automation", "Routing, classification, reminders, drafting, scheduling, escalation, and decision support inside the workflow."],
   ["03", "Custom Software Platforms", "Purpose-built portals, admin systems, internal tools, and digital products for modern businesses."],
   ["04", "Business Dashboards", "Executive command layers that expose performance, bottlenecks, costs, revenue, and operational health."],
@@ -78,19 +80,19 @@ const services = [
 ];
 
 const stats = [
-  ["01", "Systems-first thinking", "Every engagement begins with workflows, roles, data, and operational pressure."],
-  ["AI", "Practical intelligence", "Automation is placed inside real processes, not presented as decoration."],
-  ["OS", "Operating layers", "Trexiti builds platforms that help businesses run, measure, and improve."],
-  ["360", "Business visibility", "Dashboards turn fragmented activity into decisions owners can trust."],
+  ["RE", "Real estate first", "Built around property portfolios, brokerage workflows, owner visibility, and service operations."],
+  ["ROI", "Commercial lens", "Every audit looks for lost time, delayed reporting, revenue leakage, and operational drag."],
+  ["OPS", "Executive control", "Dashboards turn fragmented activity into decisions owners and managers can trust."],
+  ["AI", "Practical automation", "AI is placed inside intake, routing, reporting, communication, and follow-up workflows."],
 ];
 
 const industries = [
-  ["Real Estate", "Property management, maintenance, tenant communication, owner reporting, inspections, and portfolio operations."],
+  ["Realtors and Brokerages", "Lead flow, listings, showings, client follow-up, deal tasks, team dashboards, and transaction workflows."],
+  ["Property Management", "Maintenance, tenant communication, rent visibility, contractor coordination, owner reporting, and portfolio operations."],
+  ["Developers and Asset Owners", "Project updates, inspections, capital improvements, document control, portfolio visibility, and executive reporting."],
   ["Logistics", "Dispatch, routing, scheduling, service visibility, handoffs, and operational dashboards."],
   ["Field Services", "Work orders, contractor coordination, customer updates, job history, and mobile workflows."],
-  ["Business Operations", "Internal systems, approval flows, data visibility, team workflows, and process automation."],
-  ["Diagnostics", "Data intake, analysis workflows, reporting systems, and intelligent support tools."],
-  ["AI Infrastructure", "Structured automation layers, connected data, workflow intelligence, and decision support systems."],
+  ["Corporate Operations", "Internal systems, approval flows, data visibility, team workflows, and process automation."],
 ];
 
 const processSteps = [
@@ -321,15 +323,15 @@ export default function TrexitiSite() {
                 <span />
               </div>
               <div>
-                <p className="eyebrow">Futuristic AI systems company</p>
+                <p className="eyebrow">AI systems for real estate and enterprise operations</p>
                 <p className="wordmark">Trexiti</p>
               </div>
             </div>
 
             <h1>Engineering Intelligent Systems for the Real World.</h1>
             <p className="hero-subtitle">
-              Trexiti builds AI-powered software, automation, and operational platforms for real estate companies and modern businesses that need
-              clarity, control, and scale.
+              Trexiti builds AI-powered software, automation, and operational platforms for realtors, property companies, developers, and corporate
+              teams that need portfolio visibility, revenue control, and scalable execution.
             </p>
 
             <div className="hero-actions">
@@ -343,12 +345,12 @@ export default function TrexitiSite() {
 
             <div className="hero-proof">
               <div>
-                <strong>Built for operational complexity</strong>
-                <span>Real estate, services, field teams, approvals, reporting, and high-volume workflows.</span>
+                <strong>Built for portfolios and serious operators</strong>
+                <span>Brokerages, property managers, developers, asset owners, field teams, approvals, reporting, and high-volume workflows.</span>
               </div>
               <div>
-                <strong>Software beyond surface-level web</strong>
-                <span>Trexiti builds the operating layer that makes work visible, automated, and measurable.</span>
+                <strong>Built around commercial outcomes</strong>
+                <span>Make requests, service quality, owner updates, revenue signals, and team performance visible from one operating layer.</span>
               </div>
             </div>
           </div>
@@ -364,6 +366,8 @@ export default function TrexitiSite() {
 
         <StatsStrip stats={stats} />
 
+        <ExecutiveBuyerBlock />
+
         <section className="split-section problem-section section-shell" id="problem">
           <div className="section-copy reveal">
             <p className="eyebrow">Problem</p>
@@ -371,11 +375,14 @@ export default function TrexitiSite() {
           </div>
           <div className="problem-statement reveal">
             <p>
-              Spreadsheets, WhatsApp threads, paper forms, disconnected apps, and manual follow-ups create hidden operational drag. Trexiti replaces
-              fragmented workflows with intelligent systems built for speed, visibility, and scale.
+              Spreadsheets, WhatsApp threads, paper forms, disconnected apps, and manual follow-ups create hidden operational drag. For real estate
+              operators and corporate teams, that drag becomes delayed owner reporting, slower service, missed revenue signals, and expensive
+              management overhead. Trexiti replaces fragmented workflows with intelligent systems built for speed, visibility, and scale.
             </p>
           </div>
         </section>
+
+        <CommercialOutcomesBlock />
 
         <section className="builds section-shell" id="builds">
           <div className="section-heading reveal">
