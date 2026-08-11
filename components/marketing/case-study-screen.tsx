@@ -14,7 +14,7 @@ const screenLabels = {
     ],
     detail: ["Interest", "Residence", "Contact", "Sales handoff"],
   },
-  atlas: {
+  delta: {
     primary: ["Needs action", "In progress", "Blocked", "Completed"],
     workflow: ["Request", "Plan", "Assign", "Deliver", "Invoice"],
     detail: ["Operations", "Workload", "Exceptions", "Commercial"],
@@ -72,7 +72,7 @@ export function CaseStudyScreen({
 
         <div className={styles.frameFooter}>
           <span>{project.projectType}</span>
-          <span>Concept interface</span>
+          <span>{project.coverImage?.representative ? "Representative interface" : project.evidence.label}</span>
         </div>
       </div>
       <figcaption>

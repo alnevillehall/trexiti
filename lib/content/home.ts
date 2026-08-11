@@ -8,6 +8,8 @@ export const homepageProjects = projectSummaries.map((project) => ({
   category: project.category,
   description: project.summary,
   visual: project.visual,
+  evidence: project.evidence,
+  coverImage: project.coverImage,
 }));
 
 export type HomepageProject = (typeof homepageProjects)[number];

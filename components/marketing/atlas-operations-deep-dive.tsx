@@ -28,7 +28,7 @@ export function AtlasOperationsDeepDive({
               </Reveal>
             </div>
             <p>
-              Atlas begins with the organization as it is. Customer context,
+              This representative model begins with the operation as it is. Customer context,
               work instructions, promises, financial state, and evidence were
               spread across tools that could not provide one reliable view of
               the operation.
@@ -138,7 +138,7 @@ export function AtlasOperationsDeepDive({
               </Reveal>
             </div>
             <p>
-              Atlas is organized as a modular operating platform. Each domain has
+              The representative system is organized as a modular operating platform. Each domain has
               clear responsibility, while the customer, job, staff, material,
               document, and financial records remain connected.
             </p>
@@ -146,7 +146,7 @@ export function AtlasOperationsDeepDive({
 
           <div className={styles.moduleSystem}>
             <div className={styles.moduleSystemHeader}>
-              <span>Atlas / Domain map</span>
+              <span>Delta / Representative domain map</span>
               <span>{detail.modules.length} operational modules</span>
             </div>
             <div className={styles.moduleGrid} role="list">
@@ -189,9 +189,9 @@ export function AtlasOperationsDeepDive({
           <figure className={styles.dashboardFrame}>
             <figcaption>
               <div>
-                <span className={styles.atlasMark}>AO</span>
+                <span className={styles.atlasMark}>DA</span>
                 <div>
-                  <strong>Atlas / Operations control</strong>
+                  <strong>Delta / Representative operations control</strong>
                   <span>{detail.dashboard.period}</span>
                 </div>
               </div>
@@ -397,7 +397,7 @@ export function AtlasOperationsDeepDive({
           </div>
 
           <Workflow
-            ariaLabel="The Atlas job lifecycle with ownership and progression rules for every operational state"
+            ariaLabel="A representative job lifecycle with ownership and progression rules for every operational state"
             caption="Every state change carries the customer, commercial, and operational context required by the next responsible role."
             className={styles.sharedLifecycle}
             label="Job lifecycle"
@@ -439,18 +439,18 @@ export function AtlasOperationsDeepDive({
               </Reveal>
             </div>
             <p>
-              Atlas owns the operational model. External platforms remain
+              The operational core owns the shared model. External platforms remain
               connected where they are already the right tool, with explicit
               interfaces, failure handling, and reconciliation around the core.
             </p>
           </div>
 
           <ArchitectureDiagram
-            ariaLabel="The Atlas operational core connecting customer, CRM, job management, scheduling, staff, inventory, finance, reporting, and external platforms"
-            caption="Atlas owns the operational model while specialist platforms remain connected through deliberate, monitored interfaces."
+            ariaLabel="A representative operational core connecting customer, CRM, job management, scheduling, staff, inventory, finance, reporting, and external platforms"
+            caption="The representative core owns the operational model while specialist platforms remain connected through deliberate, monitored interfaces."
             className={styles.sharedArchitecture}
             foundation="Identity / Permissions / Audit / Events / Data"
-            label="Atlas / Proposed system boundary"
+            label="Delta / Representative system boundary"
             layers={detail.architectureChain.map((layer, index) => ({
               detail: layer.description,
               emphasis:

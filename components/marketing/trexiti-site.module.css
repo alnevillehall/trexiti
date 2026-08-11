@@ -2045,6 +2045,24 @@
   overflow: hidden;
 }
 
+.flagshipVisualMedia {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-inverse);
+}
+
+.flagshipVisualMedia::after {
+  position: absolute;
+  z-index: 1;
+  background: linear-gradient(180deg, rgb(10 12 14 / 58%) 0%, transparent 32%, rgb(10 12 14 / 72%) 100%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+}
+
+.flagshipImage {
+  object-fit: cover;
+}
+
 .flagshipVisualMarbella {
   background: var(--color-project-marbella);
 }

@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   agentRules: false,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/work/atlas-operations",
+        destination: "/work/delta-appliances",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

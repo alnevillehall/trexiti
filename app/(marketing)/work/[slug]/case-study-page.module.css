@@ -52,6 +52,16 @@
   line-height: 1.55;
 }
 
+.externalProjectLink {
+  display: inline-flex;
+  margin-top: 1.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid currentColor;
+  color: inherit;
+  font-size: var(--type-caption);
+  text-decoration: none;
+}
+
 .heroDetails dl {
   padding: 0;
   margin: 0;

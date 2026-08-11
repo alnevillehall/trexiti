@@ -1,10 +1,16 @@
+import Image from "next/image";
+
+import type { ProjectEvidence, ProjectImage, ProjectVisual } from "@/lib/content/projects";
+
 import styles from "./trexiti-site.module.css";
 
 type FlagshipVisualProject = {
   index: string;
   title: string;
   descriptor: string;
-  visual: "marbella" | "atlas" | "aster";
+  visual: ProjectVisual;
+  evidence: ProjectEvidence;
+  coverImage?: ProjectImage;
 };
 
 export function HomepageProjectVisual({
@@ -18,17 +24,27 @@ export function HomepageProjectVisual({
       className={`${styles.flagshipVisual} ${
         project.visual === "marbella"
           ? styles.flagshipVisualMarbella
-          : project.visual === "atlas"
+          : project.visual === "delta"
             ? styles.flagshipVisualAtlas
             : styles.flagshipVisualAster
-      }`}
+      } ${project.coverImage ? styles.flagshipVisualMedia : ""}`}
     >
+      {project.coverImage ? (
+        <Image
+          alt=""
+          className={styles.flagshipImage}
+          fill
+          sizes="(max-width: 56rem) 100vw, 82vw"
+          src={project.coverImage.src}
+        />
+      ) : null}
+
       <div className={styles.flagshipVisualTopline}>
         <span>Trexiti / Selected work</span>
         <span>Project {project.index}</span>
       </div>
 
-      {project.visual === "marbella" ? (
+      {!project.coverImage && project.visual === "marbella" ? (
         <div className={styles.marbellaComposition}>
           <div className={styles.marbellaWordmark}>MARBELLA</div>
           <div className={styles.marbellaFrame}>
@@ -45,11 +61,11 @@ export function HomepageProjectVisual({
         </div>
       ) : null}
 
-      {project.visual === "atlas" ? (
+      {!project.coverImage && project.visual === "delta" ? (
         <div className={styles.atlasComposition}>
           <div className={styles.atlasCore}>
             <span>Live operation</span>
-            <strong>Atlas</strong>
+            <strong>Delta</strong>
             <small>One connected record</small>
           </div>
           <div className={styles.atlasOrbit}>
@@ -67,7 +83,7 @@ export function HomepageProjectVisual({
         </div>
       ) : null}
 
-      {project.visual === "aster" ? (
+      {!project.coverImage && project.visual === "aster" ? (
         <div className={styles.asterComposition}>
           <div className={styles.asterHeader}>
             <span>Aster Health</span>
@@ -98,7 +114,7 @@ export function HomepageProjectVisual({
 
       <div className={styles.flagshipVisualCaption}>
         <span>{project.descriptor}</span>
-        <span>Business → System</span>
+        <span>{project.evidence.label}</span>
       </div>
     </div>
   );

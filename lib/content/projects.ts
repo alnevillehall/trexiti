@@ -605,25 +605,24 @@ export const projects: readonly CaseStudyProject[] = [
       "Application engineering",
     ],
     technologies: [
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "PostgreSQL",
-      "REST APIs",
-      "Webhooks",
-      "Vercel",
+      "Private web application",
+      "Structured operational data",
+      "Role-aware access",
+      "Workflow orchestration",
+      "Responsive staff interfaces",
+      "Secure deployment",
     ],
     overview: [
-      "Atlas Operations explores a shared operational platform for a service business that has outgrown coordination through spreadsheets, messaging, calendars, and separate accounting records.",
-      "The product model centers every activity on a durable job record, then connects the people, resources, documents, money, and management information needed to move that work from request to completion.",
+      "Trexiti created a private operations system for Delta Appliances. Because the platform supports internal work, its live screens, customer information, business rules, integrations, and operating data are intentionally not published.",
+      "This case study uses generalized workflow language and representative interface material to show the quality of systems thinking behind the engagement without presenting private details as public evidence.",
     ],
     challenge: [
-      "Operational complexity grows faster than headcount when customer information, schedules, job status, inventory use, and payment state all live in different places. Teams compensate with repeated entry, status chasing, and knowledge held by individuals.",
-      "The core challenge is not drawing a dashboard. It is defining a reliable operating model: states, ownership, exceptions, permissions, and information boundaries that reflect how the business actually works.",
+      "Appliance operations can span customer requests, products, service activity, scheduling, inventory, documents, payments, and staff coordination. A useful system must make those relationships understandable without forcing the team to reconstruct context from separate records.",
+      "The systems challenge extends beyond drawing a dashboard: it involves defining states, ownership, exceptions, permissions, and information boundaries that match the operation. Specific Delta workflows remain confidential.",
     ],
     understandingBusiness: {
       introduction:
-        "Trexiti would study the operation in motion—following work from first request through scheduling, delivery, evidence, invoicing, and management review.",
+        "The privacy-safe reconstruction below shows the categories Trexiti considers when shaping an operational product. It is not a disclosure of Delta Appliances’ actual workflow.",
       findings: [
         {
           title: "Work changes hands",
@@ -742,23 +741,24 @@ export const projects: readonly CaseStudyProject[] = [
       },
     ],
     engineering: [
-      "The proposed architecture separates domain rules from interface components and third-party services so the system can evolve without embedding critical logic in individual screens or integrations.",
-      "Workflow transitions would be validated on the server, written to an activity history, and protected by role-based permissions. Integrations would use explicit retry, failure, and reconciliation paths.",
+      "The implementation stack and production architecture remain private. The representative model shown here separates domain rules, interface responsibilities, operational records, and external connections so the system can be understood without exposing the client environment.",
+      "The public engineering notes describe responsible patterns for operational software rather than claiming that any undisclosed feature, integration, or automation exists in Delta Appliances’ live system.",
     ],
     technicalNotes: [
-      "Relational data model centered on customers, jobs, assignments, and transactions",
-      "Role and permission model aligned to operational responsibility",
-      "Server-validated workflow transitions with auditable activity history",
-      "Background processing for notifications and external integrations",
-      "Failure queues and reconciliation for consequential data movement",
-      "Responsive field experience with constrained-connectivity considerations",
+      "Keep operational records structured and connected",
+      "Align permissions with real responsibilities",
+      "Validate consequential workflow changes on the server",
+      "Preserve an understandable activity history",
+      "Design explicit failure and reconciliation paths for integrations",
+      "Support the devices and working contexts used by the team",
     ],
     result: [
-      "The concept demonstrates how a fragmented service operation could be translated into one understandable system boundary with clearer ownership, fewer repeated handoffs, and more trustworthy management information.",
-      "No operational improvement is claimed. The proposed model would need to be tested against stakeholder interviews, workflow observation, representative exceptions, and a staged implementation with real teams.",
+      "Trexiti delivered a private operational system for Delta Appliances and can responsibly present the engagement as evidence of business-systems and custom-software capability.",
+      "No client data, live interface, implementation detail, business metric, or performance result is disclosed. The visuals and detailed operating scenario on this page are representative case-study material only.",
     ],
-    concept: true,
-    disclaimer: conceptDisclaimer,
+    concept: false,
+    disclaimer:
+      "Real private client engagement. The live product and client information are withheld; representative visuals and generalized scenarios are clearly labeled and do not claim measured results.",
   },
   {
     index: "03",
@@ -773,6 +773,11 @@ export const projects: readonly CaseStudyProject[] = [
     summary:
       "A connected healthcare service platform designed around discovery, booking, preparation, patient access, communication, and the administrative work behind care delivery.",
     visual: "aster",
+    evidence: {
+      label: "Concept Project",
+      description:
+        "An original Trexiti concept used to demonstrate healthcare service, product, and system thinking. It does not represent a commissioned client engagement.",
+    },
     services: [
       "Service experience strategy",
       "Journey mapping",
@@ -952,6 +957,8 @@ export const projectSummaries: readonly ProjectSummary[] = projects.map(
     categories,
     summary,
     visual,
+    evidence,
+    coverImage,
     concept,
   }) => ({
     index,
@@ -965,6 +972,8 @@ export const projectSummaries: readonly ProjectSummary[] = projects.map(
     categories,
     summary,
     visual,
+    evidence,
+    coverImage,
     concept,
   }),
 );

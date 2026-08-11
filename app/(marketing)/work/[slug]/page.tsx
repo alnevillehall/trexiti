@@ -111,9 +111,7 @@ export default async function WorkDetailPage({ params }: WorkPageProps) {
             <Eyebrow>
               Work {project.index} / {project.projectType}
             </Eyebrow>
-            {project.concept ? (
-              <span className={styles.conceptLabel}>Concept Project</span>
-            ) : null}
+            <span className={styles.conceptLabel}>{project.evidence.label}</span>
           </div>
 
           <Reveal>
@@ -123,6 +121,16 @@ export default async function WorkDetailPage({ params }: WorkPageProps) {
           <div className={styles.heroDetails}>
             <Reveal>
               <p>{project.summary}</p>
+              {project.evidence.externalUrl ? (
+                <a
+                  className={styles.externalProjectLink}
+                  href={project.evidence.externalUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {project.evidence.externalLabel ?? "Visit live project"} ↗
+                </a>
+              ) : null}
             </Reveal>
             <dl>
               <div>
@@ -148,14 +156,12 @@ export default async function WorkDetailPage({ params }: WorkPageProps) {
         </MediaReveal>
       </Container>
 
-      {project.concept ? (
-        <div className={styles.disclaimerBand}>
-          <Container>
-            <strong>Concept Project</strong>
-            <p>{project.disclaimer}</p>
-          </Container>
-        </div>
-      ) : null}
+      <div className={styles.disclaimerBand}>
+        <Container>
+          <strong>{project.evidence.label}</strong>
+          <p>{project.disclaimer}</p>
+        </Container>
+      </div>
 
       <Section>
         <Container className={styles.overviewGrid}>
@@ -330,9 +336,11 @@ export default async function WorkDetailPage({ params }: WorkPageProps) {
               </Reveal>
             </div>
             <p>
-              These concept screens communicate hierarchy, workflow, and
-              interaction direction. They are not representations of a live
-              deployed product.
+              {project.concept
+                ? "These concept screens communicate hierarchy, workflow, and interaction direction. They are not representations of a live deployed product."
+                : project.evidence.label === "Private Client System"
+                  ? "These representative screens explain hierarchy and workflow without reproducing the private client interface or its data."
+                  : "These views explain the hierarchy, content journey, and interaction decisions behind the live experience."}
             </p>
           </div>
 
@@ -395,12 +403,10 @@ export default async function WorkDetailPage({ params }: WorkPageProps) {
             {project.result.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-            {project.concept ? (
-              <div className={styles.outcomeDisclaimer}>
-                <strong>Concept Project</strong>
-                <p>{project.disclaimer}</p>
-              </div>
-            ) : null}
+            <div className={styles.outcomeDisclaimer}>
+              <strong>{project.evidence.label}</strong>
+              <p>{project.disclaimer}</p>
+            </div>
           </div>
         </Container>
       </Section>

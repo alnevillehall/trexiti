@@ -57,7 +57,7 @@ export default function WorkPage() {
               </div>
               <div>
                 <dt>Current collection</dt>
-                <dd>{projectSummaries.length} Flagship concepts</dd>
+                <dd>{projectSummaries.length} Selected projects</dd>
               </div>
             </dl>
           </div>
@@ -88,10 +88,9 @@ export default function WorkPage() {
           <div>
             <h2>Concepts are labeled. Claims are not invented.</h2>
             <p>
-              These flagship concepts show how Trexiti thinks through a
-              business, product, experience, and technical system. They do not
-              imply commissioned client relationships or measured commercial
-              outcomes.
+              Live work, private client systems, and original concepts are
+              labeled separately. No case study implies a measured commercial
+              outcome unless evidence is explicitly provided.
             </p>
           </div>
         </Container>

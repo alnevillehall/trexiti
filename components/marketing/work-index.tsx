@@ -67,7 +67,7 @@ export function WorkIndex({
               <div className={styles.projectIdentity}>
                 <div>
                   <span className={styles.conceptLabel}>
-                    {project.concept ? "Concept Project" : project.projectType}
+                    {project.evidence.label}
                   </span>
                   <h3>{project.title}</h3>
                   <p>{project.projectType}</p>

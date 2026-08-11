@@ -155,12 +155,12 @@
   font-weight: 400;
 }
 
-.atlas .frame {
+.delta .frame {
   color: var(--color-text-inverse);
   background: var(--color-project-atlas);
 }
 
-.atlas .canvas {
+.delta .canvas {
   background:
     linear-gradient(var(--color-border-inverse) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-border-inverse) 1px, transparent 1px);
