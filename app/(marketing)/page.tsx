@@ -31,7 +31,9 @@ import { services } from "@/lib/content/services";
 import { siteConfig } from "@/lib/content/site";
 
 export const metadata: Metadata = {
-  title: "Digital systems for ambitious businesses",
+  title: {
+    absolute: "Trexiti — Digital systems for ambitious businesses",
+  },
   description:
     "Trexiti designs and engineers websites, software, operational systems, and automation around how ambitious businesses actually work.",
   alternates: { canonical: "/" },

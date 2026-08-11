@@ -10,13 +10,13 @@ Recommended usage:
 - Favicon: trexiti_favicon.ico or trexiti_favicon_32.png
 
 Brand colors:
-- Deep Background: #0D1117
-- Near Black: #05070B
-- Electric Blue: #00AEEF
-- Deep Blue: #0A7DFF
-- Cyan Glow: #00E5FF
-- Silver: #E6E8EC
-- White: #F8FBFF
+- Primary Background: #F1F0EB
+- Secondary Background: #E6E5DF
+- Elevated Surface: #FAF9F5
+- Near Black: #151613
+- Olive Accent: #626A50
+- Soft Olive: #DFE1D3
+- Warm White: #F7F5EF
 
 Tagline:
-Engineering Intelligent Systems for the Real World
+Digital systems for ambitious businesses.

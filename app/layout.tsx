@@ -5,6 +5,8 @@ import {
   Space_Grotesk,
 } from "next/font/google";
 
+import { siteConfig } from "@/lib/content/site";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,7 +26,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://trexiti.com"),
+  metadataBase: new URL(siteConfig.url),
   applicationName: "Trexiti",
   title: {
     default: "Trexiti — Digital systems for ambitious businesses",
@@ -32,7 +34,7 @@ export const metadata: Metadata = {
   },
   description:
     "Trexiti understands how businesses work, identifies what is slowing them down, and builds the digital systems they need to operate better.",
-  authors: [{ name: "Trexiti", url: "https://trexiti.com" }],
+  authors: [{ name: "Trexiti", url: siteConfig.url }],
   creator: "Trexiti",
   category: "technology",
   keywords: [

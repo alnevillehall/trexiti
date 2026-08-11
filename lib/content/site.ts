@@ -5,7 +5,7 @@ export const siteConfig = {
   tagline: "Digital systems for ambitious businesses.",
   description:
     "Trexiti understands how businesses work, identifies what is slowing them down, and builds the digital systems they need to operate better.",
-  url: "https://trexiti.com",
+  url: "https://www.trexiti.com",
   email: "hello@trexiti.com",
   serviceArea: "Jamaica-based. Working with ambitious businesses globally.",
   linkedInLabel: "LinkedIn — profile forthcoming",
