@@ -1,6 +1,11 @@
 import type { MetadataRoute } from "next";
 
 import { industries } from "@/lib/content/industries";
+import {
+  getInsightPublicationDate,
+  getPublishedInsights,
+  isInsightFeatured,
+} from "@/lib/content/insights";
 import { projects } from "@/lib/content/projects";
 import { services } from "@/lib/content/services";
 import { siteConfig } from "@/lib/content/site";
@@ -9,8 +14,13 @@ const staticRoutes = [
   "",
   "/work",
   "/services",
+  "/capabilities/overview",
+  "/media-kit",
+  "/privacy",
   "/about",
   "/start-a-project",
+  "/systems-review",
+  "/resources/business-systems-friction-checklist",
   "/insights",
   "/propertyos",
   "/service-businesses",
@@ -41,5 +51,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...pages, ...servicePages, ...industryPages, ...projectPages];
+  const insightPages: MetadataRoute.Sitemap = getPublishedInsights().map(
+    (article) => ({
+      url: `${siteConfig.url}/insights/${article.slug}`,
+      lastModified: getInsightPublicationDate(
+        article.updatedAt ?? article.publishedAt,
+      ),
+      changeFrequency: "monthly",
+      priority: isInsightFeatured(article) ? 0.8 : 0.7,
+    }),
+  );
+
+  return [
+    ...pages,
+    ...servicePages,
+    ...industryPages,
+    ...projectPages,
+    ...insightPages,
+  ];
 }

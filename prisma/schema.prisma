@@ -335,37 +335,208 @@ enum AdminAuditAction {
   RESTORE
 }
 
+enum MarketingContentStatus {
+  IDEA
+  DRAFTING
+  REVIEW
+  READY
+  SCHEDULED
+  PUBLISHED
+  REPURPOSED
+  ARCHIVED
+}
+
+enum MarketingContentType {
+  TEXT_POST
+  CAROUSEL
+  VIDEO
+  ARTICLE
+  CASE_STUDY
+  EMAIL
+  WHATSAPP_STATUS
+  PROFILE_UPDATE
+  LANDING_PAGE
+}
+
+enum MarketingPillar {
+  BUSINESS_SYSTEMS
+  OPERATIONAL_DESIGN
+  DIGITAL_EXPERIENCE
+  BUILD_VS_BUY
+  AUTOMATION
+  BEHIND_THE_WORK
+  SMALL_BUSINESS
+}
+
+enum MarketingChannel {
+  LINKEDIN_FOUNDER
+  LINKEDIN_COMPANY
+  INSTAGRAM
+  WEBSITE_INSIGHTS
+  EMAIL
+  WHATSAPP
+  GOOGLE_BUSINESS_PROFILE
+}
+
+enum MarketingCampaignStatus {
+  PLANNED
+  ACTIVE
+  PAUSED
+  COMPLETE
+  ARCHIVED
+}
+
+enum MarketingAssetStatus {
+  REQUESTED
+  IN_PRODUCTION
+  REVIEW
+  READY
+  ARCHIVED
+}
+
+enum MarketingAssetTemplate {
+  BRAND_STATEMENT
+  SYSTEM_FLOW
+  FRAGMENTED_CONNECTED
+  INSIGHT_ARTICLE
+  CAROUSEL
+  CASE_STUDY
+  FOCUSED_BUILD
+  SYSTEMS_REVIEW
+}
+
+enum MarketingAssetFormat {
+  LINKEDIN_FEED
+  LINKEDIN_SQUARE
+  INSTAGRAM_PORTRAIT
+  INSTAGRAM_SQUARE
+  INSTAGRAM_STORY
+  LINKEDIN_PERSONAL_COVER
+  LINKEDIN_COMPANY_COVER
+  LOGO_AVATAR
+  OPEN_GRAPH
+}
+
+enum MarketingAssetVariant {
+  LIGHT
+  DARK
+}
+
+enum MarketingChannelProfileStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  READY
+  NEEDS_REVIEW
+}
+
+enum MarketingVerificationStatus {
+  UNCHECKED
+  PENDING
+  VERIFIED
+  NOT_AVAILABLE
+}
+
+enum MarketingMetricEntrySource {
+  MANUAL
+  IMPORTED
+}
+
+enum MarketingLaunchChecklistStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  BLOCKED
+  COMPLETE
+}
+
 model ProjectLead {
-  id                 String            @id @default(cuid())
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  status             ProjectLeadStatus @default(NEW)
-  name               String
-  email              String
-  phone              String?
-  role               String
-  companyName        String
-  companyWebsite     String
-  industry           String
-  companySize        String
-  location           String
-  projectType        String
-  objectives         String[]
-  challenge          String            @db.Text
-  existingSystems    String[]
-  budgetRange        String
-  timeline           String
-  consentedAt        DateTime
-  source             String            @default("trexiti_website")
-  utmSource          String?
-  utmMedium          String?
-  utmCampaign        String?
-  requestFingerprint String?
-  opportunity        AdminOpportunity?
+  id                     String            @id @default(cuid())
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  status                 ProjectLeadStatus @default(NEW)
+  name                   String
+  email                  String
+  phone                  String?
+  role                   String
+  companyName            String
+  companyWebsite         String?
+  industry               String
+  companySize            String?
+  companyStage           String?
+  teamSize               String?
+  location               String
+  customerServiceArea    String?
+  projectType            String
+  objectives             String[]
+  challenge              String            @db.Text
+  currentState           String?           @db.Text
+  friction               String?           @db.Text
+  existingSystems        String[]
+  importantTools         String?           @db.Text
+  engagementShape        String?
+  budgetRange            String
+  investmentContext      String?
+  investmentNotes        String?           @db.Text
+  timeline               String
+  preferredContactMethod String?
+  consentedAt            DateTime
+  source                 String            @default("trexiti_website")
+  utmSource              String?
+  utmMedium              String?
+  utmCampaign            String?
+  firstTouchSource       String?
+  firstTouchMedium       String?
+  firstTouchCampaign     String?
+  firstTouchContent      String?
+  firstTouchTerm         String?
+  firstTouchAt           DateTime?
+  lastTouchSource        String?
+  lastTouchMedium        String?
+  lastTouchCampaign      String?
+  lastTouchContent       String?
+  lastTouchTerm          String?
+  lastTouchAt            DateTime?
+  landingPage            String?
+  referrer               String?
+  isReturning            Boolean           @default(false)
+  qualificationSummary   String?           @db.Text
+  nextAction             String?           @db.Text
+  requestFingerprint     String?
+  opportunity            AdminOpportunity?
 
   @@index([status, createdAt])
   @@index([email, createdAt])
   @@index([requestFingerprint, createdAt])
+  @@index([firstTouchSource, createdAt])
+}
+
+model MarketingEvent {
+  id                 String   @id @default(cuid())
+  receivedAt         DateTime @default(now())
+  occurredAt         DateTime
+  name               String
+  route              String
+  sessionId          String
+  properties         Json?
+  firstTouchSource   String
+  firstTouchMedium   String
+  firstTouchCampaign String?
+  firstTouchContent  String?
+  firstTouchTerm     String?
+  firstTouchAt       DateTime
+  lastTouchSource    String
+  lastTouchMedium    String
+  lastTouchCampaign  String?
+  lastTouchContent   String?
+  lastTouchTerm      String?
+  lastTouchAt        DateTime
+  landingPage        String
+  referrer           String?
+  isReturning        Boolean  @default(false)
+
+  @@index([name, occurredAt])
+  @@index([sessionId, occurredAt])
+  @@index([firstTouchSource, occurredAt])
+  @@index([route, occurredAt])
 }
 
 model AdminUser {
@@ -474,6 +645,7 @@ model AdminOpportunity {
   estimatedValue       Decimal                   @db.Decimal(14, 2)
   budget               String?
   timeline             String?
+  outcomeReason        String?                   @db.Text
   probability          Int                       @default(10)
   nextAction           String?                   @db.Text
   nextFollowUp         DateTime?
@@ -699,6 +871,218 @@ model AdminAuditLog {
 
   @@index([entityType, entityId, createdAt])
   @@index([actorId, createdAt])
+}
+
+model MarketingCampaign {
+  id                   String                      @id @default(cuid())
+  createdAt            DateTime                    @default(now())
+  updatedAt            DateTime                    @updatedAt
+  seedKey              String?                     @unique
+  name                 String
+  objective            String                      @db.Text
+  audience             String                      @db.Text
+  message              String                      @db.Text
+  offer                String                      @db.Text
+  startAt              DateTime
+  endAt                DateTime
+  status               MarketingCampaignStatus     @default(PLANNED)
+  primaryCta           String
+  landingPage          String?
+  utmSource            String?
+  utmMedium            String?
+  utmCampaign          String?
+  targetAccountSegment String?                     @db.Text
+  targetMetrics        Json?
+  actualMetrics        Json?
+  notes                String?                     @db.Text
+  content              MarketingContent[]
+  assets               MarketingAsset[]
+  metrics              MarketingWeeklyMetric[]
+  outboundActivities   MarketingOutboundActivity[]
+
+  @@index([status, startAt, endAt])
+}
+
+model MarketingContent {
+  id                String                 @id @default(cuid())
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  seedKey           String?                @unique
+  title             String
+  coreIdea          String                 @db.Text
+  contentType       MarketingContentType
+  pillar            MarketingPillar
+  status            MarketingContentStatus @default(IDEA)
+  primaryChannel    MarketingChannel
+  secondaryChannels MarketingChannel[]
+  publishAt         DateTime?
+  publishedAt       DateTime?
+  owner             String
+  body              String                 @db.Text
+  shortCaption      String?                @db.Text
+  cta               String?
+  destinationUrl    String?
+  assetBrief        String?                @db.Text
+  sourceArticleId   String?
+  campaignId        String?
+  parentContentId   String?
+  canonicalPostUrl  String?
+  notes             String?                @db.Text
+  campaign          MarketingCampaign?     @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  parentContent     MarketingContent?      @relation("MarketingContentRepurposing", fields: [parentContentId], references: [id], onDelete: SetNull)
+  repurposedContent MarketingContent[]     @relation("MarketingContentRepurposing")
+  assets            MarketingAsset[]
+
+  @@index([status, publishAt])
+  @@index([primaryChannel, publishAt])
+  @@index([pillar, publishAt])
+  @@index([campaignId, publishAt])
+  @@index([parentContentId])
+}
+
+model MarketingAsset {
+  id             String                  @id @default(cuid())
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  seedKey        String?                 @unique
+  name           String
+  kind           String
+  status         MarketingAssetStatus    @default(REQUESTED)
+  channel        MarketingChannel?
+  dueAt          DateTime?
+  brief          String                  @db.Text
+  assetUrl       String?
+  owner          String?
+  notes          String?                 @db.Text
+  template       MarketingAssetTemplate?
+  format         MarketingAssetFormat?
+  variant        MarketingAssetVariant?
+  title          String?
+  eyebrow        String?
+  body           String?                 @db.Text
+  cta            String?
+  altText        String?                 @db.Text
+  slideCount     Int                     @default(1)
+  slides         Json?
+  systemNodes    String[]                @default([])
+  destinationUrl String?
+  exportWidth    Int?
+  exportHeight   Int?
+  lastExportedAt DateTime?
+  campaignId     String?
+  contentId      String?
+  campaign       MarketingCampaign?      @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  content        MarketingContent?       @relation(fields: [contentId], references: [id], onDelete: SetNull)
+
+  @@index([status, dueAt])
+  @@index([campaignId])
+  @@index([contentId])
+}
+
+model MarketingChannelProfile {
+  id                 String                        @id @default(cuid())
+  createdAt          DateTime                      @default(now())
+  updatedAt          DateTime                      @updatedAt
+  channel            MarketingChannel              @unique
+  profileUrl         String?
+  status             MarketingChannelProfileStatus @default(NOT_STARTED)
+  bioComplete        Boolean                       @default(false)
+  logoComplete       Boolean                       @default(false)
+  bannerComplete     Boolean                       @default(false)
+  ctaLinkComplete    Boolean                       @default(false)
+  verificationStatus MarketingVerificationStatus   @default(UNCHECKED)
+  lastReviewedAt     DateTime?
+  notes              String?                       @db.Text
+
+  @@index([status, lastReviewedAt])
+}
+
+model MarketingWeeklyMetric {
+  id                     String                     @id @default(cuid())
+  createdAt              DateTime                   @default(now())
+  updatedAt              DateTime                   @updatedAt
+  seedKey                String?                    @unique
+  weekStarting           DateTime
+  channel                MarketingChannel?
+  campaignId             String?
+  source                 MarketingMetricEntrySource @default(MANUAL)
+  impressions            Int                        @default(0)
+  reach                  Int                        @default(0)
+  profileViews           Int                        @default(0)
+  websiteClicks          Int                        @default(0)
+  comments               Int                        @default(0)
+  saves                  Int                        @default(0)
+  directMessages         Int                        @default(0)
+  emailReplies           Int                        @default(0)
+  qualifiedConversations Int                        @default(0)
+  discoveryCalls         Int                        @default(0)
+  opportunities          Int                        @default(0)
+  wonRevenue             Decimal                    @default(0) @db.Decimal(14, 2)
+  notes                  String?                    @db.Text
+  campaign               MarketingCampaign?         @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@index([weekStarting, channel])
+  @@index([campaignId, weekStarting])
+}
+
+model MarketingOutboundActivity {
+  id         String            @id @default(cuid())
+  createdAt  DateTime          @default(now())
+  occurredAt DateTime
+  campaignId String
+  channel    MarketingChannel
+  activity   String
+  quantity   Int               @default(1)
+  notes      String?           @db.Text
+  campaign   MarketingCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId, occurredAt])
+  @@index([channel, occurredAt])
+}
+
+model MarketingUtmPreset {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  seedKey     String?  @unique
+  name        String   @unique
+  destination String
+  source      String
+  medium      String
+  campaign    String
+  content     String?
+  term        String?
+
+  @@index([campaign])
+}
+
+model MarketingLaunchChecklistItem {
+  id          String                         @id @default(cuid())
+  createdAt   DateTime                       @default(now())
+  updatedAt   DateTime                       @updatedAt
+  seedKey     String                         @unique
+  title       String
+  category    String
+  status      MarketingLaunchChecklistStatus @default(NOT_STARTED)
+  dueAt       DateTime?
+  evidenceUrl String?
+  notes       String?                        @db.Text
+  completedAt DateTime?
+
+  @@index([status, dueAt])
+  @@index([category, status])
+}
+
+model MarketingLaunchSource {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  seedKey   String   @unique
+  path      String   @unique
+  sha256    String
+  notes     String?  @db.Text
+
+  @@index([updatedAt])
 }
 
 model ProjectLeadRateLimit {

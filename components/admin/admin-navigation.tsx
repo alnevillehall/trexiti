@@ -7,6 +7,7 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   ListFilter,
+  Megaphone,
   Network,
   Target,
 } from "lucide-react";
@@ -20,6 +21,11 @@ const navigation = [
   { href: "/admin/companies", label: "Companies", icon: Building2 },
   { href: "/admin/pipeline", label: "Pipeline", icon: Network },
   { href: "/admin/tasks", label: "Tasks", icon: ClipboardCheck },
+  {
+    href: "/admin/marketing",
+    label: "Marketing",
+    icon: Megaphone,
+  },
 ] as const;
 
 function isCurrent(pathname: string, href: string) {

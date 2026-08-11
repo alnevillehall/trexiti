@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AtlasOperationsDeepDive } from "@/components/marketing/atlas-operations-deep-dive";
+import { MarketingViewEvent } from "@/components/marketing/analytics-provider";
 import { CaseStudyScreen } from "@/components/marketing/case-study-screen";
 import { HomepageProjectVisual } from "@/components/marketing/homepage-project-visual";
 import { MediaReveal, Stagger, StaggerItem } from "@/components/marketing/motion-primitives";
@@ -92,6 +93,11 @@ export default async function WorkDetailPage({ params }: WorkPageProps) {
 
   return (
     <>
+      <MarketingViewEvent
+        event="case_study_view"
+        route={`/work/${project.slug}`}
+        slug={project.slug}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

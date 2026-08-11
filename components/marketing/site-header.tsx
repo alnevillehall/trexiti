@@ -157,7 +157,12 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <Link className={styles.headerAction} href="/start-a-project">
+          <Link
+            className={styles.headerAction}
+            data-analytics-cta="start-project"
+            data-analytics-placement="desktop-header"
+            href="/start-a-project"
+          >
             Start a Project
             <span aria-hidden="true">↗</span>
           </Link>
@@ -261,8 +266,15 @@ export function SiteHeader() {
                     </Link>
                   );
                 })}
-                <Link href="/start-a-project" onClick={() => setOpen(false)}>
-                  <span>05</span>
+                <Link
+                  data-analytics-cta="start-project"
+                  data-analytics-placement="mobile-menu"
+                  href="/start-a-project"
+                  onClick={() => setOpen(false)}
+                >
+                  <span>
+                    {String(primaryNavigation.length + 1).padStart(2, "0")}
+                  </span>
                   <strong>Start a Project</strong>
                   <span aria-hidden="true">↗</span>
                 </Link>

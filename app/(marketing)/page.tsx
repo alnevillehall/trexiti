@@ -29,6 +29,7 @@ import {
 import { industryLinks } from "@/lib/content/industries";
 import { services } from "@/lib/content/services";
 import { siteConfig } from "@/lib/content/site";
+import { organizationSocialProfileUrls } from "@/lib/marketing/contact";
 
 export const metadata: Metadata = {
   title: {
@@ -66,7 +67,7 @@ const homeSystemFlow = [
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
+  "@type": "Organization",
   name: siteConfig.name,
   url: siteConfig.url,
   email: siteConfig.email,
@@ -79,6 +80,7 @@ const organizationJsonLd = {
     "Automation and integrations",
     "Business systems analysis",
   ],
+  sameAs: organizationSocialProfileUrls,
 };
 
 export default function HomePage() {

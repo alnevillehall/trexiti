@@ -1,0 +1,335 @@
+.form {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-elevated);
+  box-shadow: 1rem 1rem 0 var(--color-surface-accent-soft);
+}
+
+.formHeading {
+  display: grid;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--color-border-default);
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  align-items: end;
+  gap: 2rem;
+}
+
+.formHeading span,
+.fieldGrid label > span,
+.contactMethod legend {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.formHeading h2 {
+  max-width: 11ch;
+  margin: 0.8rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.8rem, 6vw, 6.5rem);
+  font-weight: 520;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+}
+
+.formHeading p,
+.submitRow p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+.formError {
+  margin: 1.5rem clamp(1.5rem, 4vw, 3.5rem) 0;
+  padding: 1rem;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-accent-soft);
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fieldGrid {
+  display: grid;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem clamp(2rem, 5vw, 5rem);
+}
+
+.fieldGrid label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.fieldGrid label > span small {
+  font: inherit;
+  opacity: 0.7;
+}
+
+.fieldGrid :is(input, select, textarea) {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-strong);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  background: transparent;
+  font: inherit;
+  outline: none;
+}
+
+.fieldGrid :is(input, select) {
+  min-height: 4rem;
+  padding: 0.8rem 0.15rem;
+}
+
+.fieldGrid textarea {
+  min-height: 7rem;
+  padding: 1rem 0.15rem;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.fieldGrid :is(input, select, textarea):focus-visible {
+  border-color: var(--color-interactive-accent);
+  box-shadow: 0 2px 0 var(--color-interactive-accent);
+}
+
+.fieldGrid :is(input, select, textarea)[aria-invalid="true"] {
+  background: var(--color-surface-accent-soft);
+}
+
+.wideField {
+  grid-column: 1 / -1;
+}
+
+.contactMethod {
+  display: flex;
+  margin: 0;
+  padding: 2rem clamp(1.5rem, 4vw, 3.5rem);
+  border: 0;
+  border-top: 1px solid var(--color-border-default);
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.contactMethod legend {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.contactMethod label {
+  position: relative;
+  cursor: pointer;
+}
+
+.contactMethod input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.contactMethod label > span {
+  display: inline-flex;
+  min-height: 3rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  align-items: center;
+}
+
+.contactMethod label:has(input:checked) > span {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.contactMethod label:focus-within > span {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.consent {
+  display: grid;
+  padding: 2rem clamp(1.5rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--color-border-default);
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.9rem;
+  cursor: pointer;
+}
+
+.consent input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.consent > span {
+  display: grid;
+  width: 1.5rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border-strong);
+  place-items: center;
+  color: transparent;
+}
+
+.consent:has(input:checked) > span {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.consent:focus-within > span {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 3px;
+}
+
+.consent strong {
+  max-width: 58rem;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.error {
+  display: block;
+  margin-top: 0.55rem;
+  color: var(--color-text-primary);
+  font-size: var(--type-caption);
+  font-weight: 650;
+}
+
+.consent .error,
+.contactMethod .error {
+  width: 100%;
+}
+
+.consent .error {
+  grid-column: 2;
+}
+
+.privacyNote {
+  margin: 0;
+  padding: 0 clamp(1.5rem, 4vw, 3.5rem) 1.5rem;
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption);
+}
+
+.privacyNote a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.submitRow {
+  display: grid;
+  padding: 1.5rem clamp(1.5rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--color-border-default);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem;
+}
+
+.submitRow p {
+  max-width: 48rem;
+  font-size: var(--type-caption);
+}
+
+.submitRow button {
+  display: flex;
+  min-width: 17rem;
+  min-height: 3.7rem;
+  padding: 0.7rem 0.7rem 0.7rem 1rem;
+  border: 1px solid var(--color-interactive-primary);
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  color: var(--color-text-inverse);
+  background: var(--color-interactive-primary);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.submitRow button > span:last-child {
+  display: grid;
+  width: 2.2rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border-inverse);
+  place-items: center;
+}
+
+.submitRow button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.success {
+  min-height: 32rem;
+  padding: clamp(2rem, 6vw, 6rem);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-elevated);
+  box-shadow: 1rem 1rem 0 var(--color-surface-accent-soft);
+}
+
+.success:focus {
+  outline: none;
+}
+
+.success > span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.success h2 {
+  max-width: 13ch;
+  margin: 4rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.8rem, 6vw, 6.5rem);
+  font-weight: 520;
+  letter-spacing: -0.065em;
+  line-height: 0.94;
+}
+
+.success p {
+  max-width: 48rem;
+  margin-top: 2rem;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  line-height: 1.6;
+}
+
+@media (max-width: 48rem) {
+  .form {
+    box-shadow: 0.55rem 0.55rem 0 var(--color-surface-accent-soft);
+  }
+
+  .formHeading,
+  .fieldGrid,
+  .submitRow {
+    grid-template-columns: 1fr;
+  }
+
+  .wideField {
+    grid-column: auto;
+  }
+
+  .submitRow button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submitRow button {
+    transition: none;
+  }
+}

@@ -11,6 +11,10 @@ import {
 } from "@/lib/admin/crm";
 import { getAdminPipeline } from "@/lib/admin/queries";
 
+const quickMoveStages = opportunityStages.filter(
+  (stage) => !["WON", "LOST"].includes(stage),
+);
+
 export default async function AdminPipelinePage() {
   const columns = await getAdminPipeline();
 
@@ -44,7 +48,10 @@ export default async function AdminPipelinePage() {
                       <input type="hidden" name="returnTo" value="/admin/pipeline" />
                       <label className="sr-only" htmlFor={`move-${opportunity.id}`}>Move {opportunity.company.name}</label>
                       <select id={`move-${opportunity.id}`} name="stage" defaultValue={opportunity.stage}>
-                        {opportunityStages.map((stage) => <option key={stage} value={stage}>{opportunityStageLabels[stage]}</option>)}
+                        {opportunity.stage === "WON" || opportunity.stage === "LOST" ? (
+                          <option value={opportunity.stage}>{opportunityStageLabels[opportunity.stage]}</option>
+                        ) : null}
+                        {quickMoveStages.map((stage) => <option key={stage} value={stage}>{opportunityStageLabels[stage]}</option>)}
                       </select>
                       <button type="submit">Move</button>
                     </form>

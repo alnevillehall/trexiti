@@ -269,8 +269,26 @@ function estimatedValueFromBudget(value: string) {
   if (value.includes("50,000+")) return 65000;
   if (value.includes("25,000")) return 37500;
   if (value.includes("10,000")) return 17500;
+  if (value.startsWith("Under")) return 2500;
   if (value.includes("5,000")) return 7500;
-  return 5000;
+  return 0;
+}
+
+function companyDomainFromLead(
+  companyWebsite: string | null,
+  companyName: string,
+  leadId: string,
+) {
+  if (companyWebsite) {
+    return new URL(companyWebsite).hostname.toLowerCase().replace(/^www\./, "");
+  }
+
+  const companySlug = companyName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48);
+  return `${companySlug || "company"}-${leadId.slice(-8)}.no-website`;
 }
 
 export async function convertProjectLeadAction(formData: FormData) {
@@ -285,7 +303,18 @@ export async function convertProjectLeadAction(formData: FormData) {
   });
   if (!lead) redirectWithError("/admin/leads", "Inbound lead is already converted or unavailable.");
 
-  const domain = new URL(lead.companyWebsite).hostname.toLowerCase().replace(/^www\./, "");
+  const domain = companyDomainFromLead(
+    lead.companyWebsite,
+    lead.companyName,
+    lead.id,
+  );
+  const attributedSource = [
+    lead.lastTouchSource ?? lead.utmSource ?? lead.source,
+    lead.lastTouchMedium ?? lead.utmMedium,
+    lead.lastTouchCampaign ?? lead.utmCampaign,
+  ]
+    .filter(Boolean)
+    .join(" / ");
   const opportunityId = await prisma.$transaction(async (transaction) => {
     const company = await transaction.adminCompany.upsert({
       where: { domain },
@@ -294,7 +323,7 @@ export async function convertProjectLeadAction(formData: FormData) {
         website: lead.companyWebsite,
         industry: lead.industry,
         country: lead.location,
-        estimatedSize: lead.companySize,
+        estimatedSize: lead.teamSize ?? lead.companySize,
         status: "ACTIVE",
       },
       create: {
@@ -303,7 +332,7 @@ export async function convertProjectLeadAction(formData: FormData) {
         website: lead.companyWebsite,
         industry: lead.industry,
         country: lead.location,
-        estimatedSize: lead.companySize,
+        estimatedSize: lead.teamSize ?? lead.companySize,
         status: "ACTIVE",
       },
     });
@@ -330,14 +359,20 @@ export async function convertProjectLeadAction(formData: FormData) {
         stage: "QUALIFIED",
         type: projectTypeFromLead(lead.projectType),
         title: `${lead.companyName} — ${lead.projectType}`,
-        source: lead.source,
-        identifiedProblem: lead.challenge,
-        opportunity: lead.objectives.join("; "),
+        source: attributedSource || lead.source,
+        identifiedProblem: lead.friction ?? lead.challenge,
+        opportunity:
+          lead.qualificationSummary ?? lead.objectives.join("; "),
         estimatedValue: estimatedValueFromBudget(lead.budgetRange),
-        budget: lead.budgetRange,
+        budget:
+          lead.investmentNotes ??
+          lead.investmentContext ??
+          lead.budgetRange,
         timeline: lead.timeline,
         probability: stageProbability.QUALIFIED,
-        nextAction: "Review the submitted business context and prepare discovery questions.",
+        nextAction:
+          lead.nextAction ??
+          "Review the submitted business context and prepare discovery questions.",
         activities: {
           create: {
             actorId: session.id,
@@ -379,6 +414,7 @@ export async function updateOpportunityAction(formData: FormData) {
     estimatedProjectValue: value(formData, "estimatedProjectValue"),
     budget: value(formData, "budget"),
     timeline: value(formData, "timeline"),
+    outcomeReason: value(formData, "outcomeReason"),
     nextAction: value(formData, "nextAction"),
     nextFollowUp: value(formData, "nextFollowUp"),
     assignedOwnerId: value(formData, "assignedOwnerId"),
@@ -390,7 +426,12 @@ export async function updateOpportunityAction(formData: FormData) {
 
   const existing = await prisma.adminOpportunity.findFirst({
     where: { id: parsed.data.opportunityId, archivedAt: null },
-    select: { stage: true, probability: true, estimatedValue: true },
+    select: {
+      stage: true,
+      probability: true,
+      estimatedValue: true,
+      outcomeReason: true,
+    },
   });
 
   if (!existing) redirectWithError("/admin/leads", "Opportunity not found.");
@@ -404,6 +445,7 @@ export async function updateOpportunityAction(formData: FormData) {
         estimatedValue: parsed.data.estimatedProjectValue,
         budget: parsed.data.budget ?? null,
         timeline: parsed.data.timeline ?? null,
+        outcomeReason: parsed.data.outcomeReason ?? null,
         nextAction: parsed.data.nextAction ?? null,
         nextFollowUp: optionalDate(parsed.data.nextFollowUp) ?? null,
         assignedOwnerId: parsed.data.assignedOwnerId ?? null,
@@ -431,11 +473,13 @@ export async function updateOpportunityAction(formData: FormData) {
           stage: existing.stage,
           probability: existing.probability,
           estimatedValue: String(existing.estimatedValue),
+          outcomeReason: existing.outcomeReason,
         },
         after: {
           stage: updated.stage,
           probability: updated.probability,
           estimatedValue: String(updated.estimatedValue),
+          outcomeReason: updated.outcomeReason,
         },
       },
     });

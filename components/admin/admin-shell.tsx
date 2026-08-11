@@ -19,7 +19,7 @@ export function AdminShell({ children, session }: AdminShellProps) {
           <span className={styles.brandMark}>T</span>
           <span>
             <strong>Trexiti</strong>
-            <small>Opportunity system</small>
+            <small>Operating system</small>
           </span>
         </div>
         <AdminNavigation />
@@ -42,7 +42,7 @@ export function AdminShell({ children, session }: AdminShellProps) {
         <header className={styles.topbar}>
           <div>
             <span className={styles.topbarLabel}>Internal · Restricted</span>
-            <strong>Commercial operations</strong>
+            <strong>Commercial &amp; marketing operations</strong>
           </div>
           <div className={styles.topbarMeta}>
             <span>USD</span>

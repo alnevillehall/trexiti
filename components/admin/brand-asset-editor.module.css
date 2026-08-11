@@ -1,0 +1,371 @@
+.editorShell {
+  display: grid;
+  grid-template-columns: minmax(19rem, 0.76fr) minmax(28rem, 1.24fr);
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.controls,
+.previewPanel {
+  min-width: 0;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-surface);
+}
+
+.controls {
+  display: grid;
+}
+
+.section {
+  display: grid;
+  gap: 0.72rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-line);
+}
+
+.section:last-child {
+  border-bottom: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeader h2,
+.sectionHeader h3,
+.sectionHeader p {
+  margin: 0;
+}
+
+.sectionHeader h2,
+.sectionHeader h3 {
+  font-size: 0.74rem;
+}
+
+.sectionHeader p,
+.hint,
+.counter {
+  color: var(--admin-muted);
+  font-size: 0.62rem;
+  line-height: 1.45;
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.templateOption {
+  position: relative;
+  display: grid;
+  min-height: 6.5rem;
+  align-content: space-between;
+  border: 1px solid var(--admin-line);
+  padding: 0.7rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.templateOption:has(input:checked) {
+  border-color: var(--admin-dark);
+  box-shadow: inset 0 0 0 1px var(--admin-dark);
+  background: #f0f1e9;
+}
+
+.templateOption input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.templateOption strong {
+  font-size: 0.68rem;
+}
+
+.templateOption span {
+  color: var(--admin-muted);
+  font-size: 0.59rem;
+  line-height: 1.42;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.field,
+.fieldFull {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+  color: var(--admin-muted);
+  font-size: 0.59rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+}
+
+.field input,
+.field select,
+.field textarea,
+.fieldFull input,
+.fieldFull select,
+.fieldFull textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.45rem;
+  border: 1px solid #cdcdc5;
+  border-radius: 0;
+  padding: 0.58rem 0.62rem;
+  background: #fff;
+  color: var(--admin-ink);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 450;
+  letter-spacing: 0;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+.field textarea,
+.fieldFull textarea {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled,
+.fieldFull input:disabled,
+.fieldFull select:disabled,
+.fieldFull textarea:disabled {
+  background: #f2f2ed;
+  color: #6d7068;
+}
+
+.counter {
+  text-align: right;
+  text-transform: none;
+}
+
+.slideEditor {
+  border: 1px solid var(--admin-line);
+  background: #f8f8f4;
+}
+
+.slideEditor summary {
+  padding: 0.66rem 0.72rem;
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.slideFields {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0 0.72rem 0.72rem;
+}
+
+.issues {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.issue {
+  border-left: 3px solid #b48735;
+  padding: 0.45rem 0.55rem;
+  background: #fbf4df;
+  color: #624e24;
+  font-size: 0.64rem;
+  line-height: 1.45;
+}
+
+.issue[data-level="error"] {
+  border-color: #a34a3e;
+  background: #faeae6;
+  color: #732f27;
+}
+
+.previewPanel {
+  position: sticky;
+  top: 5.4rem;
+  max-height: calc(100vh - 6.2rem);
+  overflow-y: auto;
+}
+
+.previewToolbar,
+.exportBar {
+  display: flex;
+  min-height: 3.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--admin-line);
+}
+
+.exportBar {
+  border-top: 1px solid var(--admin-line);
+  border-bottom: 0;
+}
+
+.previewToolbar strong,
+.previewToolbar span {
+  display: block;
+}
+
+.previewToolbar strong {
+  font-size: 0.7rem;
+}
+
+.previewToolbar span {
+  margin-top: 0.12rem;
+  color: var(--admin-muted);
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  text-transform: uppercase;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--admin-muted);
+  font-size: 0.62rem;
+}
+
+.canvasStage {
+  display: grid;
+  min-height: clamp(22rem, 48vh, 32rem);
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: #d7d7d1;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(68vh, 54rem);
+  object-fit: contain;
+  box-shadow: 0 1.3rem 3rem rgb(23 24 21 / 18%);
+}
+
+.slideNav {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.35rem;
+  padding: 0.65rem 0.8rem;
+  border-top: 1px solid var(--admin-line);
+  background: #f6f6f1;
+}
+
+.slideNav button {
+  flex: 0 0 auto;
+  min-width: 2.3rem;
+  border: 1px solid var(--admin-line);
+  padding: 0.45rem;
+  background: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  cursor: pointer;
+}
+
+.slideNav button[aria-current="true"] {
+  background: var(--admin-dark);
+  color: #fff;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.primary,
+.secondary {
+  min-height: 2.45rem;
+  border: 1px solid var(--admin-dark);
+  border-radius: 0;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--admin-dark);
+  color: #fff;
+}
+
+.secondary {
+  background: #fff;
+  color: var(--admin-dark);
+}
+
+.primary:disabled,
+.secondary:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.notice {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+
+.notice[data-tone="success"] {
+  color: #3d5536;
+}
+
+.notice[data-tone="error"] {
+  color: #7a342c;
+}
+
+@media (max-width: 72rem) {
+  .editorShell {
+    grid-template-columns: 1fr;
+  }
+
+  .previewPanel {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 42rem) {
+  .templateGrid,
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldFull {
+    grid-column: auto;
+  }
+
+  .canvasStage {
+    min-height: 20rem;
+    padding: 0.75rem;
+  }
+}

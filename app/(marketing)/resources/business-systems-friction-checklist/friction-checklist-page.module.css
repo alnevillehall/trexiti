@@ -1,0 +1,152 @@
+.hero {
+  padding: clamp(8rem, 15vw, 14rem) 0 clamp(5rem, 10vw, 9rem);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(19rem, 0.55fr);
+  align-items: end;
+  gap: clamp(3rem, 8vw, 9rem);
+}
+
+.hero h1 {
+  max-width: 13ch;
+  margin: 1rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(4rem, 8.5vw, 9rem);
+  font-weight: 520;
+  letter-spacing: -0.075em;
+  line-height: 0.89;
+  text-wrap: balance;
+}
+
+.heroSupport > p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  line-height: 1.65;
+}
+
+.heroSupport dl {
+  margin: 2.5rem 0 0;
+}
+
+.heroSupport dl > div {
+  display: flex;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--color-border-default);
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.heroSupport :is(dt, dd) {
+  margin: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.heroSupport dd {
+  color: var(--color-text-muted);
+}
+
+.instructions {
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.instructionsGrid {
+  display: grid;
+  grid-template-columns: 0.7fr 1fr 0.7fr;
+  align-items: end;
+  gap: clamp(2rem, 6vw, 7rem);
+}
+
+.instructions h2 {
+  max-width: 10ch;
+  margin: 1rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: var(--type-heading-2);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: var(--leading-heading);
+}
+
+.scoreKey {
+  display: grid;
+  border-top: 1px solid var(--color-border-strong);
+  border-left: 1px solid var(--color-border-strong);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scoreKey > div {
+  display: flex;
+  min-height: 9rem;
+  padding: 0.9rem;
+  border-right: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.scoreKey strong {
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: 2.7rem;
+  font-weight: 520;
+}
+
+.scoreKey span {
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption);
+}
+
+.instructions aside {
+  padding: 1.3rem;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-accent-soft);
+}
+
+.instructions aside > strong {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.instructions aside p {
+  margin: 1.2rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption);
+  line-height: 1.55;
+}
+
+.checklistSection {
+  padding-bottom: clamp(7rem, 13vw, 13rem);
+}
+
+@media (max-width: 64rem) {
+  .heroGrid,
+  .instructionsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 42rem) {
+  .hero {
+    padding-top: 7rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 16vw, 5rem);
+  }
+
+  .scoreKey {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreKey > div {
+    min-height: 5rem;
+  }
+}

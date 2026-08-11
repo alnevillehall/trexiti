@@ -1,0 +1,26 @@
+-- CreateEnum
+CREATE TYPE "MarketingAssetTemplate" AS ENUM ('BRAND_STATEMENT', 'SYSTEM_FLOW', 'FRAGMENTED_CONNECTED', 'INSIGHT_ARTICLE', 'CAROUSEL', 'CASE_STUDY', 'FOCUSED_BUILD', 'SYSTEMS_REVIEW');
+
+-- CreateEnum
+CREATE TYPE "MarketingAssetFormat" AS ENUM ('LINKEDIN_FEED', 'LINKEDIN_SQUARE', 'INSTAGRAM_PORTRAIT', 'INSTAGRAM_SQUARE', 'INSTAGRAM_STORY', 'LINKEDIN_PERSONAL_COVER', 'LINKEDIN_COMPANY_COVER', 'LOGO_AVATAR', 'OPEN_GRAPH');
+
+-- CreateEnum
+CREATE TYPE "MarketingAssetVariant" AS ENUM ('LIGHT', 'DARK');
+
+-- AlterTable
+ALTER TABLE "MarketingAsset"
+ADD COLUMN "template" "MarketingAssetTemplate",
+ADD COLUMN "format" "MarketingAssetFormat",
+ADD COLUMN "variant" "MarketingAssetVariant",
+ADD COLUMN "title" TEXT,
+ADD COLUMN "eyebrow" TEXT,
+ADD COLUMN "body" TEXT,
+ADD COLUMN "cta" TEXT,
+ADD COLUMN "altText" TEXT,
+ADD COLUMN "slideCount" INTEGER NOT NULL DEFAULT 1,
+ADD COLUMN "slides" JSONB,
+ADD COLUMN "systemNodes" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN "destinationUrl" TEXT,
+ADD COLUMN "exportWidth" INTEGER,
+ADD COLUMN "exportHeight" INTEGER,
+ADD COLUMN "lastExportedAt" TIMESTAMP(3);

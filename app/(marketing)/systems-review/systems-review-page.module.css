@@ -1,0 +1,337 @@
+.hero {
+  padding: clamp(8rem, 15vw, 14rem) 0 clamp(5rem, 10vw, 9rem);
+  border-bottom: 1px solid var(--color-border-default);
+  background: var(--color-bg-primary);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(20rem, 0.55fr);
+  align-items: end;
+  gap: clamp(3rem, 8vw, 9rem);
+}
+
+.hero h1 {
+  max-width: 12ch;
+  margin: 1rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(4rem, 8.6vw, 9.2rem);
+  font-weight: 520;
+  letter-spacing: -0.075em;
+  line-height: 0.89;
+  text-wrap: balance;
+}
+
+.heroSupport > p,
+.sectionIntro > p,
+.resourceBand > div:last-child > p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  line-height: 1.65;
+}
+
+.heroBoundary {
+  display: grid;
+  margin-top: 2.5rem;
+  grid-template-columns: 1fr auto;
+}
+
+.heroBoundary :is(span, strong) {
+  display: flex;
+  min-height: 3rem;
+  padding: 0.7rem;
+  border: 1px solid var(--color-border-strong);
+  grid-column: 1;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.heroBoundary strong {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.heroBoundary i {
+  display: grid;
+  width: 2.4rem;
+  grid-column: 2;
+  place-items: center;
+  color: var(--color-text-muted);
+  font-style: normal;
+}
+
+.principleSection {
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.principleGrid {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.42fr) minmax(0, 1.58fr);
+  gap: clamp(2rem, 7vw, 8rem);
+}
+
+.principleGrid p {
+  max-width: 35ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2rem, 4.8vw, 5rem);
+  font-weight: 520;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.sectionIntro {
+  display: grid;
+  margin-bottom: clamp(3rem, 7vw, 7rem);
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+  align-items: end;
+  gap: clamp(2rem, 8vw, 9rem);
+}
+
+.sectionIntro h2,
+.outputsGrid h2,
+.resourceBand h2 {
+  max-width: 14ch;
+  margin: 1rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: var(--type-heading-2);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: var(--leading-heading);
+}
+
+.subjectGrid,
+.methodFlow,
+.outputsGrid ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.subjectGrid {
+  display: grid;
+  border-top: 1px solid var(--color-border-strong);
+  border-left: 1px solid var(--color-border-strong);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.subjectGrid li {
+  display: grid;
+  min-height: 7rem;
+  padding: 1rem;
+  border-right: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+  grid-template-columns: 2.5rem 1fr;
+  align-items: end;
+  gap: 1rem;
+}
+
+.subjectGrid span,
+.dimensionMap article > span,
+.methodFlow span,
+.pathGrid article > span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.subjectGrid strong {
+  font-size: var(--type-body-large);
+  font-weight: 550;
+}
+
+.dimensionsSection .sectionIntro > p,
+.dimensionsSection .sectionIntro h2 {
+  color: inherit;
+}
+
+.dimensionsSection .sectionIntro > p {
+  color: var(--color-text-inverse-secondary);
+}
+
+.dimensionMap {
+  display: grid;
+  border-top: 1px solid var(--color-border-inverse);
+  border-left: 1px solid var(--color-border-inverse);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.dimensionMap > div {
+  height: 100%;
+}
+
+.dimensionMap article {
+  display: flex;
+  min-height: 19rem;
+  height: 100%;
+  padding: 1.2rem;
+  border-right: 1px solid var(--color-border-inverse);
+  border-bottom: 1px solid var(--color-border-inverse);
+  flex-direction: column;
+}
+
+.dimensionMap article > span {
+  color: var(--color-text-inverse-muted);
+}
+
+.dimensionMap h3 {
+  margin: auto 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.7rem, 2.8vw, 3.1rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+}
+
+.dimensionMap p {
+  margin: 1rem 0 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: var(--type-caption);
+  line-height: 1.55;
+}
+
+.methodFlow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.methodFlow li {
+  display: flex;
+  min-height: 10rem;
+  padding: 1rem;
+  border-top: 1px solid var(--color-border-strong);
+  border-right: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.methodFlow strong {
+  max-width: 18ch;
+  font-size: var(--type-body-large);
+  font-weight: 550;
+}
+
+.outputsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.8fr);
+  gap: clamp(3rem, 10vw, 11rem);
+}
+
+.outputsGrid > div > p {
+  max-width: 49rem;
+  margin: 2rem 0 0;
+  line-height: 1.65;
+}
+
+.outputsGrid ul {
+  border-top: 1px solid color-mix(in srgb, currentcolor 55%, transparent);
+}
+
+.outputsGrid li {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid color-mix(in srgb, currentcolor 28%, transparent);
+}
+
+.pathGrid {
+  display: grid;
+  border-top: 1px solid var(--color-border-strong);
+  border-left: 1px solid var(--color-border-strong);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pathGrid article {
+  min-height: 16rem;
+  padding: 1rem;
+  border-right: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.pathGrid h3 {
+  margin: 4rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.6rem, 2.5vw, 2.7rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.pathGrid p {
+  margin: 1rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption);
+  line-height: 1.55;
+}
+
+.resourceBand {
+  display: grid;
+  padding-block: clamp(2rem, 5vw, 5rem);
+  border-block: 1px solid var(--color-border-strong);
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+  gap: clamp(2rem, 8vw, 9rem);
+}
+
+.resourceBand a {
+  margin-top: 2rem;
+}
+
+.formSection {
+  padding-bottom: clamp(7rem, 13vw, 13rem);
+}
+
+@media (max-width: 64rem) {
+  .heroGrid,
+  .sectionIntro,
+  .outputsGrid,
+  .resourceBand {
+    grid-template-columns: 1fr;
+  }
+
+  .dimensionMap {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pathGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 42rem) {
+  .hero {
+    padding-top: 7rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.55rem, 17vw, 5.2rem);
+  }
+
+  .principleGrid,
+  .subjectGrid,
+  .dimensionMap,
+  .methodFlow,
+  .pathGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .principleGrid {
+    gap: 2rem;
+  }
+
+  .subjectGrid li,
+  .dimensionMap article,
+  .methodFlow li,
+  .pathGrid article {
+    min-height: 0;
+  }
+
+  .dimensionMap h3,
+  .pathGrid h3 {
+    margin-top: 3rem;
+  }
+}

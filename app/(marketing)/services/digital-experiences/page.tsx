@@ -8,6 +8,7 @@ import {
   Reveal,
   Section,
 } from "@/components/marketing/site-primitives";
+import { PublishedInsightLink } from "@/components/marketing/published-insight-link";
 import {
   connectedExperienceFlow,
   digitalExperienceCapabilities,
@@ -168,9 +169,13 @@ export default function DigitalExperiencesPage() {
               </Reveal>
             </div>
             <p>
-              A serious website can be the entry point to the systems that
-              qualify demand, book work, take payment, serve customers, and
-              give the business better visibility.
+              A serious website can be{" "}
+              <PublishedInsightLink slug="the-website-is-not-the-end-of-the-customer-journey">
+                the entry point to the systems that qualify demand, book work,
+                take payment, serve customers, and give the business better
+                visibility
+              </PublishedInsightLink>
+              .
             </p>
           </div>
 

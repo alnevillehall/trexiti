@@ -1,0 +1,702 @@
+.documentPage {
+  min-height: 100vh;
+  padding: clamp(6.5rem, 11vw, 10rem) var(--container-padding) var(--space-xl);
+  background: var(--color-bg-primary);
+}
+
+.documentInner {
+  width: min(100%, 92rem);
+  margin: 0 auto;
+}
+
+.screenToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border-subtle);
+  padding: 0.75rem;
+  background: var(--color-surface-elevated);
+}
+
+.toolbarMeta strong,
+.toolbarMeta span {
+  display: block;
+}
+
+.toolbarMeta strong {
+  font-size: 0.78rem;
+}
+
+.toolbarMeta span {
+  margin-top: 0.12rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.61rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.toolbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.primaryAction,
+.secondaryAction,
+.downloadAction {
+  display: inline-flex;
+  min-height: 2.7rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-text-primary);
+  border-radius: 0;
+  padding: 0.64rem 0.85rem;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.primaryAction {
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+}
+
+.secondaryAction,
+.downloadAction {
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.capabilitySheet,
+.mediaSheet {
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-elevated);
+}
+
+.capabilityHero,
+.mediaHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(20rem, 0.6fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  padding: clamp(2rem, 6vw, 6.5rem);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.documentLabel,
+.sectionIndex,
+.assetMeta,
+.identityLabel,
+.workMeta {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.documentLabel,
+.sectionIndex,
+.identityLabel,
+.workMeta {
+  color: var(--color-text-muted);
+}
+
+.capabilityHero h1,
+.mediaHero h1 {
+  max-width: 13ch;
+  margin: clamp(2.6rem, 6vw, 6rem) 0 0;
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(3rem, 7vw, 7.5rem);
+  font-weight: 530;
+  letter-spacing: -0.075em;
+  line-height: 0.92;
+}
+
+.heroCopy {
+  display: grid;
+  align-content: end;
+  gap: 1.2rem;
+}
+
+.heroCopy p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: clamp(1rem, 1.5vw, 1.32rem);
+  line-height: 1.55;
+}
+
+.heroCopy p:first-child {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.documentSection {
+  padding: clamp(2rem, 5vw, 5rem) clamp(2rem, 6vw, 6.5rem);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.documentSection:last-child {
+  border-bottom: 0;
+}
+
+.sectionHeading {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.38fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: clamp(2rem, 4vw, 4rem);
+}
+
+.sectionHeading h2 {
+  max-width: 16ch;
+  margin: 0;
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(2rem, 4vw, 4.4rem);
+  font-weight: 540;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+}
+
+.capabilityGrid,
+.engagementGrid,
+.descriptionGrid,
+.identityGrid,
+.assetGrid,
+.workGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--color-border-subtle);
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+.capabilityCard,
+.engagementCard,
+.descriptionCard,
+.identityCard,
+.workCard {
+  min-width: 0;
+  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: clamp(1.25rem, 2.5vw, 2.4rem);
+}
+
+.capabilityCard h3,
+.engagementCard h3,
+.descriptionCard h3,
+.identityCard h3,
+.workCard h3 {
+  margin: 0;
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-weight: 570;
+  letter-spacing: -0.035em;
+}
+
+.capabilityCard p,
+.engagementCard p,
+.descriptionCard p,
+.identityCard p,
+.workCard p {
+  margin: 1rem 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+.fitList,
+.processList,
+.usageList,
+.contactList,
+.socialList,
+.typeList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fitList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.fitList li {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 1rem 0;
+  line-height: 1.55;
+}
+
+.fitList li:nth-child(odd) {
+  padding-right: 1.5rem;
+}
+
+.fitList li:nth-child(even) {
+  border-left: 1px solid var(--color-border-subtle);
+  padding-left: 1.5rem;
+}
+
+.fitList span,
+.processList span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.63rem;
+}
+
+.processList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  counter-reset: process;
+  border-top: 1px solid var(--color-border-subtle);
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+.processList li {
+  min-width: 0;
+  min-height: 13rem;
+  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 1.5rem;
+}
+
+.processList strong {
+  display: block;
+  margin-top: 2.8rem;
+  font-family: var(--font-space), sans-serif;
+  font-size: 1.35rem;
+}
+
+.processList p {
+  margin: 0.7rem 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+.engagementPrinciple {
+  max-width: 45rem;
+  margin: 2rem 0 0 auto;
+  border-left: 4px solid var(--color-surface-accent);
+  padding: 0.5rem 0 0.5rem 1.2rem;
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(1.3rem, 2.4vw, 2.3rem);
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+}
+
+.capabilityCta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+  padding: clamp(2.5rem, 6vw, 6.5rem);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+}
+
+.capabilityCta h2 {
+  max-width: 14ch;
+  margin: 1.5rem 0 0;
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(2.5rem, 6vw, 6.5rem);
+  font-weight: 540;
+  letter-spacing: -0.07em;
+  line-height: 0.95;
+}
+
+.capabilityContact {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: end;
+}
+
+.capabilityContact a,
+.capabilityContact span {
+  color: inherit;
+  font-size: 0.85rem;
+}
+
+.capabilityContact a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.mediaHero {
+  align-items: center;
+}
+
+.mediaHero h1 {
+  max-width: 10ch;
+}
+
+.wordmarkDisplay {
+  display: grid;
+  min-height: 25rem;
+  place-items: center;
+  border: 1px solid var(--color-border-inverse);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+}
+
+.wordmarkDisplay > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wordmarkDisplay img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+}
+
+.wordmarkDisplay strong {
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 620;
+  letter-spacing: -0.055em;
+}
+
+.wordmarkDisplay p {
+  margin: 1.5rem 0 0;
+  color: var(--color-text-inverse-secondary);
+  text-align: center;
+}
+
+.descriptionGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.descriptionCard span {
+  display: block;
+  margin-bottom: 2rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.63rem;
+  text-transform: uppercase;
+}
+
+.assetCard {
+  display: grid;
+  min-width: 0;
+  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.assetPreview {
+  display: grid;
+  min-height: 22rem;
+  place-items: center;
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-secondary);
+}
+
+.assetPreview[data-background="dark"] {
+  background: var(--color-surface-inverse);
+}
+
+.assetPreview img {
+  width: min(48%, 12rem);
+  height: auto;
+  max-height: 13rem;
+  object-fit: contain;
+}
+
+.assetDetails {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.assetDetails strong,
+.assetDetails span {
+  display: block;
+}
+
+.assetMeta {
+  margin-top: 0.25rem;
+  color: var(--color-text-muted);
+}
+
+.usageLayout,
+.contactLayout,
+.brandSystemGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.usageList li,
+.contactList li,
+.socialList li,
+.typeList li {
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 0.85rem 0;
+  line-height: 1.55;
+}
+
+.contactList a,
+.socialList a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.pendingNote {
+  margin: 1rem 0 0;
+  border-left: 3px solid var(--color-surface-accent);
+  padding-left: 0.9rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--color-border-subtle);
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+.colorToken {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: center;
+  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 0.8rem;
+}
+
+.swatch {
+  width: 3.2rem;
+  height: 3.2rem;
+  border: 1px solid rgb(21 22 19 / 20%);
+}
+
+.colorToken strong,
+.colorToken span,
+.typeList strong,
+.typeList span {
+  display: block;
+}
+
+.colorToken span,
+.typeList span {
+  margin-top: 0.18rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.62rem;
+}
+
+.workCard {
+  display: grid;
+  min-height: 15rem;
+  align-content: space-between;
+}
+
+.workCard a {
+  margin-top: 1.5rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 62rem) {
+  .capabilityHero,
+  .mediaHero,
+  .capabilityCta,
+  .sectionHeading,
+  .usageLayout,
+  .contactLayout,
+  .brandSystemGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .capabilityHero h1,
+  .mediaHero h1 {
+    margin-top: 2.5rem;
+  }
+
+  .capabilityContact {
+    justify-items: start;
+  }
+
+  .descriptionGrid,
+  .processList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 42rem) {
+  .documentPage {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .capabilityGrid,
+  .engagementGrid,
+  .descriptionGrid,
+  .identityGrid,
+  .assetGrid,
+  .workGrid,
+  .fitList,
+  .processList,
+  .colorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fitList li:nth-child(odd),
+  .fitList li:nth-child(even) {
+    border-left: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .screenToolbar {
+    align-items: stretch;
+  }
+
+  .toolbarActions,
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  .documentPage {
+    min-height: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .screenToolbar {
+    display: none !important;
+  }
+
+  .documentInner,
+  .capabilitySheet {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    background: #fff;
+  }
+
+  .capabilityHero {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 10mm;
+    padding: 0 0 7mm;
+  }
+
+  .capabilityHero h1 {
+    margin-top: 12mm;
+    font-size: 34pt;
+  }
+
+  .heroCopy {
+    gap: 4mm;
+  }
+
+  .heroCopy p {
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+
+  .documentSection {
+    break-inside: avoid;
+    padding: 7mm 0;
+  }
+
+  .sectionHeading {
+    grid-template-columns: 32mm 1fr;
+    gap: 7mm;
+    margin-bottom: 5mm;
+  }
+
+  .sectionHeading h2 {
+    font-size: 20pt;
+  }
+
+  .capabilityCard,
+  .engagementCard {
+    padding: 4mm;
+  }
+
+  .capabilityCard h3,
+  .engagementCard h3 {
+    font-size: 11pt;
+  }
+
+  .capabilityCard p,
+  .engagementCard p,
+  .fitList li,
+  .processList p {
+    font-size: 7.7pt;
+    line-height: 1.35;
+  }
+
+  .fitList li {
+    padding-top: 2.5mm;
+    padding-bottom: 2.5mm;
+  }
+
+  .printBreak {
+    break-before: page;
+  }
+
+  .processList li {
+    min-height: 30mm;
+    padding: 4mm;
+  }
+
+  .processList strong {
+    margin-top: 5mm;
+    font-size: 10pt;
+  }
+
+  .engagementPrinciple {
+    margin-top: 5mm;
+    font-size: 13pt;
+  }
+
+  .capabilityCta {
+    break-inside: avoid;
+    grid-template-columns: 1fr auto;
+    padding: 8mm 0 0;
+    border-top: 2px solid #151613;
+    background: #fff;
+    color: #151613;
+  }
+
+  .capabilityCta h2 {
+    margin-top: 4mm;
+    font-size: 25pt;
+  }
+
+  .documentLabel,
+  .sectionIndex,
+  .capabilityContact a,
+  .capabilityContact span {
+    font-size: 7pt;
+  }
+
+  .capabilitySheet,
+  .capabilitySheet * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

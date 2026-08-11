@@ -6,7 +6,9 @@ export type AdminPermission =
   | "opportunity:update"
   | "opportunity:archive"
   | "task:manage"
-  | "company:manage";
+  | "company:manage"
+  | "marketing:view"
+  | "marketing:manage";
 
 const rolePermissions: Record<AdminRole, readonly AdminPermission[]> = {
   OWNER: [
@@ -16,6 +18,8 @@ const rolePermissions: Record<AdminRole, readonly AdminPermission[]> = {
     "opportunity:archive",
     "task:manage",
     "company:manage",
+    "marketing:view",
+    "marketing:manage",
   ],
   ADMIN: [
     "admin:view",
@@ -24,12 +28,15 @@ const rolePermissions: Record<AdminRole, readonly AdminPermission[]> = {
     "opportunity:archive",
     "task:manage",
     "company:manage",
+    "marketing:view",
+    "marketing:manage",
   ],
   SALES: [
     "admin:view",
     "opportunity:create",
     "opportunity:update",
     "task:manage",
+    "marketing:view",
   ],
 };
 

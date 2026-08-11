@@ -131,7 +131,7 @@ export default async function AdminTargetAccountsPage({ searchParams }: { search
           <label className={styles.field}>WhatsApp<input name="whatsapp" placeholder="Number or business link" /></label>
           <label className={styles.field}>Other contact method<input name="otherContactMethod" /></label>
           <label className={styles.field}>Opportunity type<select name="opportunityType" defaultValue="BUSINESS_SYSTEM">{opportunityTypes.map((type) => <option key={type} value={type}>{opportunityTypeLabels[type]}</option>)}</select></label>
-          <label className={styles.field}>Estimated project value<input name="estimatedProjectValue" type="number" min={3000} step={500} required defaultValue={10000} /></label>
+          <label className={styles.field}>Estimated project value<input name="estimatedProjectValue" type="number" min={0} step={500} required defaultValue={10000} /></label>
           <label className={styles.field}>Estimated project range<input name="budget" placeholder="$10,000–$25,000" /></label>
           <label className={styles.field}>Timeline<input name="timeline" placeholder="3–6 months" /></label>
           <label className={styles.field}>Source<input name="source" required defaultValue="Manual research" /></label>

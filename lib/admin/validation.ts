@@ -84,7 +84,7 @@ export const createOpportunitySchema = z
     opportunityType: z.enum(opportunityTypes),
     identifiedProblem: cleanText(10, 5000),
     opportunity: cleanText(10, 5000),
-    estimatedProjectValue: z.coerce.number().min(3000).max(100000000),
+    estimatedProjectValue: z.coerce.number().min(0).max(100000000),
     budget: optionalText(120),
     timeline: optionalText(120),
     source: cleanText(2, 120),
@@ -113,22 +113,38 @@ export const createOpportunitySchema = z
     totalScore: calculateOpportunityScore(value),
   }));
 
-export const updateOpportunitySchema = z.object({
-  opportunityId: z.string().cuid(),
-  stage: z.enum(opportunityStages),
-  probability: z.coerce.number().int().min(0).max(100),
-  estimatedProjectValue: z.coerce.number().min(0).max(100000000),
-  budget: optionalText(120),
-  timeline: optionalText(120),
-  nextAction: optionalText(2000),
-  nextFollowUp: optionalDateTime,
-  assignedOwnerId: optionalId,
-});
+export const updateOpportunitySchema = z
+  .object({
+    opportunityId: z.string().cuid(),
+    stage: z.enum(opportunityStages),
+    probability: z.coerce.number().int().min(0).max(100),
+    estimatedProjectValue: z.coerce.number().min(0).max(100000000),
+    budget: optionalText(120),
+    timeline: optionalText(120),
+    outcomeReason: optionalText(3000),
+    nextAction: optionalText(2000),
+    nextFollowUp: optionalDateTime,
+    assignedOwnerId: optionalId,
+  })
+  .superRefine((value, context) => {
+    if (["WON", "LOST"].includes(value.stage) && !value.outcomeReason) {
+      context.addIssue({
+        code: "custom",
+        message: "Record a reason before closing an opportunity as won or lost.",
+        path: ["outcomeReason"],
+      });
+    }
+  });
 
-export const moveOpportunitySchema = z.object({
-  opportunityId: z.string().cuid(),
-  stage: z.enum(opportunityStages),
-});
+export const moveOpportunitySchema = z
+  .object({
+    opportunityId: z.string().cuid(),
+    stage: z.enum(opportunityStages),
+  })
+  .refine((value) => !["WON", "LOST"].includes(value.stage), {
+    message: "Close won or lost opportunities from their detail page so the outcome reason is recorded.",
+    path: ["stage"],
+  });
 
 export const archiveOpportunitySchema = z.object({
   opportunityId: z.string().cuid(),

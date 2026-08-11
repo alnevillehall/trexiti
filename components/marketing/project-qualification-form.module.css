@@ -28,7 +28,7 @@
   display: grid;
   padding: 0;
   margin: 0;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   list-style: none;
 }
 
@@ -227,11 +227,31 @@
 }
 
 .choiceLabel {
+  display: block;
   font-family: var(--font-space), var(--font-geist-sans), sans-serif;
   font-size: clamp(1rem, 1.4vw, 1.32rem);
   font-weight: 540;
   letter-spacing: -0.025em;
   line-height: 1.25;
+}
+
+.choiceCopy {
+  display: flex;
+  min-width: 0;
+  align-self: end;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.choiceDescription {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption);
+  font-weight: 440;
+  line-height: 1.5;
+}
+
+.choice:has(input:checked) .choiceDescription {
+  color: var(--color-text-accent-secondary);
 }
 
 .choiceControl {
@@ -271,6 +291,12 @@
 }
 
 .fieldGrid label > span small {
+  color: var(--color-text-muted);
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.otherField > span small {
   color: var(--color-text-muted);
   font-size: inherit;
   font-weight: inherit;
@@ -430,6 +456,18 @@
 
 .consentField .fieldError {
   grid-column: 2;
+}
+
+.privacyNote {
+  grid-column: 1 / -1;
+  margin: -0.35rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption);
+}
+
+.privacyNote a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .formError {
@@ -622,14 +660,14 @@
   }
 
   .progress ol {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .progress li:nth-child(-n + 4) {
+  .progress li:nth-child(-n + 5) {
     border-bottom: 1px solid var(--color-border-subtle);
   }
 
-  .progress li:nth-child(4n) {
+  .progress li:nth-child(5n) {
     border-right: 0;
   }
 

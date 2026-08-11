@@ -11,6 +11,7 @@ import {
   Reveal,
   Section,
 } from "@/components/marketing/site-primitives";
+import { PublishedInsightLink } from "@/components/marketing/published-insight-link";
 import siteStyles from "@/components/marketing/trexiti-site.module.css";
 import { siteConfig } from "@/lib/content/site";
 
@@ -202,9 +203,12 @@ export default function AboutPage() {
                 context.
               </p>
               <p>
-                Eventually, information becomes fragmented and employees
-                become the integration layer—copying, chasing, reconciling, and
-                remembering what the systems do not.
+                Eventually, information becomes fragmented and{" "}
+                <PublishedInsightLink slug="your-employees-shouldnt-be-your-api">
+                  employees become the integration layer
+                </PublishedInsightLink>
+                —copying, chasing, reconciling, and remembering what the systems
+                do not.
               </p>
               <p>
                 Trexiti helps redesign this: first by making the operating model

@@ -69,11 +69,17 @@ export function ButtonLink({
   href,
   variant = "primary",
   className,
+  analyticsCta,
+  analyticsInsightCta,
+  analyticsPlacement,
 }: {
   children: ReactNode;
   href: string;
   variant?: "primary" | "secondary" | "inverse";
   className?: string;
+  analyticsCta?: string;
+  analyticsInsightCta?: string;
+  analyticsPlacement?: string;
 }) {
   return (
     <Link
@@ -84,6 +90,9 @@ export function ButtonLink({
         variant === "inverse" && styles.buttonLinkInverse,
         className,
       )}
+      data-analytics-cta={analyticsCta}
+      data-analytics-insight-cta={analyticsInsightCta}
+      data-analytics-placement={analyticsPlacement}
       href={href}
     >
       <span>{children}</span>
@@ -99,11 +108,17 @@ export function TextLink({
   href,
   inverse = false,
   className,
+  analyticsCta,
+  analyticsInsightCta,
+  analyticsPlacement,
 }: {
   children: ReactNode;
   href: string;
   inverse?: boolean;
   className?: string;
+  analyticsCta?: string;
+  analyticsInsightCta?: string;
+  analyticsPlacement?: string;
 }) {
   return (
     <Link
@@ -112,6 +127,9 @@ export function TextLink({
         inverse && styles.textActionInverse,
         className,
       )}
+      data-analytics-cta={analyticsCta}
+      data-analytics-insight-cta={analyticsInsightCta}
+      data-analytics-placement={analyticsPlacement}
       href={href}
     >
       <span>{children}</span>
@@ -127,22 +145,41 @@ export function ArrowLink({
   href,
   tone = "default",
   className,
+  analyticsCta,
+  analyticsInsightCta,
+  analyticsPlacement,
 }: {
   children: ReactNode;
   href: string;
   tone?: "default" | "light" | "solid";
   className?: string;
+  analyticsCta?: string;
+  analyticsInsightCta?: string;
+  analyticsPlacement?: string;
 }) {
   if (tone === "solid") {
     return (
-      <ButtonLink className={className} href={href}>
+      <ButtonLink
+        analyticsCta={analyticsCta}
+        analyticsInsightCta={analyticsInsightCta}
+        analyticsPlacement={analyticsPlacement}
+        className={className}
+        href={href}
+      >
         {children}
       </ButtonLink>
     );
   }
 
   return (
-    <TextLink className={className} href={href} inverse={tone === "light"}>
+    <TextLink
+      analyticsCta={analyticsCta}
+      analyticsInsightCta={analyticsInsightCta}
+      analyticsPlacement={analyticsPlacement}
+      className={className}
+      href={href}
+      inverse={tone === "light"}
+    >
       {children}
     </TextLink>
   );

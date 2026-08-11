@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { investmentContextOptions } from "@/lib/content/project-qualification";
 import { siteConfig } from "@/lib/content/site";
 
 import styles from "./trexiti-site.module.css";
@@ -13,14 +14,6 @@ const projectTypes = [
   "Automation or integration",
   "Systems analysis and roadmap",
   "Not sure yet",
-] as const;
-
-const budgets = [
-  "$3,000–$10,000 USD",
-  "$10,000–$25,000 USD",
-  "$25,000–$50,000 USD",
-  "$50,000+ USD",
-  "Still defining scope",
 ] as const;
 
 export function ProjectInquiryForm() {
@@ -37,7 +30,7 @@ export function ProjectInquiryForm() {
       `Company: ${data.get("company")}`,
       `Email: ${data.get("email")}`,
       `Project type: ${data.get("projectType")}`,
-      `Indicative investment: ${data.get("budget")}`,
+      `Investment context: ${data.get("investmentContext")}`,
       `Timing: ${data.get("timing")}`,
       "",
       "Business challenge:",
@@ -81,13 +74,13 @@ export function ProjectInquiryForm() {
           </select>
         </label>
         <label>
-          <span>Indicative investment</span>
-          <select name="budget" defaultValue="" required>
+          <span>Investment context</span>
+          <select name="investmentContext" defaultValue="" required>
             <option value="" disabled>
-              Select a range
+              Select the closest context
             </option>
-            {budgets.map((budget) => (
-              <option key={budget}>{budget}</option>
+            {investmentContextOptions.map((context) => (
+              <option key={context}>{context}</option>
             ))}
           </select>
         </label>

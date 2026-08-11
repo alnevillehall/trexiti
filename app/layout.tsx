@@ -32,8 +32,7 @@ export const metadata: Metadata = {
     default: "Trexiti — Digital systems for ambitious businesses",
     template: "%s | Trexiti",
   },
-  description:
-    "Trexiti understands how businesses work, identifies what is slowing them down, and builds the digital systems they need to operate better.",
+  description: siteConfig.description,
   authors: [{ name: "Trexiti", url: siteConfig.url }],
   creator: "Trexiti",
   category: "technology",

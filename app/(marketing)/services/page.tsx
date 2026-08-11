@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { Stagger, StaggerItem } from "@/components/marketing/motion-primitives";
 import {
   ArrowLink,
   Container,
+  Eyebrow,
   PageIntro,
   Section,
 } from "@/components/marketing/site-primitives";
 import styles from "@/components/marketing/trexiti-site.module.css";
-import { services } from "@/lib/content/services";
+import { engagementShapes, services } from "@/lib/content/services";
 
 export const metadata: Metadata = {
   title: "Capabilities",
@@ -57,6 +59,38 @@ export default function ServicesPage() {
                     </ArrowLink>
                   </div>
                 </article>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </Container>
+      </Section>
+
+      <Section tone="secondary">
+        <Container>
+          <div className={styles.sectionHeading}>
+            <div>
+              <Eyebrow>Engagement shapes</Eyebrow>
+            </div>
+            <div>
+              <h2>Start with the boundary the problem requires.</h2>
+              <p>
+                We work with businesses at different stages. Some need one
+                focused improvement; others need a connected operating system.
+                The right engagement is shaped by the problem—not the size of
+                the company.
+              </p>
+            </div>
+          </div>
+
+          <Stagger className={styles.capabilityList} role="list" step={0.055}>
+            {engagementShapes.map((shape) => (
+              <StaggerItem key={shape.title} role="listitem">
+                <Link className={styles.capabilityItem} href={shape.href}>
+                  <span>{shape.index}</span>
+                  <h3>{shape.title}</h3>
+                  <p>{shape.description}</p>
+                  <span aria-hidden="true">{"\u2197"}</span>
+                </Link>
               </StaggerItem>
             ))}
           </Stagger>

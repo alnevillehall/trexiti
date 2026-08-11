@@ -13,6 +13,7 @@ import {
   Reveal,
   Section,
 } from "@/components/marketing/site-primitives";
+import { PublishedInsightLink } from "@/components/marketing/published-insight-link";
 import { IntegrationMap } from "@/components/marketing/system-visuals";
 import {
   businessSystemCapabilities,
@@ -173,8 +174,11 @@ export default function BusinessSystemsPage() {
               </Reveal>
               <p>
                 The goal is not to replace every platform. It is to establish a
-                reliable operational centre—and connect the specialist tools
-                that still do their jobs well.
+                reliable operational centre—and{" "}
+                <PublishedInsightLink slug="your-employees-shouldnt-be-your-api">
+                  connect the specialist tools that still do their jobs well
+                </PublishedInsightLink>
+                .
               </p>
             </div>
           </div>
@@ -261,9 +265,11 @@ export default function BusinessSystemsPage() {
                 <h2>Build only where the business needs an advantage.</h2>
               </Reveal>
               <p>
-                Use existing software when it solves the problem well. Custom
-                software should be a deliberate response to operational fit—not
-                the default answer.
+                Use existing software when it solves the problem well.{" "}
+                <PublishedInsightLink slug="you-probably-dont-need-custom-software">
+                  Custom software should be a deliberate response to operational
+                  fit—not the default answer.
+                </PublishedInsightLink>
               </p>
             </div>
           </div>

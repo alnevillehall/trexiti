@@ -13,6 +13,7 @@ import {
   createOpportunitySchema,
   createTaskSchema,
   opportunityFiltersSchema,
+  moveOpportunitySchema,
   updateOpportunitySchema,
   updateProspectResearchSchema,
 } from "../lib/admin/validation";
@@ -79,11 +80,25 @@ const unsafeUrl = createOpportunitySchema.safeParse({
 });
 assert.equal(unsafeUrl.success, false, "unsafe website schemes must be rejected");
 
-const belowCommercialRange = createOpportunitySchema.safeParse({
+const focusedCommercialRange = createOpportunitySchema.safeParse({
   ...createPayload,
-  estimatedProjectValue: "2999",
+  estimatedProjectValue: "0",
 });
-assert.equal(belowCommercialRange.success, false, "create contract must reject below-range work");
+assert.equal(
+  focusedCommercialRange.success,
+  true,
+  "create contract must allow a focused or not-yet-estimated opportunity",
+);
+
+const negativeCommercialRange = createOpportunitySchema.safeParse({
+  ...createPayload,
+  estimatedProjectValue: "-1",
+});
+assert.equal(
+  negativeCommercialRange.success,
+  false,
+  "create contract must reject negative opportunity values",
+);
 
 const invalidScore = createOpportunitySchema.safeParse({
   ...createPayload,
@@ -98,11 +113,52 @@ const updateResult = updateOpportunitySchema.safeParse({
   estimatedProjectValue: "30000",
   budget: "$25,000–$50,000",
   timeline: "3–6 months",
+  outcomeReason: "",
   nextAction: "Review proposal with the decision maker.",
   nextFollowUp: "2026-08-14T10:00",
   assignedOwnerId: "cm00000000000000000000002",
 });
 assert.equal(updateResult.success, true, "update contract should accept commercial changes");
+
+const closeWithoutReason = updateOpportunitySchema.safeParse({
+  opportunityId: "cm00000000000000000000001",
+  stage: "LOST",
+  probability: "0",
+  estimatedProjectValue: "30000",
+  budget: "",
+  timeline: "",
+  outcomeReason: "",
+  nextAction: "",
+  nextFollowUp: "",
+  assignedOwnerId: "",
+});
+assert.equal(
+  closeWithoutReason.success,
+  false,
+  "won and lost opportunities must capture a real outcome reason",
+);
+
+const closeWithReason = updateOpportunitySchema.safeParse({
+  opportunityId: "cm00000000000000000000001",
+  stage: "WON",
+  probability: "100",
+  estimatedProjectValue: "30000",
+  budget: "",
+  timeline: "",
+  outcomeReason: "Scope and commercial terms approved by the decision maker.",
+  nextAction: "Schedule the kickoff.",
+  nextFollowUp: "2026-08-18T09:00",
+  assignedOwnerId: "",
+});
+assert.equal(closeWithReason.success, true);
+assert.equal(
+  moveOpportunitySchema.safeParse({
+    opportunityId: "cm00000000000000000000001",
+    stage: "LOST",
+  }).success,
+  false,
+  "the quick pipeline mover must not bypass the outcome reason",
+);
 
 const researchUpdate = updateProspectResearchSchema.parse({
   opportunityId: "cm00000000000000000000001",

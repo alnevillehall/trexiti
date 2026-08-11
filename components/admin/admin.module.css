@@ -421,6 +421,31 @@
   text-underline-offset: 0.18rem;
 }
 
+.contentStatus {
+  display: inline-flex;
+  min-height: 1.7rem;
+  padding: 0.28rem 0.48rem;
+  border: 1px solid var(--admin-line);
+  align-items: center;
+  background: var(--admin-soft);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 720;
+  letter-spacing: 0.06em;
+}
+
+.contentStatus[data-status="published"] {
+  border-color: #758061;
+  color: #3f4930;
+  background: #e9eddf;
+}
+
+.contentStatus[data-status="scheduled"] {
+  border-color: #9d8a59;
+  color: #66572f;
+  background: #f2ebd9;
+}
+
 .subtle {
   display: block;
   margin-top: 0.16rem;

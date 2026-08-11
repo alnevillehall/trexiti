@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { publicContactLinks } from "@/lib/marketing/contact";
+
 import styles from "./marketing-site.module.css";
 
 export type MarketingNavItem = {
@@ -100,9 +102,16 @@ export function MarketingFooter() {
         <p>Digital systems for ambitious businesses.</p>
         <div className={styles.footerLinks}>
           <Link href="/start-a-project">Start a Project</Link>
+          <Link href="/systems-review">Systems Review</Link>
+          <Link href="/work">Selected Work</Link>
+          <Link href="/insights">Insights</Link>
           <Link href="/service-businesses">ServiceOS</Link>
           <Link href="/propertyos">PropertyOS</Link>
-          <a href="mailto:hello@trexiti.com">hello@trexiti.com</a>
+          {publicContactLinks.map((link) => (
+            <a href={link.href} key={link.kind}>
+              {link.label}
+            </a>
+          ))}
         </div>
       </div>
     </footer>

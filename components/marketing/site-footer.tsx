@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AnalyticsPreferencesButton } from "@/components/marketing/analytics-provider";
 import { footerNavigation, siteConfig } from "@/lib/content/site";
+import { publicContactLinks } from "@/lib/marketing/contact";
 
 import styles from "./trexiti-site.module.css";
 
-export function SiteFooter() {
+export function SiteFooter({ analyticsEnabled = false }: { analyticsEnabled?: boolean }) {
   return (
     <footer className={styles.siteFooter}>
       <div className={styles.footerGrid}>
@@ -31,10 +33,11 @@ export function SiteFooter() {
 
         <div className={styles.footerColumn}>
           <p>Contact</p>
-          <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
-          <span className={styles.footerPlaceholder}>
-            {siteConfig.linkedInLabel}
-          </span>
+          {publicContactLinks.map((link) => (
+            <a href={link.href} key={link.kind}>
+              {link.label}
+            </a>
+          ))}
           <span className={styles.footerServiceArea}>
             {siteConfig.serviceArea}
           </span>
@@ -50,7 +53,11 @@ export function SiteFooter() {
 
       <div className={styles.footerMeta}>
         <p>© {new Date().getFullYear()} Trexiti. All rights reserved.</p>
-        <p>Strategy · Design · Engineering · Improvement</p>
+        <div className={styles.footerMetaLinks}>
+          <Link href="/privacy">Privacy</Link>
+          {analyticsEnabled ? <AnalyticsPreferencesButton /> : null}
+          <p>Strategy · Design · Engineering · Improvement</p>
+        </div>
       </div>
     </footer>
   );

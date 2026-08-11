@@ -39,13 +39,22 @@
   gap: clamp(3rem, 8vw, 9rem);
 }
 
-.heroBottom > div > p {
+.heroIntroduction > p {
   max-width: 54rem;
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--type-body-large);
   letter-spacing: -0.025em;
   line-height: 1.58;
+}
+
+.heroIntroduction .inclusionNote {
+  max-width: 48rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-default);
+  color: var(--color-text-muted);
+  font-size: var(--type-caption);
 }
 
 .heroBottom dl {

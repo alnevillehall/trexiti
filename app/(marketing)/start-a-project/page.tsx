@@ -12,7 +12,7 @@ import { siteConfig } from "@/lib/content/site";
 import styles from "./start-a-project.module.css";
 
 const pageDescription =
-  "Tell Trexiti about the business, the problem, the systems involved, and what you are looking to build through a considered project qualification process.";
+  "Tell Trexiti what should work better, how the business handles it today, and what a useful outcome would look like.";
 
 export const metadata: Metadata = {
   title: "Start a Project",
@@ -81,33 +81,37 @@ export default function StartProjectPage() {
       <section className={styles.hero}>
         <Container>
           <div className={styles.heroTopline}>
-            <Eyebrow>Start a project / Qualification</Eyebrow>
+            <Eyebrow>Start a project / Business context</Eyebrow>
             <span>Private / Considered / No automated pitch</span>
           </div>
           <Reveal>
             <h1>A better first conversation begins with context.</h1>
           </Reveal>
           <div className={styles.heroBottom}>
-            <Reveal>
+            <Reveal className={styles.heroIntroduction}>
               <p>
-                Tell us what you are building, what the business needs to change,
-                and the systems already involved. We use that context to decide
-                whether Trexiti is the right partner—and what a sensible first
-                engagement might be.
+                Tell us what should work better, how the business handles it
+                today, and what a useful outcome would look like. Some
+                engagements begin with one focused improvement; others require
+                a connected system.
+              </p>
+              <p className={styles.inclusionNote}>
+                The right engagement is shaped by the problem—not the size of the
+                company.
               </p>
             </Reveal>
             <dl>
               <div>
                 <dt>Format</dt>
-                <dd>8 considered stages</dd>
+                <dd>10 considered stages</dd>
               </div>
               <div>
                 <dt>Purpose</dt>
                 <dd>One useful project brief</dd>
               </div>
               <div>
-                <dt>Starting range</dt>
-                <dd>$3,000 USD</dd>
+                <dt>Engagement shape</dt>
+                <dd>Focused → Connected</dd>
               </div>
             </dl>
           </div>

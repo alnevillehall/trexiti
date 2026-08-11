@@ -108,6 +108,20 @@
   outline-offset: 4px;
 }
 
+@media print {
+  .siteHeader,
+  .siteFooter,
+  .skipLink,
+  .mobileNavigation {
+    display: none !important;
+  }
+
+  .publicSite {
+    min-height: auto;
+    background: #fff;
+  }
+}
+
 .sectionInverse :is(a, button, input, select, textarea, summary):focus-visible,
 .siteFooter :is(a, button, input, select, textarea, summary):focus-visible,
 .siteHeaderOpen :is(a, button):focus-visible,
@@ -1270,6 +1284,26 @@
 
 .footerMeta p {
   margin: 0;
+}
+
+.footerMetaLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.footerMetaLinks a,
+.footerMetaLinks button {
+  color: inherit;
+}
+
+.footerMetaLinks a:hover,
+.footerMetaLinks a:focus-visible,
+.footerMetaLinks button:hover,
+.footerMetaLinks button:focus-visible {
+  color: var(--color-text-inverse);
 }
 
 .pageIntro {
@@ -3332,6 +3366,10 @@
   .formSubmitRow {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footerMetaLinks {
+    justify-content: flex-start;
   }
 
   .projectGrid {

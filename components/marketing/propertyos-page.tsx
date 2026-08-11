@@ -17,7 +17,10 @@ import {
   MarketingHeader,
   type MarketingNavItem,
 } from "./marketing-chrome";
+import { TREXITI_CONTACT_EMAIL } from "@/lib/marketing/contact";
 import styles from "./marketing-site.module.css";
+
+const propertyOsDemoUrl = `mailto:${TREXITI_CONTACT_EMAIL}?subject=PropertyOS%20Demo%20Request`;
 
 const navItems: readonly MarketingNavItem[] = [
   { label: "Home", href: "/" },
@@ -67,7 +70,7 @@ export function PropertyOSPage() {
         navItems={navItems}
         cta={{
           label: "Request a Demo",
-          href: "mailto:hello@trexiti.com?subject=PropertyOS%20Demo%20Request",
+          href: propertyOsDemoUrl,
         }}
       />
 
@@ -88,7 +91,7 @@ export function PropertyOSPage() {
             <div className={styles.heroActions}>
               <a
                 className={`${styles.button} ${styles.primaryButton}`}
-                href="mailto:hello@trexiti.com?subject=PropertyOS%20Demo%20Request"
+                href={propertyOsDemoUrl}
               >
                 Request a Demo
                 <ArrowRight aria-hidden="true" />
@@ -228,7 +231,7 @@ export function PropertyOSPage() {
           </div>
           <a
             className={`${styles.button} ${styles.primaryButton}`}
-            href="mailto:hello@trexiti.com?subject=PropertyOS%20Demo%20Request"
+            href={propertyOsDemoUrl}
           >
             Request a PropertyOS Demo
             <ArrowRight aria-hidden="true" />

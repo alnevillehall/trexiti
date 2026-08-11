@@ -87,22 +87,78 @@ export default async function AdminLeadsPage({
           </div>
           <div className={styles.tableWrap}>
             <table className={styles.table}>
-              <thead><tr><th>Business</th><th>Contact</th><th>Project</th><th>Budget</th><th>Received</th><th>Action</th></tr></thead>
-              <tbody>{inboundLeads.map((lead) => (
-                <tr key={lead.id}>
-                  <td>{lead.companyName}<span className={styles.subtle}>{lead.industry} · {lead.location}</span></td>
-                  <td>{lead.name}<span className={styles.subtle}>{lead.email}</span></td>
-                  <td>{lead.projectType}<span className={styles.subtle}>{lead.objectives.slice(0, 2).join(" · ")}</span></td>
-                  <td>{lead.budgetRange}</td>
-                  <td>{formatAdminDate(lead.createdAt)}</td>
-                  <td>
-                    <form action={convertProjectLeadAction}>
-                      <input type="hidden" name="projectLeadId" value={lead.id} />
-                      <button className={styles.secondaryButton} type="submit">Convert to opportunity</button>
-                    </form>
-                  </td>
+              <thead>
+                <tr>
+                  <th>Business</th>
+                  <th>Stage</th>
+                  <th>Engagement</th>
+                  <th>Qualification summary</th>
+                  <th>Attribution</th>
+                  <th>Next action</th>
+                  <th>Received</th>
+                  <th>Action</th>
                 </tr>
-              ))}</tbody>
+              </thead>
+              <tbody>
+                {inboundLeads.map((lead) => {
+                  const attribution = [
+                    lead.lastTouchSource ?? lead.utmSource ?? lead.source,
+                    lead.lastTouchMedium ?? lead.utmMedium,
+                    lead.lastTouchCampaign ?? lead.utmCampaign,
+                  ]
+                    .filter(Boolean)
+                    .join(" / ");
+
+                  return (
+                    <tr key={lead.id}>
+                      <td>
+                        {lead.companyName}
+                        <span className={styles.subtle}>
+                          {lead.industry} · {lead.location}
+                        </span>
+                        <span className={styles.subtle}>
+                          {lead.name} · {lead.email}
+                        </span>
+                      </td>
+                      <td>{lead.status}</td>
+                      <td>
+                        {lead.engagementShape ?? lead.projectType}
+                        <span className={styles.subtle}>
+                          {lead.companyStage ?? "Stage not supplied"}
+                          {lead.teamSize ? ` · ${lead.teamSize}` : ""}
+                        </span>
+                      </td>
+                      <td>
+                        {lead.projectType}
+                        <span className={styles.subtle}>
+                          {(lead.qualificationSummary ?? lead.objectives.join(" · ")).slice(0, 280)}
+                        </span>
+                      </td>
+                      <td>
+                        {attribution || lead.source}
+                        {lead.firstTouchSource ? (
+                          <span className={styles.subtle}>
+                            First touch: {lead.firstTouchSource}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td>
+                        {lead.nextAction ??
+                          "Review the business context and prepare discovery questions."}
+                      </td>
+                      <td>{formatAdminDate(lead.createdAt)}</td>
+                      <td>
+                        <form action={convertProjectLeadAction}>
+                          <input type="hidden" name="projectLeadId" value={lead.id} />
+                          <button className={styles.secondaryButton} type="submit">
+                            Convert to opportunity
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           </div>
         </section>

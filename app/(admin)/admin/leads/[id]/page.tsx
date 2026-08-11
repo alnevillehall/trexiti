@@ -249,6 +249,8 @@ export default async function AdminLeadDetailPage({ params, searchParams }: Page
               <label className={styles.fieldFull}>Estimated value<input name="estimatedProjectValue" type="number" min={0} step={500} defaultValue={Number(opportunity.estimatedValue)} /></label>
               <label className={styles.fieldFull}>Budget<input name="budget" defaultValue={opportunity.budget ?? ""} /></label>
               <label className={styles.fieldFull}>Timeline<input name="timeline" defaultValue={opportunity.timeline ?? ""} /></label>
+              <label className={styles.fieldFull}>Won / lost reason<textarea aria-describedby="outcome-reason-help" name="outcomeReason" defaultValue={opportunity.outcomeReason ?? ""} /></label>
+              <p className={styles.fieldFull} id="outcome-reason-help">Required when the stage is Won or Lost. Use the real decision reason; do not infer it.</p>
               <label className={styles.fieldFull}>Assigned owner<select name="assignedOwnerId" defaultValue={opportunity.assignedOwnerId ?? ""}><option value="">Unassigned</option>{owners.map((owner) => <option key={owner.id} value={owner.id}>{owner.name} · {owner.role}</option>)}</select></label>
               <label className={styles.fieldFull}>Next follow-up<input name="nextFollowUp" type="datetime-local" defaultValue={dateTimeLocal(opportunity.nextFollowUp)} /></label>
               <label className={styles.fieldFull}>Next action<textarea name="nextAction" defaultValue={opportunity.nextAction ?? ""} /></label>

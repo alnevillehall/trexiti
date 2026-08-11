@@ -1,5 +1,36 @@
 import type { Service } from "@/lib/content/types";
 
+export const engagementShapes = [
+  {
+    index: "01",
+    title: "Focused Build",
+    description:
+      "One clearly bounded improvement tied to a meaningful business outcome, controlled timeline, and defined revision scope. The boundary is smaller; the standard of analysis, design, and engineering is not.",
+    href: "/systems-review",
+  },
+  {
+    index: "02",
+    title: "Connected Experience",
+    description:
+      "A customer-facing website or digital product designed together with the forms, CRM, booking, payment, analytics, and operational handoffs behind it.",
+    href: "/services/digital-experiences",
+  },
+  {
+    index: "03",
+    title: "Custom System",
+    description:
+      "Purpose-built software for a distinct operating model, with the workflows, data, permissions, integrations, and controls the business needs to own.",
+    href: "/services/business-systems",
+  },
+  {
+    index: "04",
+    title: "Systems Partnership",
+    description:
+      "An ongoing relationship for businesses improving several connected systems over time, guided by operational evidence and a shared roadmap.",
+    href: "/start-a-project",
+  },
+] as const;
+
 export const services = [
   {
     slug: "digital-experiences",

@@ -8,6 +8,7 @@ import {
   Reveal,
   Section,
 } from "@/components/marketing/site-primitives";
+import { PublishedInsightLink } from "@/components/marketing/published-insight-link";
 import {
   IntegrationMap,
   Workflow,
@@ -167,9 +168,12 @@ export default function AutomationPage() {
             </div>
             <p>
               Better operations do not always require replacing the tools the
-              business already knows. Trexiti establishes the right source of
-              truth, then connects each platform where information or action
-              needs to move.
+              business already knows. Trexiti establishes the{" "}
+              <PublishedInsightLink slug="your-employees-shouldnt-be-your-api">
+                right source of truth
+              </PublishedInsightLink>
+              , then connects each platform where information or action needs
+              to move.
             </p>
           </div>
 

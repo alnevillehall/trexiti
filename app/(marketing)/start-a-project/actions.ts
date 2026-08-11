@@ -10,7 +10,11 @@ import {
 import { cookies, headers } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
-import { projectLeadSubmissionSchema } from "@/lib/validation/project-lead";
+import { buildSystemsReviewLeadData } from "@/lib/marketing/systems-review-lead";
+import {
+  projectLeadSubmissionSchema,
+  systemsReviewSubmissionSchema,
+} from "@/lib/validation/project-lead";
 
 const FORM_COOKIE = "trexiti_project_form";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 2;
@@ -159,6 +163,10 @@ function firstFieldErrors(
   return errors;
 }
 
+function plainText(value: string) {
+  return value.replace(/\u0000/g, "").replace(/\r\n?/g, "\n").trim();
+}
+
 export async function createProjectFormSession(): Promise<ProjectFormSessionResult> {
   try {
     const secret = getFormSecret();
@@ -257,6 +265,25 @@ export async function submitProjectLead(
 
     const value = parsed.data;
     const email = value.email.toLowerCase();
+    const objectives = value.objectives.map((objective) =>
+      objective === "Other"
+        ? `Other: ${plainText(value.otherObjective)}`
+        : objective,
+    );
+    const existingSystems = value.existingSystems.map((system) =>
+      system === "Other" ? `Other: ${plainText(value.otherSystem)}` : system,
+    );
+    const currentState = plainText(value.currentState);
+    const friction = plainText(value.friction);
+    const qualificationSummary = [
+      `Change: ${value.projectType}`,
+      `Objectives: ${objectives.join("; ")}`,
+      `Engagement shape: ${value.engagementShape}`,
+      `Company stage: ${value.companyStage}${value.teamSize ? ` / ${plainText(value.teamSize)}` : ""}`,
+      `Current state: ${currentState}`,
+      `Friction: ${friction}`,
+      `Investment context: ${value.investmentContext}${value.investmentNotes ? ` / ${plainText(value.investmentNotes)}` : ""}`,
+    ].join("\n");
     const recentDuplicate = await prisma.projectLead.findFirst({
       where: {
         email,
@@ -275,27 +302,53 @@ export async function submitProjectLead(
           phone: value.phone || null,
           role: value.role,
           companyName: value.companyName,
-          companyWebsite: value.companyWebsite,
+          companyWebsite: value.companyWebsite || null,
           industry: value.industry,
-          companySize: value.companySize,
+          companySize: value.teamSize || null,
+          companyStage: value.companyStage,
+          teamSize: value.teamSize || null,
           location: value.location,
+          customerServiceArea: value.customerServiceArea,
           projectType: value.projectType,
-          objectives: value.objectives.map((objective) =>
-            objective === "Other"
-              ? `Other: ${value.otherObjective}`
-              : objective,
-          ),
-          challenge: value.challenge,
-          existingSystems: value.existingSystems.map((system) =>
-            system === "Other" ? `Other: ${value.otherSystem}` : system,
-          ),
-          budgetRange: value.budgetRange,
+          objectives,
+          challenge: `${currentState}\n\nFriction:\n${friction}`,
+          currentState,
+          friction,
+          existingSystems,
+          importantTools: value.importantTools
+            ? plainText(value.importantTools)
+            : null,
+          engagementShape: value.engagementShape,
+          budgetRange: value.investmentContext,
+          investmentContext: value.investmentContext,
+          investmentNotes: value.investmentNotes
+            ? plainText(value.investmentNotes)
+            : null,
           timeline: value.timeline,
+          preferredContactMethod: value.preferredContactMethod,
           consentedAt: new Date(),
           source: "trexiti_website",
-          utmSource: value.utmSource || null,
-          utmMedium: value.utmMedium || null,
-          utmCampaign: value.utmCampaign || null,
+          utmSource: value.lastTouchSource || null,
+          utmMedium: value.lastTouchMedium || null,
+          utmCampaign: value.lastTouchCampaign || null,
+          firstTouchSource: value.firstTouchSource || null,
+          firstTouchMedium: value.firstTouchMedium || null,
+          firstTouchCampaign: value.firstTouchCampaign || null,
+          firstTouchContent: value.firstTouchContent || null,
+          firstTouchTerm: value.firstTouchTerm || null,
+          firstTouchAt: value.firstTouchAt ? new Date(value.firstTouchAt) : null,
+          lastTouchSource: value.lastTouchSource || null,
+          lastTouchMedium: value.lastTouchMedium || null,
+          lastTouchCampaign: value.lastTouchCampaign || null,
+          lastTouchContent: value.lastTouchContent || null,
+          lastTouchTerm: value.lastTouchTerm || null,
+          lastTouchAt: value.lastTouchAt ? new Date(value.lastTouchAt) : null,
+          landingPage: value.landingPage || null,
+          referrer: value.referrer || null,
+          isReturning: value.isReturning,
+          qualificationSummary,
+          nextAction:
+            "Review the qualification summary and prepare discovery questions.",
           requestFingerprint: fingerprint,
         },
       });
@@ -312,6 +365,111 @@ export async function submitProjectLead(
       ok: false,
       message:
         "We could not save your project details. Your answers are still here—please try again.",
+    };
+  }
+}
+
+export async function submitSystemsReviewLead(
+  input: unknown,
+): Promise<ProjectLeadActionResult> {
+  const rawInput =
+    typeof input === "object" && input !== null
+      ? (input as Record<string, unknown>)
+      : {};
+
+  if (typeof rawInput.companyFax === "string" && rawInput.companyFax.trim()) {
+    return { ok: true };
+  }
+
+  try {
+    const secret = getFormSecret();
+    const requestHeaders = await headers();
+    const host =
+      requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+
+    if (!isSameOrigin(requestHeaders.get("origin"), host)) {
+      return {
+        ok: false,
+        message: "This submission could not be verified. Please refresh and try again.",
+      };
+    }
+
+    const cookieStore = await cookies();
+    const cookieToken = cookieStore.get(FORM_COOKIE)?.value;
+    const suppliedToken =
+      typeof rawInput.formToken === "string" ? rawInput.formToken : "";
+
+    if (!cookieToken || !suppliedToken || cookieToken !== suppliedToken) {
+      return {
+        ok: false,
+        message: "Your secure form session expired. Refresh the page and try again.",
+      };
+    }
+
+    const tokenState = verifyFormToken(suppliedToken, secret);
+    if (
+      !tokenState.valid ||
+      tokenState.age < MINIMUM_COMPLETION_MS ||
+      tokenState.age > SESSION_MAX_AGE_SECONDS * 1_000
+    ) {
+      return {
+        ok: false,
+        message: "This submission could not be verified. Please review it and try again.",
+      };
+    }
+
+    const forwardedFor = requestHeaders.get("x-forwarded-for") ?? "unknown";
+    const ipAddress = forwardedFor.split(",")[0]?.trim() || "unknown";
+    const userAgent = requestHeaders.get("user-agent")?.slice(0, 240) ?? "unknown";
+    const fingerprint = createRequestFingerprint(ipAddress, userAgent, secret);
+    const withinLimit = await consumeRateLimit(fingerprint);
+
+    if (!withinLimit) {
+      return {
+        ok: false,
+        message:
+          "This form has received several submissions. Please wait before trying again.",
+      };
+    }
+
+    const parsed = systemsReviewSubmissionSchema.safeParse(rawInput);
+    if (!parsed.success) {
+      return {
+        ok: false,
+        message: "Please review the highlighted details before submitting.",
+        fieldErrors: firstFieldErrors(parsed.error.issues),
+      };
+    }
+
+    const value = parsed.data;
+    const email = value.email.toLowerCase();
+    const recentDuplicate = await prisma.projectLead.findFirst({
+      where: {
+        email,
+        companyName: value.companyName,
+        projectType: "SYSTEMS_REVIEW",
+        createdAt: { gte: new Date(Date.now() - 10 * 60 * 1_000) },
+      },
+      select: { id: true },
+    });
+
+    if (!recentDuplicate) {
+      await prisma.projectLead.create({
+        data: buildSystemsReviewLeadData(value, fingerprint),
+      });
+    }
+
+    cookieStore.delete(FORM_COOKIE);
+    return { ok: true };
+  } catch (error) {
+    console.error(
+      "Systems Review submission failed:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+    return {
+      ok: false,
+      message:
+        "We could not save the review enquiry. Your answers are still here—please try again.",
     };
   }
 }
