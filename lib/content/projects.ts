@@ -8,7 +8,21 @@ export const workFilters = [
 
 export type WorkFilter = (typeof workFilters)[number];
 export type ProjectCategory = Exclude<WorkFilter, "All">;
-export type ProjectVisual = "marbella" | "atlas" | "aster";
+export type ProjectVisual = "marbella" | "delta" | "aster";
+
+export type ProjectEvidence = {
+  label: "Live Website" | "Private Client System" | "Concept Project";
+  description: string;
+  externalUrl?: string;
+  externalLabel?: string;
+};
+
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  caption: string;
+  representative?: boolean;
+};
 
 export type AtlasOperationsDetail = {
   scenarioSources: readonly string[];
@@ -77,6 +91,9 @@ export type CaseStudyProject = {
   categories: readonly ProjectCategory[];
   summary: string;
   visual: ProjectVisual;
+  evidence: ProjectEvidence;
+  coverImage?: ProjectImage;
+  media?: readonly ProjectImage[];
   services: readonly string[];
   technologies: readonly string[];
   overview: readonly string[];
@@ -132,6 +149,8 @@ export type ProjectSummary = Pick<
   | "categories"
   | "summary"
   | "visual"
+  | "evidence"
+  | "coverImage"
   | "concept"
 >;
 
@@ -145,41 +164,65 @@ export const projects: readonly CaseStudyProject[] = [
     slug: "marbella",
     year: "2026",
     industry: "Property development",
-    projectType: "Property Development Platform",
-    descriptor: "Property Development Platform",
+    projectType: "Property Development Website",
+    descriptor: "Live Property Website",
     category: "Digital Experience / Property Technology",
     categories: ["Digital Experiences", "Platforms"],
     summary:
-      "A premium property development experience designed to connect positioning, residences, investment information, enquiries, and sales follow-up in one considered platform.",
+      "A live, image-led property website that introduces Marbella Apartments, explains the Long Lane location, presents residences and floor plans, and turns interest into private-viewing enquiries.",
     visual: "marbella",
+    evidence: {
+      label: "Live Website",
+      description:
+        "Public website created by Trexiti for Marbella Apartments in Long Lane, Kingston, Jamaica.",
+      externalUrl: "https://www.marbellaja.com/",
+      externalLabel: "Visit marbellaja.com",
+    },
+    coverImage: {
+      src: "/work/marbella/marbella-exterior.webp",
+      alt: "Architectural rendering of the Marbella Apartments exterior against a green hillside.",
+      caption: "Marbella Apartments exterior imagery from the live website.",
+    },
+    media: [
+      {
+        src: "/work/marbella/marbella-rooftop.webp",
+        alt: "Rendered rooftop lounge and terrace at Marbella Apartments.",
+        caption: "The rooftop amenity story is part of the live property experience.",
+      },
+      {
+        src: "/work/marbella/marbella-facade.webp",
+        alt: "Architectural rendering of the Marbella Apartments facade and landscaped entrance.",
+        caption: "Facade imagery supports the development narrative and visual identity.",
+      },
+    ],
     services: [
       "Experience strategy",
       "Information architecture",
-      "Digital product design",
+      "Interface design",
       "Responsive development",
-      "CRM workflow design",
-      "Analytics planning",
+      "Content architecture",
+      "Enquiry journey design",
     ],
     technologies: [
       "Next.js",
       "TypeScript",
-      "Headless CMS",
-      "CRM API",
-      "Mapping API",
-      "Analytics",
-      "Vercel",
+      "Responsive web",
+      "Optimized image delivery",
+      "Enquiry forms",
+      "WhatsApp handoff",
+      "Search metadata",
     ],
     overview: [
-      "Marbella explores how a property development can be presented as both a desirable place and a clear investment proposition. The experience is designed to support the long consideration journey from first impression through residence comparison and qualified enquiry.",
-      "The platform treats the public website, content operation, lead capture, and sales handoff as one connected experience rather than separate marketing tasks.",
+      "Marbella is a live digital sales experience for an apartment development in Long Lane, Kingston. It moves from an atmospheric introduction into location context, amenities, residence details, floor plans, a visual gallery, and a private-viewing request.",
+      "Trexiti shaped the information hierarchy, responsive interface, image presentation, and conversion journey so the development could feel premium while remaining practical to evaluate.",
     ],
     challenge: [
-      "Property developments need to communicate an emotional vision while helping buyers and investors evaluate detailed, practical information. When brand storytelling, unit information, documents, and enquiries are fragmented, interest loses momentum and sales teams receive incomplete context.",
+      "Property developments need to communicate an emotional vision while helping prospective residents and investors evaluate practical information. The experience had to connect place, amenities, residence options, floor plans, availability context, and direct contact without losing its sense of calm.",
       "The design challenge is to preserve a premium atmosphere without making essential information difficult to find or the conversion journey feel aggressive.",
     ],
     understandingBusiness: {
       introduction:
-        "Trexiti would begin by mapping the audiences, decision stages, content dependencies, inventory states, and sales handoffs behind the development.",
+        "Trexiti mapped the questions a prospective buyer would ask, then organized the website around a progressive journey from aspiration to practical evaluation and direct contact.",
       findings: [
         {
           title: "Multiple audiences",
@@ -221,7 +264,7 @@ export const projects: readonly CaseStudyProject[] = [
     },
     architecture: {
       summary:
-        "A composable content and enquiry platform separates presentation, structured development data, and sales operations while keeping them connected through defined interfaces.",
+        "The website separates editorial storytelling, structured residence information, gallery media, and enquiry actions while presenting them as one continuous buyer journey.",
       layers: [
         {
           title: "Experience layer",
@@ -231,17 +274,17 @@ export const projects: readonly CaseStudyProject[] = [
         {
           title: "Content layer",
           description:
-            "Managed development information, residences, specifications, documents, imagery, and project updates.",
+            "Development information, amenities, residences, specifications, available units, floor plans, and gallery imagery.",
         },
         {
           title: "Commercial layer",
           description:
-            "Qualified enquiry capture, consent, source attribution, CRM routing, and sales follow-up status.",
+            "Private-viewing requests, residence interest, direct contact, and WhatsApp conversation paths.",
         },
         {
           title: "Insight layer",
           description:
-            "Privacy-conscious analytics around content interest, residence consideration, and conversion paths.",
+            "Search metadata, responsive delivery, accessible interactions, and maintainable page structure.",
         },
       ],
     },
@@ -249,7 +292,7 @@ export const projects: readonly CaseStudyProject[] = [
       {
         title: "Development narrative",
         description:
-          "A controlled editorial system for vision, architecture, amenities, location, and progress.",
+          "An editorial structure for the development, architecture, location, amenities, and lifestyle proposition.",
       },
       {
         title: "Residence explorer",
@@ -259,22 +302,22 @@ export const projects: readonly CaseStudyProject[] = [
       {
         title: "Investor information",
         description:
-          "A clear path to the commercial context, documents, FAQs, and relevant disclosures.",
+          "Travel-time context for Manor Park, New Kingston, hospitals, universities, shopping, and the airport.",
       },
       {
         title: "Qualified enquiries",
         description:
-          "Context-aware forms that capture intent without turning a premium journey into a questionnaire.",
+          "A focused private-viewing form that captures residence interest and the details needed for follow-up.",
       },
       {
         title: "Sales handoff",
         description:
-          "CRM routing that carries source, audience, and residence interest into follow-up.",
+          "Direct enquiry and WhatsApp paths that move a considered website visit into a human conversation.",
       },
       {
         title: "Content operations",
         description:
-          "Roles and publishing workflows that keep commercial information accurate as the development changes.",
+          "Clear content groupings for residence types, available units, floor plans, amenities, and contact information.",
       },
     ],
     screens: [
@@ -298,37 +341,50 @@ export const projects: readonly CaseStudyProject[] = [
       },
     ],
     engineering: [
-      "The proposed platform uses server-rendered content for fast first delivery and strong search foundations, with richer interactions introduced only where they improve evaluation.",
-      "Structured content models would keep residences, specifications, documents, and availability separate from page layout so the experience can evolve without duplicating data.",
+      "The live website uses a responsive, component-driven presentation that keeps image-rich sections usable across desktop and mobile screens.",
+      "Content, floor-plan, gallery, enquiry, and contact sections are deliberately separated so visitors can scan the development or evaluate it in detail without losing their place.",
     ],
     technicalNotes: [
-      "Proposed component-driven frontend with accessible interaction patterns",
-      "Structured CMS model for development and residence data",
-      "CRM integration with source and interest attribution",
-      "Image delivery strategy for high-quality architectural media",
-      "Consent-aware analytics and enquiry tracking",
-      "Role-based content publishing workflow",
+      "Component-driven responsive frontend",
+      "Optimized delivery for high-resolution architectural imagery",
+      "Structured residence and floor-plan presentation",
+      "Keyboard-accessible gallery and enquiry interactions",
+      "Direct private-viewing and WhatsApp contact paths",
+      "Search and social metadata for the public property website",
     ],
     result: [
-      "The concept produces a coherent model for moving from brand attention to informed consideration and a better-qualified sales conversation.",
-      "It is an architectural direction rather than a claim of live commercial performance; validation would happen through stakeholder discovery, content readiness, usability testing, and measured release data.",
+      "The delivered website gives Marbella one public experience for its location story, amenities, residences, floor plans, gallery, and private-viewing journey.",
+      "The project is live at marbellaja.com. No traffic, sales, or conversion result is stated because those measurements have not been supplied for this case study.",
     ],
-    concept: true,
-    disclaimer: conceptDisclaimer,
+    concept: false,
+    disclaimer:
+      "Live public website created by Trexiti. Architectural imagery belongs to the Marbella project; no commercial performance claim is made.",
   },
   {
     index: "02",
-    title: "Atlas Operations",
-    slug: "atlas-operations",
-    year: "2026",
-    industry: "Complex service operations",
+    title: "Delta Appliances",
+    slug: "delta-appliances",
+    year: "Private",
+    industry: "Appliance operations",
     projectType: "Business Operations System",
-    descriptor: "Business Operations System",
+    descriptor: "Private Operations System",
     category: "Business Systems / Custom Software",
     categories: ["Business Systems", "Custom Software", "Platforms"],
     summary:
-      "A connected operating system designed to coordinate customers, jobs, schedules, staff, inventory, payments, and reporting around one shared record of work.",
-    visual: "atlas",
+      "A private operations system created for Delta Appliances. The public case study explains the systems thinking at a representative level while withholding the live product, business data, integrations, and internal workflows.",
+    visual: "delta",
+    evidence: {
+      label: "Private Client System",
+      description:
+        "A real operational system created for Delta Appliances. Access, client data, live screens, and implementation details remain private.",
+    },
+    coverImage: {
+      src: "/work/delta-appliances/delta-operations-system.png",
+      alt: "Representative dark operations dashboard on a desktop monitor with a field-service tablet beside it.",
+      caption:
+        "Representative visualization created for this case study; it is not a screenshot of Delta Appliances’ private system.",
+      representative: true,
+    },
     atlasDetail: {
       scenarioSources: [
         "WhatsApp",
@@ -385,7 +441,7 @@ export const projects: readonly CaseStudyProject[] = [
         {
           title: "System integration",
           description:
-            "Keep established tools where they add value, with Atlas coordinating data movement and preserving a clear system of record.",
+            "Keep established tools where they add value, with the operational core coordinating data movement and preserving a clear system of record.",
         },
       ],
       roles: [
@@ -478,12 +534,12 @@ export const projects: readonly CaseStudyProject[] = [
         ],
       },
       customerRecord: {
-        name: "North Coast Hospitality",
+        name: "Illustrative Service Account",
         reference: "CUS-00841 / Illustrative account",
         contact: [
-          { label: "Primary contact", value: "Maya Bennett" },
+          { label: "Primary contact", value: "Sample contact" },
           { label: "Email", value: "operations@example.com" },
-          { label: "Telephone", value: "+1 876 555 0142" },
+          { label: "Telephone", value: "Withheld" },
           { label: "Service sites", value: "3 active locations" },
         ],
         sections: [
