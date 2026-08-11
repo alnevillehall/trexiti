@@ -1,0 +1,259 @@
+.figure {
+  margin: 0;
+}
+
+.frame {
+  display: grid;
+  min-height: clamp(28rem, 48vw, 48rem);
+  border: 1px solid var(--color-border-strong);
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+}
+
+.frameHeader,
+.frameFooter {
+  display: flex;
+  min-height: 3.5rem;
+  padding-inline: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.frameHeader {
+  border-bottom: 1px solid currentColor;
+}
+
+.frameFooter {
+  border-top: 1px solid currentColor;
+}
+
+.canvas {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  padding: clamp(1.25rem, 3vw, 3rem);
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+
+.canvasLead {
+  display: flex;
+  max-width: 44rem;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.canvasLead span {
+  margin-bottom: 0.8rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.canvasLead strong {
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(3.2rem, 8vw, 8.5rem);
+  font-weight: 520;
+  letter-spacing: -0.075em;
+  line-height: 0.86;
+}
+
+.screenSequence {
+  display: grid;
+  border-top: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.workflow .screenSequence {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.screenSequence > div {
+  position: relative;
+  display: flex;
+  min-height: 8.5rem;
+  padding: 0.9rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.screenSequence span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+}
+
+.screenSequence strong {
+  font-size: clamp(0.76rem, 0.4vw + 0.67rem, 0.9rem);
+  font-weight: 620;
+}
+
+.screenSequence i {
+  position: absolute;
+  top: 1.1rem;
+  right: 0.9rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.signal {
+  position: absolute;
+  top: 16%;
+  right: 7%;
+  display: flex;
+  width: 22%;
+  height: 28%;
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.signal span {
+  width: 100%;
+  border: 1px solid currentColor;
+  border-bottom: 0;
+}
+
+.signal span:nth-child(1) {
+  height: 38%;
+}
+
+.signal span:nth-child(2) {
+  height: 62%;
+}
+
+.signal span:nth-child(3) {
+  height: 48%;
+}
+
+.signal span:nth-child(4) {
+  height: 86%;
+}
+
+.signal span:nth-child(5) {
+  height: 70%;
+}
+
+.marbella .frame {
+  color: #25221f;
+  background: var(--color-project-marbella);
+}
+
+.marbella .canvasLead strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.atlas .frame {
+  color: var(--color-text-inverse);
+  background: var(--color-project-atlas);
+}
+
+.atlas .canvas {
+  background:
+    linear-gradient(var(--color-border-inverse) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-inverse) 1px, transparent 1px);
+  background-size: 12.5% 12.5%;
+}
+
+.aster .frame {
+  color: #26312d;
+  background: var(--color-project-aster);
+}
+
+.aster .canvasLead strong {
+  color: var(--color-surface-accent);
+}
+
+.figure figcaption {
+  display: grid;
+  padding-top: 1rem;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.figure figcaption > span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.figure figcaption strong {
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 540;
+  letter-spacing: -0.04em;
+}
+
+.figure figcaption p {
+  max-width: 38rem;
+  margin: 0.65rem 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--type-caption);
+  line-height: 1.6;
+}
+
+@media (max-width: 56rem) {
+  .frame {
+    min-height: 34rem;
+  }
+
+  .canvasLead {
+    max-width: 75%;
+  }
+
+  .screenSequence,
+  .workflow .screenSequence {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .signal {
+    width: 28%;
+  }
+}
+
+@media (max-width: 42rem) {
+  .frame {
+    min-height: 30rem;
+  }
+
+  .frameHeader,
+  .frameFooter {
+    font-size: 0.54rem;
+  }
+
+  .canvas {
+    padding: 1rem;
+  }
+
+  .canvasLead {
+    max-width: 82%;
+  }
+
+  .canvasLead strong {
+    font-size: clamp(2.8rem, 16vw, 4.5rem);
+  }
+
+  .screenSequence > div {
+    min-height: 6.8rem;
+    padding: 0.7rem;
+  }
+
+  .signal {
+    top: 22%;
+    right: 1rem;
+    width: 30%;
+    height: 22%;
+  }
+}

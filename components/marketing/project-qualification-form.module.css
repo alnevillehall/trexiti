@@ -1,0 +1,749 @@
+.form,
+.successPanel {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-elevated);
+  box-shadow: 1rem 1rem 0 var(--color-surface-accent-soft);
+}
+
+.formTopline {
+  display: flex;
+  min-height: 4rem;
+  padding-inline: clamp(1rem, 2vw, 1.6rem);
+  border-bottom: 1px solid var(--color-border-default);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.progress {
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.progress ol {
+  display: grid;
+  padding: 0;
+  margin: 0;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  list-style: none;
+}
+
+.progress li {
+  min-width: 0;
+  border-right: 1px solid var(--color-border-subtle);
+}
+
+.progress li:last-child {
+  border-right: 0;
+}
+
+.progress button,
+.progress li > div {
+  display: flex;
+  width: 100%;
+  min-height: 4.9rem;
+  padding: 0.7rem;
+  border: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+}
+
+.progress button {
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+.progress button:hover,
+.progress button:focus-visible {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+}
+
+.progress li[data-state="current"] button {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.progress li[data-state="complete"] button {
+  color: var(--color-text-primary);
+  background: var(--color-surface-accent-soft);
+}
+
+.progress span,
+.progress strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.55rem;
+}
+
+.progress strong {
+  width: 100%;
+  font-size: 0.6rem;
+  font-weight: 580;
+  letter-spacing: 0.02em;
+}
+
+.stepAnnouncement,
+.visuallyHidden,
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.stepHeader {
+  display: grid;
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1rem, 3.5vw, 3.5rem);
+  border-bottom: 1px solid var(--color-border-default);
+  grid-template-columns: 3rem 1fr;
+  align-items: start;
+  gap: clamp(1rem, 3vw, 3rem);
+}
+
+.stepHeader > span {
+  padding-top: 0.5rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.stepHeader h2 {
+  max-width: 15ch;
+  margin: 0;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.4rem, 4.6vw, 5.1rem);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.stepHeader h2:focus {
+  outline: none;
+}
+
+.stepHeader p {
+  max-width: 46rem;
+  margin: 1.5rem 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--type-body);
+  line-height: 1.65;
+}
+
+.stepFields {
+  min-width: 0;
+  min-height: 30rem;
+  padding: clamp(1rem, 3.5vw, 3.5rem);
+  margin: 0;
+  border: 0;
+}
+
+.choiceGrid {
+  display: grid;
+  border-top: 1px solid var(--color-border-default);
+  border-left: 1px solid var(--color-border-default);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.choice {
+  position: relative;
+  display: grid;
+  min-height: 7.5rem;
+  padding: 1.1rem;
+  border-right: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+  grid-template-columns: 2rem 1fr auto;
+  align-items: end;
+  gap: 1rem;
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+.choice:hover {
+  background: var(--color-bg-secondary);
+}
+
+.choice:has(input:checked) {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.choice:focus-within {
+  z-index: 1;
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: -3px;
+}
+
+.choice:has(input:checked):focus-within {
+  outline-color: var(--color-focus-ring-accent);
+}
+
+.choice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.choiceIndex,
+.choiceControl {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.choiceIndex {
+  color: var(--color-text-muted);
+}
+
+.choice:has(input:checked) .choiceIndex {
+  color: var(--color-text-accent-secondary);
+}
+
+.choiceLabel {
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1rem, 1.4vw, 1.32rem);
+  font-weight: 540;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.choiceControl {
+  display: grid;
+  width: 1.85rem;
+  aspect-ratio: 1;
+  border: 1px solid currentColor;
+  place-items: center;
+  font-size: 0.7rem;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.3rem, 2.5vw, 2.5rem);
+}
+
+.fieldGrid > label,
+.otherField,
+.challengeField {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.fieldGrid label > span:first-child,
+.otherField > span:first-child,
+.challengeField > span:first-child,
+.fieldPrompt {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-secondary);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  font-weight: 560;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+
+.fieldGrid label > span small {
+  color: var(--color-text-muted);
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.fieldGrid :is(input, select),
+.otherField input,
+.challengeField textarea {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-strong);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+.fieldGrid :is(input, select),
+.otherField input {
+  min-height: 4.2rem;
+  padding: 0.85rem 0.2rem;
+}
+
+.fieldGrid select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1rem) 50%,
+    calc(100% - 0.65rem) 50%;
+  background-repeat: no-repeat;
+  background-size: 0.35rem 0.35rem;
+}
+
+.fieldGrid :is(input, select):focus-visible,
+.otherField input:focus-visible,
+.challengeField textarea:focus-visible {
+  border-color: var(--color-interactive-accent);
+  box-shadow: 0 2px 0 var(--color-interactive-accent);
+}
+
+.fieldGrid :is(input, select)[aria-invalid="true"],
+.otherField input[aria-invalid="true"],
+.challengeField textarea[aria-invalid="true"] {
+  border-color: var(--color-text-primary);
+  background: var(--color-surface-accent-soft);
+}
+
+.fieldGrid input::placeholder,
+.otherField input::placeholder,
+.challengeField textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.72;
+}
+
+.fieldWide {
+  grid-column: 1 / -1;
+}
+
+.otherField {
+  max-width: 42rem;
+  margin-top: 2rem;
+}
+
+.challengeField > span:first-child {
+  max-width: 35ch;
+  color: var(--color-text-primary);
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.4rem, 2.4vw, 2.35rem);
+  font-weight: 520;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  text-transform: none;
+}
+
+.challengeField textarea {
+  min-height: 19rem;
+  padding: 1.25rem 0.2rem;
+  resize: vertical;
+  line-height: 1.65;
+}
+
+.fieldHint {
+  margin-top: 0.65rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+  text-align: right;
+}
+
+.fieldPrompt {
+  margin-bottom: 1.25rem;
+}
+
+.fieldError {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--color-text-primary);
+  font-size: var(--type-caption);
+  font-weight: 620;
+  line-height: 1.45;
+}
+
+.consentField {
+  display: grid !important;
+  grid-column: 1 / -1;
+  max-width: 53rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-default);
+  grid-template-columns: 1.5rem 1fr;
+  align-items: start;
+  gap: 0.9rem;
+  cursor: pointer;
+}
+
+.consentField input {
+  position: absolute;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0;
+}
+
+.consentField > span {
+  display: grid;
+  width: 1.5rem;
+  aspect-ratio: 1;
+  margin: 0 !important;
+  border: 1px solid var(--color-border-strong);
+  place-items: center;
+  color: var(--color-text-inverse);
+  background: transparent;
+  font-size: 0.72rem !important;
+}
+
+.consentField:has(input:checked) > span {
+  background: var(--color-surface-accent);
+}
+
+.consentField:focus-within > span {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 3px;
+}
+
+.consentField > strong {
+  max-width: 53ch;
+  font-size: var(--type-body);
+  font-weight: 470;
+  line-height: 1.55;
+}
+
+.consentField .fieldError {
+  grid-column: 2;
+}
+
+.formError {
+  margin: 0 clamp(1rem, 3.5vw, 3.5rem) 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-primary);
+  background: var(--color-surface-accent-soft);
+  font-size: var(--type-caption);
+  line-height: 1.55;
+}
+
+.formActions {
+  display: grid;
+  min-height: 6.5rem;
+  padding: 1rem clamp(1rem, 3.5vw, 3.5rem);
+  border-top: 1px solid var(--color-border-default);
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.backButton,
+.nextButton {
+  min-height: 3.5rem;
+  border-radius: 0;
+  font: inherit;
+  font-size: var(--type-button);
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.backButton {
+  display: inline-flex;
+  width: max-content;
+  padding-inline: 0;
+  border: 0;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--color-text-secondary);
+  background: transparent;
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.nextButton {
+  display: flex;
+  min-width: min(19rem, 42vw);
+  padding-inline: 1.2rem 0.6rem;
+  border: 1px solid var(--color-interactive-primary);
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  color: var(--color-text-inverse);
+  background: var(--color-interactive-primary);
+}
+
+.nextButton > span:last-child {
+  display: grid;
+  width: 2.3rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border-inverse);
+  place-items: center;
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.nextButton:hover,
+.nextButton:focus-visible {
+  background: var(--color-interactive-primary-hover);
+}
+
+.nextButton:hover > span:last-child,
+.nextButton:focus-visible > span:last-child {
+  transform: translateX(0.2rem);
+}
+
+.backButton:disabled,
+.nextButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.successPanel {
+  position: relative;
+  min-height: 48rem;
+  padding: clamp(2rem, 5vw, 5rem);
+  overflow: hidden;
+}
+
+.successPanel:focus {
+  outline: none;
+}
+
+.successIndex,
+.successEyebrow,
+.successFooter span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.successIndex {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.successMark {
+  display: grid;
+  width: clamp(4.5rem, 8vw, 7rem);
+  aspect-ratio: 1;
+  margin-bottom: clamp(4rem, 9vw, 9rem);
+  border: 1px solid var(--color-border-strong);
+  place-items: center;
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+  font-size: clamp(1.2rem, 2vw, 2rem);
+}
+
+.successEyebrow {
+  color: var(--color-text-muted);
+}
+
+.successPanel h2 {
+  max-width: 12ch;
+  margin: 1rem 0 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.8rem, 6.2vw, 6.5rem);
+  font-weight: 520;
+  letter-spacing: -0.065em;
+  line-height: 0.94;
+  text-wrap: balance;
+}
+
+.successPanel > p:not(.successEyebrow) {
+  max-width: 48rem;
+  margin: 2rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+}
+
+.successFooter {
+  display: flex;
+  margin-top: clamp(4rem, 8vw, 8rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border-default);
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.successFooter span {
+  color: var(--color-text-muted);
+}
+
+.successFooter a {
+  color: inherit;
+  font-size: var(--type-button);
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35rem;
+}
+
+@media (max-width: 72rem) {
+  .progress strong {
+    font-size: 0.54rem;
+  }
+
+  .stepFields {
+    min-height: 27rem;
+  }
+}
+
+@media (max-width: 56rem) {
+  .form,
+  .successPanel {
+    box-shadow: 0.65rem 0.65rem 0 var(--color-surface-accent-soft);
+  }
+
+  .progress ol {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .progress li:nth-child(-n + 4) {
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .progress li:nth-child(4n) {
+    border-right: 0;
+  }
+
+  .stepHeader {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .stepFields {
+    min-height: 0;
+  }
+
+  .choice {
+    min-height: 6.7rem;
+  }
+
+  .successPanel {
+    min-height: 40rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .formTopline {
+    min-height: 3.5rem;
+  }
+
+  .progress button,
+  .progress li > div {
+    min-height: 2.75rem;
+    padding: 0.6rem;
+    justify-content: center;
+  }
+
+  .progress strong {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+  }
+
+  .stepHeader {
+    padding-block: 2.5rem;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .stepHeader > span {
+    padding-top: 0;
+  }
+
+  .stepHeader h2 {
+    font-size: clamp(2.35rem, 11vw, 3.6rem);
+  }
+
+  .stepHeader p {
+    margin-top: 1rem;
+  }
+
+  .choiceGrid,
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .choice {
+    min-height: 5.6rem;
+    grid-template-columns: 1.6rem 1fr auto;
+  }
+
+  .fieldWide,
+  .consentField {
+    grid-column: auto;
+  }
+
+  .challengeField > span:first-child {
+    font-size: 1.55rem;
+  }
+
+  .challengeField textarea {
+    min-height: 16rem;
+  }
+
+  .formActions {
+    grid-template-columns: auto 1fr;
+  }
+
+  .nextButton {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .successPanel {
+    min-height: 37rem;
+  }
+
+  .successFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress button,
+  .choice,
+  .fieldGrid :is(input, select),
+  .otherField input,
+  .challengeField textarea,
+  .backButton,
+  .nextButton,
+  .nextButton > span:last-child {
+    transition: none;
+  }
+
+  .nextButton:hover > span:last-child,
+  .nextButton:focus-visible > span:last-child {
+    transform: none;
+  }
+}

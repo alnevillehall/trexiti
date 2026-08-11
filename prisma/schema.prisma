@@ -1,0 +1,1996 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrganizationStatus {
+  TRIAL
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum RoleKey {
+  PLATFORM_OWNER
+  COMPANY_ADMIN
+  DISPATCHER
+  TECHNICIAN
+  SALES
+  ACCOUNTANT
+}
+
+enum CustomerType {
+  RESIDENTIAL
+  COMMERCIAL
+  PROPERTY_MANAGER
+  LANDLORD
+  TENANT
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+  PROSPECT
+  ARCHIVED
+}
+
+enum AssetStatus {
+  ACTIVE
+  INACTIVE
+  NEEDS_REPLACEMENT
+}
+
+enum WorkOrderPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  EMERGENCY
+}
+
+enum WorkOrderLifecycle {
+  REQUESTED
+  SCHEDULED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum JobSource {
+  PHONE
+  WHATSAPP
+  WALK_IN
+  WEBSITE
+  REFERRAL
+  REPEAT_CUSTOMER
+  OTHER
+}
+
+enum WorkOrderPaymentStatus {
+  NOT_INVOICED
+  INVOICED
+  PARTIALLY_PAID
+  PAID
+}
+
+enum AssignmentStatus {
+  ASSIGNED
+  ACCEPTED
+  EN_ROUTE
+  ON_SITE
+  COMPLETED
+  REASSIGNED
+}
+
+enum ChecklistItemType {
+  BOOLEAN
+  TEXT
+  NUMBER
+  PHOTO
+  SIGNATURE
+  SINGLE_SELECT
+  MULTI_SELECT
+}
+
+enum ConfigFieldType {
+  TEXT
+  NUMBER
+  DATE
+  BOOLEAN
+  SELECT
+  MULTI_SELECT
+}
+
+enum ChecklistResponseStatus {
+  PASS
+  FAIL
+  NOT_APPLICABLE
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  APPROVED
+  DECLINED
+  EXPIRED
+  CONVERTED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  VOID
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  BANK_TRANSFER
+  CHEQUE
+  MOBILE_MONEY
+  OTHER
+}
+
+enum InventoryTransactionType {
+  PURCHASE
+  USE
+  RETURN
+  ADJUSTMENT
+  TRANSFER
+}
+
+enum AttachmentEntityType {
+  CUSTOMER
+  CUSTOMER_LOCATION
+  ASSET
+  WORK_ORDER
+  QUOTE
+  INVOICE
+  PAYMENT
+}
+
+enum NoteEntityType {
+  CUSTOMER
+  CUSTOMER_LOCATION
+  ASSET
+  WORK_ORDER
+  QUOTE
+  INVOICE
+  PAYMENT
+}
+
+enum ActivityEntityType {
+  ORGANIZATION
+  CUSTOMER
+  CUSTOMER_LOCATION
+  ASSET
+  WORK_ORDER
+  QUOTE
+  INVOICE
+  PAYMENT
+  INVENTORY_ITEM
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  WHATSAPP
+  IN_APP
+}
+
+enum NotificationTrigger {
+  JOB_CREATED
+  JOB_ASSIGNED
+  JOB_REMINDER
+  QUOTE_SENT
+  INVOICE_SENT
+  PAYMENT_RECEIVED
+  FOLLOW_UP_DUE
+}
+
+enum ProjectLeadStatus {
+  NEW
+  REVIEWING
+  QUALIFIED
+  DISCOVERY
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum AdminRole {
+  OWNER
+  ADMIN
+  SALES
+}
+
+enum AdminCompanyStatus {
+  TARGET
+  ACTIVE
+  CLIENT
+  DORMANT
+  ARCHIVED
+}
+
+enum AdminOpportunityDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum AdminOpportunityStage {
+  RESEARCHING
+  CONTACTED
+  REPLIED
+  QUALIFIED
+  DISCOVERY
+  PROPOSAL
+  NEGOTIATION
+  WON
+  LOST
+}
+
+enum AdminOpportunityType {
+  WEBSITE_REDESIGN
+  PROPERTY_PLATFORM
+  CUSTOMER_PORTAL
+  BUSINESS_SYSTEM
+  OPERATIONS_PLATFORM
+  CRM
+  AUTOMATION
+  INTEGRATION
+  CUSTOM_SOFTWARE
+  OTHER
+}
+
+enum AdminTaskType {
+  CALL
+  EMAIL
+  LINKEDIN
+  RESEARCH
+  PROPOSAL
+  FOLLOW_UP
+  MEETING
+}
+
+enum AdminTaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum AdminTaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+enum AdminActivityKind {
+  CREATED
+  UPDATED
+  STAGE_CHANGED
+  NOTE_ADDED
+  MESSAGE_LOGGED
+  TASK_CREATED
+  PROPOSAL_UPDATED
+  ASSIGNED
+  ARCHIVED
+  RESTORED
+  RESEARCH_COMPLETED
+  OUTREACH_STEP_COMPLETED
+  REPLY_ACTIONED
+}
+
+enum AdminOutreachChannel {
+  EMAIL
+  LINKEDIN
+  INSTAGRAM
+  PHONE
+  WHATSAPP
+  REFERRAL
+  OTHER
+}
+
+enum AdminMessageDirection {
+  INBOUND
+  OUTBOUND
+  INTERNAL
+}
+
+enum AdminOutreachStepStatus {
+  PENDING
+  READY
+  COMPLETED
+  SKIPPED
+}
+
+enum AdminProposalStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+enum AdminAuditAction {
+  CREATE
+  UPDATE
+  ARCHIVE
+  RESTORE
+}
+
+model ProjectLead {
+  id                 String            @id @default(cuid())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  status             ProjectLeadStatus @default(NEW)
+  name               String
+  email              String
+  phone              String?
+  role               String
+  companyName        String
+  companyWebsite     String
+  industry           String
+  companySize        String
+  location           String
+  projectType        String
+  objectives         String[]
+  challenge          String            @db.Text
+  existingSystems    String[]
+  budgetRange        String
+  timeline           String
+  consentedAt        DateTime
+  source             String            @default("trexiti_website")
+  utmSource          String?
+  utmMedium          String?
+  utmCampaign        String?
+  requestFingerprint String?
+  opportunity        AdminOpportunity?
+
+  @@index([status, createdAt])
+  @@index([email, createdAt])
+  @@index([requestFingerprint, createdAt])
+}
+
+model AdminUser {
+  id                    String                  @id @default(cuid())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  lastSignedInAt        DateTime?
+  externalAuthId        String                  @unique
+  email                 String                  @unique
+  name                  String
+  role                  AdminRole               @default(SALES)
+  active                Boolean                 @default(true)
+  assignedOpportunities AdminOpportunity[]      @relation("AdminOpportunityOwner")
+  assignedTasks         AdminTask[]             @relation("AdminTaskOwner")
+  authoredNotes         AdminOpportunityNote[]
+  activities            AdminActivity[]
+  messages              AdminMessage[]
+  proposals             AdminProposal[]
+  auditLogs             AdminAuditLog[]
+  dailyTargetConfig     AdminDailyTargetConfig?
+
+  @@index([active, role])
+}
+
+model AdminCompany {
+  id            String             @id @default(cuid())
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  archivedAt    DateTime?
+  status        AdminCompanyStatus @default(TARGET)
+  name          String
+  domain        String             @unique
+  website       String?
+  industry      String
+  country       String
+  estimatedSize String?
+  phone         String?
+  notes         String?            @db.Text
+  lifetimeValue Decimal            @default(0) @db.Decimal(14, 2)
+  contacts      AdminContact[]
+  opportunities AdminOpportunity[]
+  tasks         AdminTask[]
+
+  @@index([industry, country])
+  @@index([status, createdAt])
+  @@index([archivedAt])
+}
+
+model AdminContact {
+  id              String               @id @default(cuid())
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  archivedAt      DateTime?
+  companyId       String
+  name            String
+  title           String?
+  email           String?
+  phone           String?
+  linkedInUrl     String?
+  isDecisionMaker Boolean              @default(false)
+  company         AdminCompany         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  opportunities   AdminOpportunity[]
+  tasks           AdminTask[]
+  contactMethods  AdminContactMethod[]
+
+  @@unique([companyId, email])
+  @@index([companyId, isDecisionMaker])
+  @@index([email])
+  @@index([archivedAt])
+}
+
+model AdminContactMethod {
+  id         String               @id @default(cuid())
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  contactId  String
+  channel    AdminOutreachChannel
+  value      String
+  label      String?
+  preferred  Boolean              @default(false)
+  verifiedAt DateTime?
+  contact    AdminContact         @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@unique([contactId, channel, value])
+  @@index([channel, value])
+  @@index([contactId, preferred])
+}
+
+model AdminOpportunity {
+  id                   String                    @id @default(cuid())
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  archivedAt           DateTime?
+  reference            String                    @unique
+  companyId            String
+  primaryContactId     String?
+  projectLeadId        String?                   @unique
+  assignedOwnerId      String?
+  direction            AdminOpportunityDirection
+  stage                AdminOpportunityStage     @default(RESEARCHING)
+  type                 AdminOpportunityType
+  title                String
+  source               String
+  identifiedProblem    String                    @db.Text
+  opportunity          String                    @db.Text
+  estimatedValue       Decimal                   @db.Decimal(14, 2)
+  budget               String?
+  timeline             String?
+  probability          Int                       @default(10)
+  nextAction           String?                   @db.Text
+  nextFollowUp         DateTime?
+  reasonForContact     String?                   @db.Text
+  personalizationAngle String?                   @db.Text
+  company              AdminCompany              @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  primaryContact       AdminContact?             @relation(fields: [primaryContactId], references: [id], onDelete: SetNull)
+  projectLead          ProjectLead?              @relation(fields: [projectLeadId], references: [id], onDelete: SetNull)
+  assignedOwner        AdminUser?                @relation("AdminOpportunityOwner", fields: [assignedOwnerId], references: [id], onDelete: SetNull)
+  research             AdminProspectResearch?
+  activities           AdminActivity[]
+  notes                AdminOpportunityNote[]
+  messages             AdminMessage[]
+  proposals            AdminProposal[]
+  tasks                AdminTask[]
+  outreachSequence     AdminOutreachSequence?
+
+  @@index([stage, nextFollowUp])
+  @@index([assignedOwnerId, stage])
+  @@index([companyId, stage])
+  @@index([direction, createdAt])
+  @@index([estimatedValue])
+  @@index([archivedAt])
+}
+
+model AdminProspectResearch {
+  id                        String           @id @default(cuid())
+  createdAt                 DateTime         @default(now())
+  updatedAt                 DateTime         @updatedAt
+  opportunityId             String           @unique
+  currentWebsiteQuality     Int?
+  operationalMaturity       Int?
+  observedProblems          String?          @db.Text
+  recentBusinessActivity    String?          @db.Text
+  notes                     String?          @db.Text
+  financialCapacityScore    Int              @default(1)
+  problemSeverityScore      Int              @default(1)
+  strategicFitScore         Int              @default(1)
+  urgencyScore              Int              @default(1)
+  decisionMakerAccessScore  Int              @default(1)
+  totalScore                Int              @default(5)
+  websiteReviewed           Boolean          @default(false)
+  mobileReviewed            Boolean          @default(false)
+  businessModelUnderstood   Boolean          @default(false)
+  decisionMakerIdentified   Boolean          @default(false)
+  specificProblemIdentified Boolean          @default(false)
+  personalizationPrepared   Boolean          @default(false)
+  contactMethodFound        Boolean          @default(false)
+  readyForOutreachAt        DateTime?
+  opportunity               AdminOpportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@index([totalScore])
+  @@index([readyForOutreachAt])
+}
+
+model AdminTask {
+  id            String            @id @default(cuid())
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  completedAt   DateTime?
+  archivedAt    DateTime?
+  opportunityId String?
+  companyId     String?
+  contactId     String?
+  ownerId       String
+  type          AdminTaskType
+  priority      AdminTaskPriority @default(MEDIUM)
+  status        AdminTaskStatus   @default(TODO)
+  title         String
+  dueAt         DateTime
+  notes         String?           @db.Text
+  opportunity   AdminOpportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  company       AdminCompany?     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contact       AdminContact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  owner         AdminUser         @relation("AdminTaskOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+
+  @@index([ownerId, status, dueAt])
+  @@index([opportunityId, status])
+  @@index([companyId])
+  @@index([priority, dueAt])
+  @@index([archivedAt])
+}
+
+model AdminOpportunityNote {
+  id            String           @id @default(cuid())
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  opportunityId String
+  authorId      String
+  body          String           @db.Text
+  opportunity   AdminOpportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  author        AdminUser        @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([opportunityId, createdAt])
+  @@index([authorId])
+}
+
+model AdminActivity {
+  id            String            @id @default(cuid())
+  createdAt     DateTime          @default(now())
+  occurredAt    DateTime          @default(now())
+  opportunityId String
+  actorId       String?
+  kind          AdminActivityKind
+  summary       String
+  metadata      Json?
+  opportunity   AdminOpportunity  @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  actor         AdminUser?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([opportunityId, occurredAt])
+  @@index([actorId, occurredAt])
+}
+
+model AdminMessage {
+  id                String                @id @default(cuid())
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  opportunityId     String
+  recordedById      String?
+  sequenceStepId    String?               @unique
+  channel           AdminOutreachChannel
+  direction         AdminMessageDirection
+  subject           String?
+  body              String                @db.Text
+  response          String?               @db.Text
+  occurredAt        DateTime              @default(now())
+  nextAction        String?               @db.Text
+  provider          String?
+  externalMessageId String?
+  deliveryStatus    String?
+  rawMetadata       Json?
+  needsAction       Boolean               @default(false)
+  actionedAt        DateTime?
+  opportunity       AdminOpportunity      @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  recordedBy        AdminUser?            @relation(fields: [recordedById], references: [id], onDelete: SetNull)
+  sequenceStep      AdminOutreachStep?    @relation(fields: [sequenceStepId], references: [id], onDelete: SetNull)
+
+  @@index([opportunityId, occurredAt])
+  @@index([externalMessageId])
+  @@index([provider, deliveryStatus])
+  @@index([needsAction, occurredAt])
+}
+
+model AdminOutreachSequence {
+  id            String              @id @default(cuid())
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  opportunityId String              @unique
+  startedAt     DateTime
+  pausedAt      DateTime?
+  completedAt   DateTime?
+  opportunity   AdminOpportunity    @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  steps         AdminOutreachStep[]
+
+  @@index([startedAt, completedAt])
+}
+
+model AdminOutreachStep {
+  id           String                  @id @default(cuid())
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  sequenceId   String
+  stepNumber   Int
+  dayOffset    Int
+  label        String
+  scheduledFor DateTime
+  status       AdminOutreachStepStatus @default(PENDING)
+  completedAt  DateTime?
+  channel      AdminOutreachChannel?
+  notes        String?                 @db.Text
+  sequence     AdminOutreachSequence   @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  message      AdminMessage?
+
+  @@unique([sequenceId, stepNumber])
+  @@index([status, scheduledFor])
+}
+
+model AdminDailyTargetConfig {
+  id                         String    @id @default(cuid())
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
+  userId                     String    @unique
+  researchTarget             Int       @default(10)
+  personalizedOutreachTarget Int       @default(20)
+  followUpTarget             Int       @default(10)
+  user                       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AdminProposal {
+  id            String              @id @default(cuid())
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  opportunityId String
+  createdById   String?
+  version       Int                 @default(1)
+  title         String
+  amount        Decimal             @db.Decimal(14, 2)
+  status        AdminProposalStatus @default(DRAFT)
+  documentUrl   String?
+  notes         String?             @db.Text
+  sentAt        DateTime?
+  validUntil    DateTime?
+  opportunity   AdminOpportunity    @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  createdBy     AdminUser?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@unique([opportunityId, version])
+  @@index([status, sentAt])
+  @@index([createdById])
+}
+
+model AdminAuditLog {
+  id         String           @id @default(cuid())
+  createdAt  DateTime         @default(now())
+  actorId    String?
+  action     AdminAuditAction
+  entityType String
+  entityId   String
+  summary    String
+  before     Json?
+  after      Json?
+  metadata   Json?
+  actor      AdminUser?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model ProjectLeadRateLimit {
+  fingerprint     String    @id
+  windowStartedAt DateTime  @default(now())
+  requestCount    Int       @default(1)
+  blockedUntil    DateTime?
+  updatedAt       DateTime  @updatedAt
+
+  @@index([updatedAt])
+}
+
+model IndustryTemplate {
+  id                          String                                @id @default(cuid())
+  key                         String                                @unique
+  name                        String
+  description                 String?
+  version                     Int                                   @default(1)
+  active                      Boolean                               @default(true)
+  workflowLabels              Json?
+  assetFieldSchema            Json?
+  jobTypeDefaults             Json?
+  quoteItemDefaults           Json?
+  invoiceDefaults             Json?
+  createdAt                   DateTime                              @default(now())
+  updatedAt                   DateTime                              @updatedAt
+  organizations               Organization[]
+  companyIndustrySettings     CompanyIndustrySettings[]
+  templateServiceCategories   IndustryServiceCategory[]
+  templateJobTypes            IndustryJobType[]
+  templateAssetTypes          IndustryAssetType[]
+  templateAssetFields         IndustryAssetField[]
+  templateChecklistTemplates  IndustryTechnicianChecklistTemplate[]
+  templateJobStatuses         IndustryJobStatus[]
+  templateQuoteLineItems      IndustryQuoteLineItem[]
+  templateInvoiceTerms        IndustryInvoiceTerm[]
+  templateInventoryCategories IndustryInventoryCategory[]
+  templateIssueSymptoms       IndustryIssueSymptom[]
+  templatePriorityLabels      IndustryPriorityLabel[]
+  templateSlaResponseTimes    IndustrySlaResponseTime[]
+  assetTypes                  AssetType[]
+  serviceCategories           ServiceCategory[]
+  serviceItems                ServiceItem[]
+  workOrderStatuses           WorkOrderStatus[]
+  checklistTemplates          ChecklistTemplate[]
+  notificationTemplates       NotificationTemplate[]
+
+  @@index([key])
+}
+
+model Organization {
+  id                         String                               @id @default(cuid())
+  name                       String
+  slug                       String                               @unique
+  legalName                  String?
+  status                     OrganizationStatus                   @default(TRIAL)
+  phone                      String?
+  email                      String?
+  website                    String?
+  addressLine1               String?
+  addressLine2               String?
+  city                       String?
+  parish                     String?
+  country                    String                               @default("Jamaica")
+  timezone                   String                               @default("America/Jamaica")
+  currency                   String                               @default("JMD")
+  taxLabel                   String                               @default("GCT")
+  taxRate                    Decimal                              @default(0) @db.Decimal(5, 2)
+  industryTemplateId         String?
+  industryTemplate           IndustryTemplate?                    @relation(fields: [industryTemplateId], references: [id])
+  createdAt                  DateTime                             @default(now())
+  updatedAt                  DateTime                             @updatedAt
+  members                    OrganizationMember[]
+  settings                   CompanySettings?
+  industrySettings           CompanyIndustrySettings?
+  companyServiceCategories   CompanyServiceCategory[]
+  companyJobTypes            CompanyJobType[]
+  companyAssetTypes          CompanyAssetType[]
+  companyAssetFields         CompanyAssetField[]
+  companyChecklistTemplates  CompanyTechnicianChecklistTemplate[]
+  companyJobStatuses         CompanyJobStatus[]
+  companyQuoteLineItems      CompanyQuoteLineItem[]
+  companyInvoiceTerms        CompanyInvoiceTerm[]
+  companyInventoryCategories CompanyInventoryCategory[]
+  companyIssueSymptoms       CompanyIssueSymptom[]
+  companyPriorityLabels      CompanyPriorityLabel[]
+  companySlaResponseTimes    CompanySlaResponseTime[]
+  customers                  Customer[]
+  customerLocations          CustomerLocation[]
+  assetTypes                 AssetType[]
+  assets                     Asset[]
+  serviceCategories          ServiceCategory[]
+  serviceItems               ServiceItem[]
+  workOrderStatuses          WorkOrderStatus[]
+  workOrders                 WorkOrder[]
+  assignments                WorkOrderAssignment[]
+  technicianProfiles         TechnicianProfile[]
+  checklistTemplates         ChecklistTemplate[]
+  checklistResponses         JobChecklistResponse[]
+  quotes                     Quote[]
+  quoteLineItems             QuoteLineItem[]
+  invoices                   Invoice[]
+  invoiceLineItems           InvoiceLineItem[]
+  payments                   Payment[]
+  inventoryItems             InventoryItem[]
+  inventoryTransactions      InventoryTransaction[]
+  attachments                Attachment[]
+  notes                      Note[]
+  activityLogs               ActivityLog[]
+  notificationTemplates      NotificationTemplate[]
+  followUpReminders          FollowUpReminder[]
+
+  @@index([industryTemplateId])
+}
+
+model User {
+  id                    String                 @id @default(cuid())
+  externalAuthId        String?                @unique
+  email                 String                 @unique
+  name                  String
+  avatarUrl             String?
+  phone                 String?
+  active                Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  memberships           OrganizationMember[]
+  technicianProfiles    TechnicianProfile[]
+  createdWorkOrders     WorkOrder[]            @relation("WorkOrderCreator")
+  assignmentsMade       WorkOrderAssignment[]  @relation("AssignmentCreator")
+  authoredNotes         Note[]                 @relation("NoteAuthor")
+  activityLogs          ActivityLog[]          @relation("ActivityActor")
+  inventoryTransactions InventoryTransaction[] @relation("InventoryTransactionCreator")
+  ownedFollowUps        FollowUpReminder[]     @relation("FollowUpOwner")
+}
+
+model Role {
+  id          String               @id @default(cuid())
+  key         RoleKey              @unique
+  name        String
+  description String?
+  memberships OrganizationMember[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  roleId         String
+  title          String?
+  invitedAt      DateTime?
+  joinedAt       DateTime?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           Role         @relation(fields: [roleId], references: [id])
+
+  @@unique([organizationId, userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+}
+
+model CompanySettings {
+  id                    String       @id @default(cuid())
+  organizationId        String       @unique
+  businessPhone         String?
+  businessEmail         String?
+  addressLine1          String?
+  addressLine2          String?
+  city                  String?
+  parish                String?
+  country               String       @default("Jamaica")
+  currency              String       @default("JMD")
+  taxEnabled            Boolean      @default(true)
+  taxLabel              String       @default("GCT")
+  taxRate               Decimal      @default(15) @db.Decimal(5, 2)
+  businessHours         Json
+  numberOfTechnicians   Int          @default(1)
+  onboardingCompletedAt DateTime?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model IndustryServiceCategory {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  description        String?
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryJobType {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  description        String?
+  defaultDurationMin Int?
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryAssetType {
+  id                 String               @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  description        String?
+  sortOrder          Int                  @default(0)
+  active             Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  industryTemplate   IndustryTemplate     @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+  fields             IndustryAssetField[]
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryAssetField {
+  id                 String             @id @default(cuid())
+  industryTemplateId String
+  assetTypeId        String?
+  name               String
+  slug               String
+  type               ConfigFieldType    @default(TEXT)
+  required           Boolean            @default(false)
+  options            Json?
+  sortOrder          Int                @default(0)
+  active             Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  industryTemplate   IndustryTemplate   @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+  assetType          IndustryAssetType? @relation(fields: [assetTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, assetTypeId, slug])
+  @@index([industryTemplateId])
+  @@index([assetTypeId])
+}
+
+model IndustryTechnicianChecklistTemplate {
+  id                 String                            @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  description        String?
+  jobTypeSlug        String?
+  sortOrder          Int                               @default(0)
+  active             Boolean                           @default(true)
+  createdAt          DateTime                          @default(now())
+  updatedAt          DateTime                          @updatedAt
+  industryTemplate   IndustryTemplate                  @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+  items              IndustryTechnicianChecklistItem[]
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryTechnicianChecklistItem {
+  id                  String                              @id @default(cuid())
+  checklistTemplateId String
+  label               String
+  helpText            String?
+  type                ChecklistItemType                   @default(BOOLEAN)
+  required            Boolean                             @default(false)
+  sortOrder           Int                                 @default(0)
+  options             Json?
+  createdAt           DateTime                            @default(now())
+  updatedAt           DateTime                            @updatedAt
+  checklistTemplate   IndustryTechnicianChecklistTemplate @relation(fields: [checklistTemplateId], references: [id], onDelete: Cascade)
+
+  @@index([checklistTemplateId])
+}
+
+model IndustryJobStatus {
+  id                 String             @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  lifecycle          WorkOrderLifecycle @default(REQUESTED)
+  color              String?
+  sortOrder          Int                @default(0)
+  isDefault          Boolean            @default(false)
+  isTerminal         Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  industryTemplate   IndustryTemplate   @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryQuoteLineItem {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  description        String?
+  defaultQuantity    Decimal          @default(1) @db.Decimal(10, 2)
+  defaultUnitPrice   Decimal?         @db.Decimal(12, 2)
+  taxable            Boolean          @default(true)
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryInvoiceTerm {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  terms              String
+  dueDays            Int              @default(0)
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryInventoryCategory {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  description        String?
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryIssueSymptom {
+  id                  String           @id @default(cuid())
+  industryTemplateId  String
+  name                String
+  slug                String
+  description         String?
+  serviceCategorySlug String?
+  priorityHint        String?
+  sortOrder           Int              @default(0)
+  active              Boolean          @default(true)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  industryTemplate    IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustryPriorityLabel {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  color              String?
+  level              Int              @default(0)
+  description        String?
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model IndustrySlaResponseTime {
+  id                 String           @id @default(cuid())
+  industryTemplateId String
+  name               String
+  slug               String
+  prioritySlug       String
+  responseMinutes    Int
+  resolutionMinutes  Int?
+  description        String?
+  sortOrder          Int              @default(0)
+  active             Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  industryTemplate   IndustryTemplate @relation(fields: [industryTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([industryTemplateId, slug])
+  @@index([industryTemplateId])
+}
+
+model CompanyIndustrySettings {
+  id                       String            @id @default(cuid())
+  organizationId           String            @unique
+  sourceIndustryTemplateId String?
+  sourceTemplateVersion    Int?
+  copiedAt                 DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  organization             Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sourceIndustryTemplate   IndustryTemplate? @relation(fields: [sourceIndustryTemplateId], references: [id])
+
+  @@index([sourceIndustryTemplateId])
+}
+
+model CompanyServiceCategory {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyJobType {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  defaultDurationMin     Int?
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyAssetType {
+  id                     String              @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  sortOrder              Int                 @default(0)
+  active                 Boolean             @default(true)
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  organization           Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  fields                 CompanyAssetField[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyAssetField {
+  id                     String            @id @default(cuid())
+  organizationId         String
+  companyAssetTypeId     String?
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  type                   ConfigFieldType   @default(TEXT)
+  required               Boolean           @default(false)
+  options                Json?
+  sortOrder              Int               @default(0)
+  active                 Boolean           @default(true)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  organization           Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  companyAssetType       CompanyAssetType? @relation(fields: [companyAssetTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, companyAssetTypeId, slug])
+  @@index([organizationId])
+  @@index([companyAssetTypeId])
+}
+
+model CompanyTechnicianChecklistTemplate {
+  id                     String                           @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  jobTypeSlug            String?
+  sortOrder              Int                              @default(0)
+  active                 Boolean                          @default(true)
+  createdAt              DateTime                         @default(now())
+  updatedAt              DateTime                         @updatedAt
+  organization           Organization                     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  items                  CompanyTechnicianChecklistItem[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyTechnicianChecklistItem {
+  id                     String                             @id @default(cuid())
+  checklistTemplateId    String
+  sourceTemplateConfigId String?
+  label                  String
+  helpText               String?
+  type                   ChecklistItemType                  @default(BOOLEAN)
+  required               Boolean                            @default(false)
+  sortOrder              Int                                @default(0)
+  options                Json?
+  createdAt              DateTime                           @default(now())
+  updatedAt              DateTime                           @updatedAt
+  checklistTemplate      CompanyTechnicianChecklistTemplate @relation(fields: [checklistTemplateId], references: [id], onDelete: Cascade)
+
+  @@index([checklistTemplateId])
+}
+
+model CompanyJobStatus {
+  id                     String             @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  lifecycle              WorkOrderLifecycle @default(REQUESTED)
+  color                  String?
+  sortOrder              Int                @default(0)
+  isDefault              Boolean            @default(false)
+  isTerminal             Boolean            @default(false)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  organization           Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyQuoteLineItem {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  defaultQuantity        Decimal      @default(1) @db.Decimal(10, 2)
+  defaultUnitPrice       Decimal?     @db.Decimal(12, 2)
+  taxable                Boolean      @default(true)
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyInvoiceTerm {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  terms                  String
+  dueDays                Int          @default(0)
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyInventoryCategory {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyIssueSymptom {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  description            String?
+  serviceCategorySlug    String?
+  priorityHint           String?
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanyPriorityLabel {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  color                  String?
+  level                  Int          @default(0)
+  description            String?
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model CompanySlaResponseTime {
+  id                     String       @id @default(cuid())
+  organizationId         String
+  sourceTemplateConfigId String?
+  name                   String
+  slug                   String
+  prioritySlug           String
+  responseMinutes        Int
+  resolutionMinutes      Int?
+  description            String?
+  sortOrder              Int          @default(0)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+}
+
+model Customer {
+  id             String             @id @default(cuid())
+  organizationId String
+  displayName    String
+  type           CustomerType       @default(RESIDENTIAL)
+  status         CustomerStatus     @default(ACTIVE)
+  primaryName    String?
+  email          String?
+  phone          String?
+  whatsapp       String?
+  taxId          String?
+  source         String?
+  tags           String[]           @default([])
+  notesSummary   String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  locations      CustomerLocation[]
+  assets         Asset[]
+  workOrders     WorkOrder[]
+  quotes         Quote[]
+  invoices       Invoice[]
+  payments       Payment[]
+  followUps      FollowUpReminder[]
+
+  @@index([organizationId, displayName])
+}
+
+model CustomerLocation {
+  id             String       @id @default(cuid())
+  organizationId String
+  customerId     String
+  label          String       @default("Main site")
+  addressLine1   String
+  addressLine2   String?
+  city           String?
+  parish         String?
+  country        String       @default("Jamaica")
+  accessNotes    String?
+  mapUrl         String?
+  contactName    String?
+  contactPhone   String?
+  securityNotes  String?
+  preferredTimes String?
+  geo            Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer       Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  assets         Asset[]
+  workOrders     WorkOrder[]
+  quotes         Quote[]
+  invoices       Invoice[]
+
+  @@index([organizationId])
+  @@index([customerId])
+}
+
+model AssetType {
+  id                 String            @id @default(cuid())
+  organizationId     String?
+  industryTemplateId String?
+  name               String
+  slug               String
+  fieldSchema        Json?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  organization       Organization?     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industryTemplate   IndustryTemplate? @relation(fields: [industryTemplateId], references: [id])
+  assets             Asset[]
+
+  @@unique([organizationId, slug])
+  @@unique([industryTemplateId, slug])
+  @@index([organizationId])
+  @@index([industryTemplateId])
+}
+
+model Asset {
+  id                 String           @id @default(cuid())
+  organizationId     String
+  customerId         String
+  customerLocationId String
+  assetTypeId        String?
+  name               String
+  manufacturer       String?
+  modelNumber        String?
+  serialNumber       String?
+  installedAt        DateTime?
+  warrantyExpiresAt  DateTime?
+  warrantyStatus     String?
+  lastServiceAt      DateTime?
+  notesSummary       String?
+  status             AssetStatus      @default(ACTIVE)
+  customFields       Json?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  organization       Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer           Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerLocation   CustomerLocation @relation(fields: [customerLocationId], references: [id], onDelete: Cascade)
+  assetType          AssetType?       @relation(fields: [assetTypeId], references: [id])
+  workOrders         WorkOrder[]
+
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([customerLocationId])
+  @@index([assetTypeId])
+}
+
+model ServiceCategory {
+  id                 String              @id @default(cuid())
+  organizationId     String?
+  industryTemplateId String?
+  name               String
+  slug               String
+  description        String?
+  sortOrder          Int                 @default(0)
+  active             Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  organization       Organization?       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industryTemplate   IndustryTemplate?   @relation(fields: [industryTemplateId], references: [id])
+  serviceItems       ServiceItem[]
+  workOrders         WorkOrder[]
+  checklistTemplates ChecklistTemplate[]
+
+  @@unique([organizationId, slug])
+  @@unique([industryTemplateId, slug])
+  @@index([organizationId])
+  @@index([industryTemplateId])
+}
+
+model ServiceItem {
+  id                 String              @id @default(cuid())
+  organizationId     String?
+  industryTemplateId String?
+  serviceCategoryId  String?
+  name               String
+  slug               String
+  description        String?
+  defaultPrice       Decimal?            @db.Decimal(12, 2)
+  defaultDurationMin Int?
+  taxable            Boolean             @default(true)
+  active             Boolean             @default(true)
+  metadata           Json?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  organization       Organization?       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industryTemplate   IndustryTemplate?   @relation(fields: [industryTemplateId], references: [id])
+  serviceCategory    ServiceCategory?    @relation(fields: [serviceCategoryId], references: [id])
+  workOrders         WorkOrder[]
+  quoteLineItems     QuoteLineItem[]
+  invoiceLineItems   InvoiceLineItem[]
+  checklistTemplates ChecklistTemplate[]
+
+  @@unique([organizationId, slug])
+  @@unique([industryTemplateId, slug])
+  @@index([organizationId])
+  @@index([industryTemplateId])
+  @@index([serviceCategoryId])
+}
+
+model WorkOrderStatus {
+  id                 String             @id @default(cuid())
+  organizationId     String?
+  industryTemplateId String?
+  name               String
+  slug               String
+  lifecycle          WorkOrderLifecycle @default(REQUESTED)
+  color              String?
+  sortOrder          Int                @default(0)
+  isDefault          Boolean            @default(false)
+  isTerminal         Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  organization       Organization?      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industryTemplate   IndustryTemplate?  @relation(fields: [industryTemplateId], references: [id])
+  workOrders         WorkOrder[]
+
+  @@unique([organizationId, slug])
+  @@unique([industryTemplateId, slug])
+  @@index([organizationId])
+  @@index([industryTemplateId])
+}
+
+model WorkOrder {
+  id                    String                 @id @default(cuid())
+  organizationId        String
+  number                String
+  customerId            String
+  customerLocationId    String?
+  assetId               String?
+  serviceCategoryId     String?
+  serviceItemId         String?
+  statusId              String
+  checklistTemplateId   String?
+  createdById           String?
+  title                 String
+  description           String?
+  customerComplaint     String?
+  internalNotes         String?
+  jobType               String?
+  priority              WorkOrderPriority      @default(NORMAL)
+  source                JobSource              @default(PHONE)
+  paymentStatus         WorkOrderPaymentStatus @default(NOT_INVOICED)
+  requestedAt           DateTime               @default(now())
+  preferredStart        DateTime?
+  preferredEnd          DateTime?
+  scheduledStart        DateTime?
+  scheduledEnd          DateTime?
+  estimatedDurationMin  Int?
+  completedAt           DateTime?
+  customFields          Json?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  organization          Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer              Customer               @relation(fields: [customerId], references: [id])
+  customerLocation      CustomerLocation?      @relation(fields: [customerLocationId], references: [id])
+  asset                 Asset?                 @relation(fields: [assetId], references: [id])
+  serviceCategory       ServiceCategory?       @relation(fields: [serviceCategoryId], references: [id])
+  serviceItem           ServiceItem?           @relation(fields: [serviceItemId], references: [id])
+  status                WorkOrderStatus        @relation(fields: [statusId], references: [id])
+  checklistTemplate     ChecklistTemplate?     @relation(fields: [checklistTemplateId], references: [id])
+  createdBy             User?                  @relation("WorkOrderCreator", fields: [createdById], references: [id])
+  assignments           WorkOrderAssignment[]
+  checklistResponses    JobChecklistResponse[]
+  quotes                Quote[]
+  invoices              Invoice[]
+  inventoryTransactions InventoryTransaction[]
+  followUps             FollowUpReminder[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([customerLocationId])
+  @@index([assetId])
+  @@index([statusId])
+  @@index([scheduledStart])
+  @@index([preferredStart])
+  @@index([paymentStatus])
+}
+
+model WorkOrderAssignment {
+  id                  String            @id @default(cuid())
+  organizationId      String
+  workOrderId         String
+  technicianProfileId String
+  assignedById        String?
+  status              AssignmentStatus  @default(ASSIGNED)
+  assignedAt          DateTime          @default(now())
+  acceptedAt          DateTime?
+  completedAt         DateTime?
+  organization        Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  workOrder           WorkOrder         @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  technicianProfile   TechnicianProfile @relation(fields: [technicianProfileId], references: [id])
+  assignedBy          User?             @relation("AssignmentCreator", fields: [assignedById], references: [id])
+
+  @@index([organizationId])
+  @@index([workOrderId])
+  @@index([technicianProfileId])
+  @@index([assignedById])
+}
+
+model TechnicianProfile {
+  id                 String                 @id @default(cuid())
+  organizationId     String
+  userId             String
+  displayName        String
+  phone              String?
+  serviceArea        String?
+  skills             String[]               @default([])
+  hourlyCost         Decimal?               @db.Decimal(12, 2)
+  active             Boolean                @default(true)
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  organization       Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user               User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignments        WorkOrderAssignment[]
+  checklistResponses JobChecklistResponse[]
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model ChecklistTemplate {
+  id                 String            @id @default(cuid())
+  organizationId     String?
+  industryTemplateId String?
+  serviceCategoryId  String?
+  serviceItemId      String?
+  name               String
+  slug               String
+  jobType            String?
+  description        String?
+  required           Boolean           @default(false)
+  active             Boolean           @default(true)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  organization       Organization?     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industryTemplate   IndustryTemplate? @relation(fields: [industryTemplateId], references: [id])
+  serviceCategory    ServiceCategory?  @relation(fields: [serviceCategoryId], references: [id])
+  serviceItem        ServiceItem?      @relation(fields: [serviceItemId], references: [id])
+  items              ChecklistItem[]
+  workOrders         WorkOrder[]
+
+  @@unique([organizationId, slug])
+  @@unique([industryTemplateId, slug])
+  @@index([organizationId])
+  @@index([industryTemplateId])
+  @@index([serviceCategoryId])
+  @@index([serviceItemId])
+}
+
+model ChecklistItem {
+  id                  String                 @id @default(cuid())
+  checklistTemplateId String
+  label               String
+  helpText            String?
+  type                ChecklistItemType      @default(BOOLEAN)
+  required            Boolean                @default(false)
+  sortOrder           Int                    @default(0)
+  options             Json?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  checklistTemplate   ChecklistTemplate      @relation(fields: [checklistTemplateId], references: [id], onDelete: Cascade)
+  responses           JobChecklistResponse[]
+
+  @@index([checklistTemplateId])
+}
+
+model JobChecklistResponse {
+  id                  String                   @id @default(cuid())
+  organizationId      String
+  workOrderId         String
+  checklistItemId     String
+  technicianProfileId String?
+  status              ChecklistResponseStatus?
+  value               Json?
+  note                String?
+  completedAt         DateTime?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  organization        Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  workOrder           WorkOrder                @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  checklistItem       ChecklistItem            @relation(fields: [checklistItemId], references: [id], onDelete: Cascade)
+  technicianProfile   TechnicianProfile?       @relation(fields: [technicianProfileId], references: [id])
+
+  @@unique([workOrderId, checklistItemId])
+  @@index([organizationId])
+  @@index([technicianProfileId])
+}
+
+model Quote {
+  id                 String             @id @default(cuid())
+  organizationId     String
+  number             String
+  customerId         String
+  customerLocationId String?
+  workOrderId        String?
+  status             QuoteStatus        @default(DRAFT)
+  title              String
+  notes              String?
+  subtotal           Decimal            @default(0) @db.Decimal(12, 2)
+  taxAmount          Decimal            @default(0) @db.Decimal(12, 2)
+  discountAmount     Decimal            @default(0) @db.Decimal(12, 2)
+  total              Decimal            @default(0) @db.Decimal(12, 2)
+  expiresAt          DateTime?
+  sentAt             DateTime?
+  approvedAt         DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  organization       Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer           Customer           @relation(fields: [customerId], references: [id])
+  customerLocation   CustomerLocation?  @relation(fields: [customerLocationId], references: [id])
+  workOrder          WorkOrder?         @relation(fields: [workOrderId], references: [id])
+  lineItems          QuoteLineItem[]
+  invoices           Invoice[]
+  followUps          FollowUpReminder[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([workOrderId])
+}
+
+model QuoteLineItem {
+  id             String       @id @default(cuid())
+  organizationId String
+  quoteId        String
+  serviceItemId  String?
+  description    String
+  quantity       Decimal      @default(1) @db.Decimal(10, 2)
+  unitPrice      Decimal      @default(0) @db.Decimal(12, 2)
+  taxRate        Decimal      @default(0) @db.Decimal(5, 2)
+  total          Decimal      @default(0) @db.Decimal(12, 2)
+  sortOrder      Int          @default(0)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  quote          Quote        @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  serviceItem    ServiceItem? @relation(fields: [serviceItemId], references: [id])
+
+  @@index([organizationId])
+  @@index([quoteId])
+  @@index([serviceItemId])
+}
+
+model Invoice {
+  id                 String             @id @default(cuid())
+  organizationId     String
+  number             String
+  customerId         String
+  customerLocationId String?
+  quoteId            String?
+  workOrderId        String?
+  status             InvoiceStatus      @default(DRAFT)
+  subtotal           Decimal            @default(0) @db.Decimal(12, 2)
+  taxAmount          Decimal            @default(0) @db.Decimal(12, 2)
+  discountAmount     Decimal            @default(0) @db.Decimal(12, 2)
+  total              Decimal            @default(0) @db.Decimal(12, 2)
+  balanceDue         Decimal            @default(0) @db.Decimal(12, 2)
+  issuedAt           DateTime?
+  dueAt              DateTime?
+  paidAt             DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  organization       Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer           Customer           @relation(fields: [customerId], references: [id])
+  customerLocation   CustomerLocation?  @relation(fields: [customerLocationId], references: [id])
+  quote              Quote?             @relation(fields: [quoteId], references: [id])
+  workOrder          WorkOrder?         @relation(fields: [workOrderId], references: [id])
+  lineItems          InvoiceLineItem[]
+  payments           Payment[]
+  followUps          FollowUpReminder[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([quoteId])
+  @@index([workOrderId])
+}
+
+model InvoiceLineItem {
+  id             String       @id @default(cuid())
+  organizationId String
+  invoiceId      String
+  serviceItemId  String?
+  description    String
+  quantity       Decimal      @default(1) @db.Decimal(10, 2)
+  unitPrice      Decimal      @default(0) @db.Decimal(12, 2)
+  taxRate        Decimal      @default(0) @db.Decimal(5, 2)
+  total          Decimal      @default(0) @db.Decimal(12, 2)
+  sortOrder      Int          @default(0)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoice        Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  serviceItem    ServiceItem? @relation(fields: [serviceItemId], references: [id])
+
+  @@index([organizationId])
+  @@index([invoiceId])
+  @@index([serviceItemId])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  organizationId String
+  invoiceId      String
+  customerId     String
+  status         PaymentStatus @default(PENDING)
+  method         PaymentMethod @default(CASH)
+  amount         Decimal       @db.Decimal(12, 2)
+  reference      String?
+  paidAt         DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoice        Invoice       @relation(fields: [invoiceId], references: [id])
+  customer       Customer      @relation(fields: [customerId], references: [id])
+
+  @@index([organizationId])
+  @@index([invoiceId])
+  @@index([customerId])
+}
+
+model InventoryItem {
+  id             String                 @id @default(cuid())
+  organizationId String
+  sku            String
+  name           String
+  category       String?
+  unit           String                 @default("each")
+  quantityOnHand Decimal                @default(0) @db.Decimal(12, 2)
+  reorderPoint   Decimal                @default(0) @db.Decimal(12, 2)
+  defaultCost    Decimal?               @db.Decimal(12, 2)
+  active         Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  organization   Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  transactions   InventoryTransaction[]
+
+  @@unique([organizationId, sku])
+  @@index([organizationId])
+}
+
+model InventoryTransaction {
+  id              String                   @id @default(cuid())
+  organizationId  String
+  inventoryItemId String
+  workOrderId     String?
+  createdById     String?
+  type            InventoryTransactionType
+  quantity        Decimal                  @db.Decimal(12, 2)
+  unitCost        Decimal?                 @db.Decimal(12, 2)
+  notes           String?
+  createdAt       DateTime                 @default(now())
+  organization    Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  inventoryItem   InventoryItem            @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  workOrder       WorkOrder?               @relation(fields: [workOrderId], references: [id])
+  createdBy       User?                    @relation("InventoryTransactionCreator", fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([inventoryItemId])
+  @@index([workOrderId])
+  @@index([createdById])
+}
+
+model Attachment {
+  id             String               @id @default(cuid())
+  organizationId String
+  entityType     AttachmentEntityType
+  entityId       String
+  fileName       String
+  mimeType       String
+  url            String
+  sizeBytes      Int?
+  createdAt      DateTime             @default(now())
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([entityType, entityId])
+}
+
+model Note {
+  id             String         @id @default(cuid())
+  organizationId String
+  entityType     NoteEntityType
+  entityId       String
+  authorId       String?
+  body           String
+  pinned         Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  author         User?          @relation("NoteAuthor", fields: [authorId], references: [id])
+
+  @@index([organizationId])
+  @@index([entityType, entityId])
+  @@index([authorId])
+}
+
+model ActivityLog {
+  id             String             @id @default(cuid())
+  organizationId String
+  actorId        String?
+  entityType     ActivityEntityType
+  entityId       String
+  action         String
+  message        String?
+  metadata       Json?
+  createdAt      DateTime           @default(now())
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor          User?              @relation("ActivityActor", fields: [actorId], references: [id])
+
+  @@index([organizationId])
+  @@index([actorId])
+  @@index([entityType, entityId])
+}
+
+model NotificationTemplate {
+  id                 String              @id @default(cuid())
+  organizationId     String?
+  industryTemplateId String?
+  name               String
+  slug               String
+  channel            NotificationChannel
+  trigger            NotificationTrigger
+  subject            String?
+  body               String
+  variables          Json?
+  active             Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  organization       Organization?       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industryTemplate   IndustryTemplate?   @relation(fields: [industryTemplateId], references: [id])
+
+  @@unique([organizationId, slug])
+  @@unique([industryTemplateId, slug])
+  @@index([organizationId])
+  @@index([industryTemplateId])
+}
+
+model FollowUpReminder {
+  id             String       @id @default(cuid())
+  organizationId String
+  customerId     String?
+  workOrderId    String?
+  quoteId        String?
+  invoiceId      String?
+  ownerId        String?
+  title          String
+  notes          String?
+  dueAt          DateTime
+  completedAt    DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer       Customer?    @relation(fields: [customerId], references: [id])
+  workOrder      WorkOrder?   @relation(fields: [workOrderId], references: [id])
+  quote          Quote?       @relation(fields: [quoteId], references: [id])
+  invoice        Invoice?     @relation(fields: [invoiceId], references: [id])
+  owner          User?        @relation("FollowUpOwner", fields: [ownerId], references: [id])
+
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([workOrderId])
+  @@index([quoteId])
+  @@index([invoiceId])
+  @@index([ownerId])
+}

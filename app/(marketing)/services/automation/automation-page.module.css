@@ -1,0 +1,944 @@
+.hero {
+  min-height: calc(100svh - var(--header-height));
+  padding-block: clamp(4rem, 6vw, 7rem);
+  border-bottom: 1px solid var(--color-border-strong);
+  background:
+    linear-gradient(var(--color-border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-subtle) 1px, transparent 1px),
+    var(--color-bg-primary);
+  background-size: 8.333% 8.333%, 8.333% 8.333%, auto;
+}
+
+.heroGrid {
+  display: grid;
+  min-height: calc(100svh - 13.25rem);
+  grid-template-columns: minmax(0, 1.18fr) minmax(25rem, 0.82fr);
+  align-items: center;
+  gap: clamp(3rem, 7vw, 8.5rem);
+}
+
+.heroTitle {
+  max-width: 9.5ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(4rem, 7.65vw, 8.65rem);
+  font-weight: 520;
+  letter-spacing: -0.075em;
+  line-height: 0.89;
+  text-wrap: balance;
+}
+
+.heroTitle span {
+  color: var(--color-surface-accent);
+}
+
+.heroSupport {
+  display: grid;
+  max-width: 55rem;
+  margin-top: clamp(2.75rem, 4vw, 4.75rem);
+  grid-template-columns: minmax(16rem, 1fr) minmax(19rem, 0.8fr);
+  align-items: end;
+  gap: clamp(2rem, 4vw, 4.5rem);
+}
+
+.heroSupport p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+}
+
+.heroArchitecture {
+  display: grid;
+  min-height: 42rem;
+  border: 1px solid var(--color-border-strong);
+  grid-template-rows: auto 1fr auto;
+  color: var(--color-text-inverse);
+  background: var(--color-surface-inverse);
+  box-shadow: 1.1rem 1.1rem 0 var(--color-surface-accent);
+}
+
+.heroWorkflow {
+  min-width: 0;
+  align-self: center;
+  box-shadow: 1.1rem 1.1rem 0 var(--color-surface-accent);
+}
+
+.systemIntegrationMap {
+  margin-top: clamp(3rem, 6vw, 6rem);
+}
+
+.architectureHeader,
+.architectureControls {
+  display: flex;
+  min-height: 3.7rem;
+  padding-inline: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.architectureHeader {
+  border-bottom: 1px solid var(--color-border-inverse);
+}
+
+.architectureHeader span:last-child,
+.architectureControls span {
+  color: var(--color-text-inverse-muted);
+}
+
+.architectureRoute {
+  display: grid;
+  padding: clamp(1.25rem, 2.5vw, 2.5rem);
+  align-content: center;
+  gap: 0;
+}
+
+.architectureStage {
+  display: grid;
+  min-height: 5.7rem;
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--color-border-inverse);
+  grid-template-columns: 3rem minmax(6rem, 0.62fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.architectureStage:last-child {
+  border-bottom: 0;
+}
+
+.architectureStage > div {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  flex-direction: column;
+}
+
+.architectureStage > div span {
+  color: var(--color-text-inverse-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+}
+
+.architectureStage i {
+  display: block;
+  width: 1px;
+  margin-top: 0.5rem;
+  flex: 1;
+  background: var(--color-border-inverse);
+}
+
+.architectureStage strong {
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.25rem, 1.8vw, 1.8rem);
+  font-weight: 520;
+  letter-spacing: -0.04em;
+}
+
+.architectureStage:nth-child(3) strong {
+  color: var(--color-surface-accent-soft);
+}
+
+.architectureStage p {
+  margin: 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.architectureControls {
+  border-top: 1px solid var(--color-border-inverse);
+}
+
+.architectureControls strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 600;
+}
+
+.architectureControls strong::before {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  content: "";
+  background: var(--color-surface-accent-soft);
+}
+
+.sectionIntro,
+.integrationIntro,
+.methodIntro {
+  display: grid;
+  margin-bottom: clamp(3.5rem, 7vw, 7rem);
+  grid-template-columns: minmax(13rem, 0.48fr) minmax(22rem, 1.52fr);
+  align-items: start;
+  gap: clamp(2rem, 7vw, 8rem);
+}
+
+.sectionIntro h2,
+.integrationIntro h2,
+.methodIntro h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: var(--type-heading-2);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.useCaseList {
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.useCaseList > div {
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.useCase {
+  display: grid;
+  min-height: 13rem;
+  grid-template-columns: minmax(15rem, 0.64fr) minmax(0, 1.36fr);
+  align-items: stretch;
+}
+
+.useCaseTrigger {
+  display: grid;
+  padding: 1.25rem 1.25rem 1.25rem 0;
+  border-right: 1px solid var(--color-border-default);
+  grid-template-columns: 2.5rem 1fr;
+  align-content: space-between;
+  gap: 2rem 1rem;
+}
+
+.useCaseTrigger span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.useCaseTrigger h3 {
+  max-width: 12ch;
+  margin: auto 0 0;
+  grid-column: 2;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2rem, 3.5vw, 4rem);
+  font-weight: 520;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+}
+
+.useCaseSequence {
+  display: grid;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  list-style: none;
+}
+
+.useCaseSequence li {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  padding: 1.25rem;
+  border-right: 1px solid var(--color-border-default);
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 3rem;
+  background: var(--color-bg-primary);
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    background var(--duration-normal) var(--ease-standard);
+}
+
+.useCaseSequence li:last-child {
+  border-right: 0;
+}
+
+.useCaseSequence li:hover {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-inverse);
+}
+
+.useCaseSequence li:not(:last-child)::after {
+  position: absolute;
+  top: 50%;
+  right: -0.3rem;
+  z-index: 1;
+  display: grid;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-top: 1px solid var(--color-border-strong);
+  border-right: 1px solid var(--color-border-strong);
+  content: "";
+  background: var(--color-bg-primary);
+  transform: translateY(-50%) rotate(45deg);
+  transition: background var(--duration-normal) var(--ease-standard);
+}
+
+.useCaseSequence li:hover::after {
+  background: var(--color-surface-inverse);
+}
+
+.useCaseSequence span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+}
+
+.useCaseSequence li:hover span {
+  color: var(--color-text-inverse-muted);
+}
+
+.useCaseSequence strong {
+  max-width: 15ch;
+  font-size: clamp(0.8rem, 0.4vw + 0.7rem, 1rem);
+  font-weight: 580;
+  line-height: 1.35;
+}
+
+.integrationSection {
+  overflow: hidden;
+}
+
+.integrationIntro {
+  grid-template-columns: minmax(22rem, 1.2fr) minmax(18rem, 0.8fr);
+  align-items: end;
+}
+
+.integrationIntro p {
+  max-width: 40rem;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--type-body-large);
+  letter-spacing: -0.025em;
+  line-height: 1.55;
+}
+
+.integrationMap {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-elevated);
+  box-shadow: 1.25rem 1.25rem 0 var(--color-surface-accent-soft);
+}
+
+.integrationMapHeader {
+  display: flex;
+  min-height: 3.75rem;
+  padding-inline: 1rem;
+  border-bottom: 1px solid var(--color-border-default);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.integrationGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.integrationGrid > div {
+  height: 100%;
+}
+
+.integrationItem {
+  display: grid;
+  min-height: 10rem;
+  height: 100%;
+  padding: 1rem;
+  border-right: 1px solid var(--color-border-default);
+  border-bottom: 1px solid var(--color-border-default);
+  grid-template-columns: auto 1fr;
+  align-content: space-between;
+  gap: 3rem 0.85rem;
+}
+
+.integrationGrid > div:nth-child(4n) .integrationItem {
+  border-right: 0;
+}
+
+.integrationItem span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+}
+
+.integrationItem i {
+  position: relative;
+  display: block;
+  height: 1px;
+  margin-top: 0.28rem;
+  background: var(--color-border-default);
+}
+
+.integrationItem i::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  content: "";
+  background: var(--color-surface-accent);
+  transform: translateY(-50%);
+}
+
+.integrationItem strong {
+  grid-column: 1 / -1;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.45rem, 2.25vw, 2.5rem);
+  font-weight: 520;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.integrationCore {
+  display: grid;
+  min-height: 8rem;
+  padding: 1.25rem;
+  grid-template-columns: minmax(13rem, 0.45fr) minmax(20rem, 1.55fr);
+  align-items: center;
+  gap: 2rem;
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.integrationCore span {
+  color: var(--color-text-accent-secondary);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.integrationCore strong {
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.7rem, 3vw, 3.25rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.methodSection {
+  position: relative;
+}
+
+.methodIntro {
+  grid-template-columns: minmax(22rem, 1.3fr) minmax(18rem, 0.7fr);
+  align-items: end;
+}
+
+.methodIntro h2 {
+  max-width: 13ch;
+}
+
+.methodIntro h2 span {
+  color: var(--color-surface-accent-soft);
+}
+
+.methodIntro > p {
+  max-width: 39rem;
+  margin: 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: var(--type-body-large);
+  letter-spacing: -0.025em;
+  line-height: 1.55;
+}
+
+.methodGrid {
+  display: grid;
+  border-top: 1px solid var(--color-border-inverse);
+  border-left: 1px solid var(--color-border-inverse);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.methodGrid > div {
+  height: 100%;
+}
+
+.methodStep {
+  display: flex;
+  min-height: 24rem;
+  height: 100%;
+  padding: clamp(1.1rem, 2.25vw, 2rem);
+  border-right: 1px solid var(--color-border-inverse);
+  border-bottom: 1px solid var(--color-border-inverse);
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 3rem;
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    background var(--duration-normal) var(--ease-standard);
+}
+
+.methodStep:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-accent-soft);
+}
+
+.methodStep > span {
+  color: var(--color-text-inverse-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.methodStep:hover > span {
+  color: var(--color-text-muted);
+}
+
+.methodStep h3 {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.65rem, 2.5vw, 2.65rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.methodStep p {
+  margin: 1rem 0 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: clamp(0.74rem, 0.2vw + 0.7rem, 0.82rem);
+  line-height: 1.6;
+  transition: color var(--duration-normal) var(--ease-standard);
+}
+
+.methodStep:hover p {
+  color: var(--color-text-secondary);
+}
+
+.controlPlane {
+  margin-top: clamp(4rem, 8vw, 8rem);
+  border: 1px solid var(--color-border-inverse);
+}
+
+.controlPlaneHeader {
+  display: flex;
+  min-height: 4rem;
+  padding-inline: 1rem;
+  border-bottom: 1px solid var(--color-border-inverse);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.controlPlaneHeader span {
+  color: var(--color-text-inverse-muted);
+}
+
+.controlPlaneBody {
+  display: grid;
+  min-height: 22rem;
+  grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 1.4fr) minmax(0, 0.8fr);
+}
+
+.systemBoundary,
+.orchestrationBoundary {
+  display: flex;
+  padding: clamp(1.25rem, 2.5vw, 2.5rem);
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.systemBoundary {
+  color: var(--color-text-primary);
+  background: var(--color-surface-accent-soft);
+}
+
+.systemBoundary span,
+.orchestrationBoundary > span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.systemBoundary span {
+  color: var(--color-text-muted);
+}
+
+.systemBoundary > strong {
+  max-width: 14ch;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.6rem, 2.8vw, 3rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.orchestrationBoundary {
+  border-inline: 1px solid var(--color-border-inverse);
+  background:
+    linear-gradient(var(--color-border-inverse) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-inverse) 1px, transparent 1px);
+  background-size: 25% 25%;
+}
+
+.orchestrationBoundary > span {
+  color: var(--color-text-inverse-muted);
+}
+
+.orchestrationBoundary > div {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.orchestrationBoundary strong {
+  display: flex;
+  min-height: 3.75rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--color-border-inverse);
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  font-weight: 520;
+  background: var(--color-surface-inverse);
+}
+
+.orchestrationBoundary strong::after {
+  content: "→";
+  color: var(--color-text-inverse-muted);
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.reliabilityControls {
+  display: grid;
+  border-top: 1px solid var(--color-border-inverse);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.reliabilityControls > div {
+  display: flex;
+  min-height: 4.5rem;
+  padding-inline: 1rem;
+  border-right: 1px solid var(--color-border-inverse);
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-text-inverse-secondary);
+  font-size: var(--type-caption);
+}
+
+.reliabilityControls > div:last-child {
+  border-right: 0;
+}
+
+.reliabilityControls i {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-surface-accent-soft);
+}
+
+.finalCta {
+  padding-block: clamp(6rem, 11vw, 11rem);
+}
+
+.finalCta h2 {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(3.8rem, 8.4vw, 9rem);
+  font-weight: 520;
+  letter-spacing: -0.075em;
+  line-height: 0.89;
+  text-wrap: balance;
+}
+
+.finalCtaAction {
+  display: grid;
+  margin-top: clamp(3rem, 6vw, 6rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-inverse);
+  grid-template-columns: minmax(18rem, 1fr) minmax(16rem, 0.6fr);
+  align-items: start;
+  gap: 3rem;
+}
+
+.finalCtaAction p {
+  max-width: 43rem;
+  margin: 0;
+  color: var(--color-text-accent-secondary);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+.finalCtaAction a {
+  width: min(100%, 24rem);
+  justify-self: end;
+}
+
+@media (max-width: 72rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 1.12fr) minmax(22rem, 0.88fr);
+    gap: 3rem;
+  }
+
+  .heroSupport {
+    grid-template-columns: 1fr;
+  }
+
+  .useCase {
+    grid-template-columns: minmax(13rem, 0.55fr) minmax(0, 1.45fr);
+  }
+
+  .integrationGrid,
+  .methodGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .integrationGrid > div:nth-child(4n) .integrationItem {
+    border-right: 1px solid var(--color-border-default);
+  }
+
+  .integrationGrid > div:nth-child(3n) .integrationItem {
+    border-right: 0;
+  }
+
+  .methodStep {
+    min-height: 22rem;
+  }
+}
+
+@media (max-width: 56rem) {
+  .hero {
+    min-height: auto;
+    background: var(--color-bg-primary);
+  }
+
+  .heroGrid,
+  .sectionIntro,
+  .integrationIntro,
+  .methodIntro,
+  .integrationCore,
+  .finalCtaAction {
+    grid-template-columns: 1fr;
+  }
+
+  .heroGrid {
+    min-height: auto;
+  }
+
+  .heroArchitecture {
+    min-height: 38rem;
+  }
+
+  .heroWorkflow {
+    min-height: 0;
+  }
+
+  .sectionIntro,
+  .integrationIntro,
+  .methodIntro {
+    gap: 1.5rem;
+  }
+
+  .useCase {
+    grid-template-columns: 1fr;
+  }
+
+  .useCaseTrigger {
+    min-height: 9rem;
+    padding: 1.25rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .useCaseSequence li {
+    min-height: 10rem;
+  }
+
+  .integrationCore {
+    gap: 0.75rem;
+  }
+
+  .controlPlaneBody {
+    grid-template-columns: 1fr;
+  }
+
+  .systemBoundary,
+  .orchestrationBoundary {
+    min-height: 16rem;
+  }
+
+  .orchestrationBoundary {
+    border-top: 1px solid var(--color-border-inverse);
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-inverse);
+    border-left: 0;
+  }
+
+  .reliabilityControls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reliabilityControls > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .reliabilityControls > div:nth-child(n + 3) {
+    border-top: 1px solid var(--color-border-inverse);
+  }
+
+  .finalCtaAction {
+    gap: 2rem;
+  }
+
+  .finalCtaAction a {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 42rem) {
+  .hero {
+    padding-block: 4.5rem 5.5rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(3.55rem, 16vw, 5.2rem);
+  }
+
+  .heroSupport {
+    margin-top: 2.5rem;
+  }
+
+  .heroSupport a,
+  .finalCtaAction a {
+    width: 100%;
+  }
+
+  .heroArchitecture {
+    min-height: 34rem;
+    box-shadow: 0.75rem 0.75rem 0 var(--color-surface-accent);
+  }
+
+  .heroWorkflow {
+    box-shadow: 0.75rem 0.75rem 0 var(--color-surface-accent);
+  }
+
+  .architectureHeader,
+  .architectureControls,
+  .integrationMapHeader,
+  .controlPlaneHeader {
+    font-size: 0.54rem;
+  }
+
+  .architectureRoute {
+    padding: 1rem;
+  }
+
+  .architectureStage {
+    min-height: 5.25rem;
+    grid-template-columns: 2rem minmax(4.5rem, 0.6fr) minmax(0, 1.4fr);
+    gap: 0.75rem;
+  }
+
+  .architectureStage p {
+    font-size: 0.64rem;
+  }
+
+  .architectureControls span {
+    max-width: 10rem;
+  }
+
+  .useCaseTrigger {
+    min-height: 10rem;
+  }
+
+  .useCaseSequence {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+  }
+
+  .useCaseSequence li {
+    min-height: 7.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-default);
+    gap: 2rem;
+  }
+
+  .useCaseSequence li:last-child {
+    border-bottom: 0;
+  }
+
+  .useCaseSequence li:not(:last-child)::after {
+    top: auto;
+    right: 1.25rem;
+    bottom: -0.3rem;
+    transform: rotate(135deg);
+  }
+
+  .integrationGrid,
+  .methodGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .integrationGrid > div:nth-child(3n) .integrationItem,
+  .integrationGrid > div:nth-child(4n) .integrationItem {
+    border-right: 0;
+  }
+
+  .integrationItem {
+    min-height: 8.5rem;
+    border-right: 0;
+  }
+
+  .methodStep {
+    min-height: 18rem;
+  }
+
+  .controlPlaneHeader {
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .systemBoundary,
+  .orchestrationBoundary {
+    min-height: 14rem;
+  }
+
+  .reliabilityControls {
+    grid-template-columns: 1fr;
+  }
+
+  .reliabilityControls > div,
+  .reliabilityControls > div:nth-child(2) {
+    border-top: 1px solid var(--color-border-inverse);
+    border-right: 0;
+  }
+
+  .reliabilityControls > div:first-child {
+    border-top: 0;
+  }
+
+  .finalCta h2 {
+    font-size: clamp(3.4rem, 16vw, 5.4rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .useCaseSequence li,
+  .methodStep {
+    transition: none;
+  }
+}

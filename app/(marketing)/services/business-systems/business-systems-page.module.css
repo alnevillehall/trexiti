@@ -1,0 +1,868 @@
+.hero {
+  position: relative;
+  min-height: calc(100svh - var(--header-height));
+  padding-block: clamp(4rem, 5.5vw, 6rem) clamp(4rem, 7vw, 7rem);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 50%,
+      var(--color-border-subtle) 50% calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    var(--color-bg-primary);
+}
+
+.heroGrid {
+  display: grid;
+  min-height: calc(100svh - 17rem);
+  grid-template-columns: minmax(0, 1.28fr) minmax(23rem, 0.72fr);
+  align-items: center;
+  gap: clamp(3rem, 7vw, 8.5rem);
+}
+
+.heroCopy {
+  align-self: center;
+}
+
+.heroTitle {
+  max-width: 11ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(4rem, 7.15vw, 7.9rem);
+  font-weight: 520;
+  letter-spacing: -0.073em;
+  line-height: 0.91;
+  text-wrap: balance;
+}
+
+.heroTitle span {
+  color: var(--color-surface-accent);
+}
+
+.heroSupport {
+  display: grid;
+  max-width: 53rem;
+  margin-top: clamp(2.75rem, 3.25vw, 4.5rem);
+  grid-template-columns: minmax(15rem, 1fr) minmax(17rem, 0.78fr);
+  align-items: end;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.heroSupport p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  letter-spacing: -0.025em;
+  line-height: 1.52;
+}
+
+.heroAction {
+  width: 100%;
+}
+
+.heroBlueprint {
+  display: grid;
+  align-self: stretch;
+  min-height: 40rem;
+  border: 1px solid var(--color-surface-inverse);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  color: var(--color-text-inverse);
+  background: var(--color-surface-inverse);
+}
+
+.heroSystemMap {
+  min-width: 0;
+  align-self: stretch;
+}
+
+.blueprintHeader,
+.blueprintFooter {
+  display: flex;
+  min-height: 3.5rem;
+  padding-inline: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.blueprintHeader {
+  border-bottom: 1px solid var(--color-border-inverse);
+}
+
+.blueprintHeader span:last-child,
+.blueprintFooter span:first-child {
+  color: var(--color-text-inverse-muted);
+}
+
+.blueprintFooter {
+  border-top: 1px solid var(--color-border-inverse);
+}
+
+.blueprintFooter strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 600;
+}
+
+.blueprintFooter strong::before {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  content: "";
+  background: var(--color-surface-accent-soft);
+  animation: statusPulse 2.4s var(--ease-standard) 3;
+}
+
+.blueprintCanvas {
+  display: grid;
+  position: relative;
+  min-height: 0;
+  padding: clamp(1rem, 2.2vw, 2rem);
+  grid-template-columns: minmax(5rem, 1fr) 1.1fr 1.1fr minmax(5rem, 1fr);
+  grid-template-rows: repeat(4, minmax(5rem, 1fr));
+  gap: 0.75rem;
+  background-image:
+    linear-gradient(var(--color-border-inverse) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-inverse) 1px, transparent 1px);
+  background-size: 25% 25%;
+  overflow: hidden;
+}
+
+.blueprintCanvas::before,
+.blueprintCanvas::after {
+  position: absolute;
+  z-index: 0;
+  content: "";
+  background: var(--color-surface-accent);
+  opacity: 0.5;
+}
+
+.blueprintCanvas::before {
+  top: 12.5%;
+  bottom: 12.5%;
+  left: 50%;
+  width: 1px;
+}
+
+.blueprintCanvas::after {
+  top: 50%;
+  right: 12.5%;
+  left: 12.5%;
+  height: 1px;
+}
+
+.blueprintDomain,
+.blueprintCore {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--color-border-inverse);
+}
+
+.blueprintDomain {
+  display: flex;
+  min-width: 0;
+  padding: 0.65rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-inverse-secondary);
+  background: color-mix(in srgb, var(--color-surface-inverse) 88%, transparent);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(0.56rem, 0.65vw, 0.68rem);
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.blueprintDomain:nth-child(1) {
+  grid-area: 1 / 1;
+}
+
+.blueprintDomain:nth-child(2) {
+  grid-area: 1 / 4;
+}
+
+.blueprintDomain:nth-child(3) {
+  grid-area: 2 / 1;
+}
+
+.blueprintDomain:nth-child(4) {
+  grid-area: 2 / 4;
+}
+
+.blueprintDomain:nth-child(5) {
+  grid-area: 3 / 1;
+}
+
+.blueprintDomain:nth-child(6) {
+  grid-area: 3 / 4;
+}
+
+.blueprintDomain:nth-child(7) {
+  grid-area: 4 / 1;
+}
+
+.blueprintDomain:nth-child(8) {
+  grid-area: 4 / 4;
+}
+
+.blueprintCore {
+  display: flex;
+  padding: clamp(1rem, 2vw, 2rem);
+  grid-area: 2 / 2 / 4 / 4;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-color: var(--color-surface-accent-soft);
+  background: var(--color-surface-accent);
+  text-align: center;
+}
+
+.blueprintCore span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.blueprintCore strong {
+  max-width: 10ch;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.55rem, 2.5vw, 2.8rem);
+  font-weight: 520;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.sectionHeader {
+  display: grid;
+  margin-bottom: clamp(3.5rem, 7vw, 7rem);
+  grid-template-columns: minmax(12rem, 0.5fr) minmax(22rem, 1.5fr);
+  align-items: start;
+  gap: clamp(2rem, 6vw, 7rem);
+}
+
+.sectionHeader h2 {
+  max-width: 15ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: var(--type-heading-2);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.sectionHeader p {
+  max-width: 42rem;
+  margin: 1.5rem 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+.sectionHeaderInverse p {
+  color: var(--color-text-inverse-secondary);
+}
+
+.buildGrid {
+  display: grid;
+  border-top: 1px solid var(--color-border-strong);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.buildItem {
+  display: grid;
+  min-height: 16rem;
+  padding: clamp(1.25rem, 2.2vw, 2.25rem);
+  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  grid-template-columns: 3rem 1fr;
+  align-content: space-between;
+  gap: 2rem 1.25rem;
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    background var(--duration-normal) var(--ease-standard),
+    transform var(--duration-normal) var(--ease-standard);
+}
+
+.buildGrid > div:nth-child(even) .buildItem {
+  border-right: 0;
+}
+
+.buildItem:hover {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-inverse);
+  transform: translateY(-0.2rem);
+}
+
+.buildIndex,
+.buildDomain {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.buildIndex {
+  color: var(--color-text-muted);
+}
+
+.buildDomain {
+  align-self: end;
+  color: var(--color-text-muted);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.buildItem:hover :is(.buildIndex, .buildDomain) {
+  color: var(--color-text-inverse-muted);
+}
+
+.buildContent {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.buildContent h3 {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.65rem, 2.6vw, 2.8rem);
+  font-weight: 520;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.buildContent p {
+  max-width: 37rem;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body);
+  line-height: 1.62;
+  transition: color var(--duration-normal) var(--ease-standard);
+}
+
+.buildItem:hover .buildContent p {
+  color: var(--color-text-inverse-secondary);
+}
+
+.analysisIntro {
+  display: grid;
+  margin-bottom: clamp(4rem, 8vw, 8rem);
+  grid-template-columns: minmax(14rem, 0.45fr) minmax(24rem, 1.55fr);
+  gap: clamp(2rem, 7vw, 9rem);
+}
+
+.analysisIntro h2 {
+  max-width: 13ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: var(--type-heading-1);
+  font-weight: 520;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+.analysisLead {
+  align-self: end;
+}
+
+.analysisLead > p {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: var(--type-body-large);
+  letter-spacing: -0.025em;
+  line-height: 1.52;
+}
+
+.analysisSteps {
+  display: grid;
+  border-top: 1px solid var(--color-border-inverse);
+  border-left: 1px solid var(--color-border-inverse);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.analysisStep {
+  display: flex;
+  min-height: 13rem;
+  padding: 1.25rem;
+  border-right: 1px solid var(--color-border-inverse);
+  border-bottom: 1px solid var(--color-border-inverse);
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 3rem;
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    background var(--duration-normal) var(--ease-standard);
+}
+
+.analysisStep:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-accent-soft);
+}
+
+.analysisStep span {
+  color: var(--color-text-inverse-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.analysisStep:hover span {
+  color: var(--color-text-muted);
+}
+
+.analysisStep h3 {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  font-weight: 520;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.analysisOutputs {
+  display: grid;
+  margin-top: clamp(3rem, 5vw, 5rem);
+  grid-template-columns: 1fr repeat(3, minmax(0, 0.75fr));
+  border-top: 1px solid var(--color-border-inverse);
+}
+
+.analysisOutputs > p,
+.analysisOutputs > div {
+  min-height: 8rem;
+  margin: 0;
+  padding: 1rem;
+  border-right: 1px solid var(--color-border-inverse);
+}
+
+.analysisOutputs > p {
+  padding-left: 0;
+  color: var(--color-text-inverse-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.analysisOutputs > div:last-child {
+  border-right: 0;
+}
+
+.analysisOutputs strong {
+  display: block;
+  max-width: 14ch;
+  font-size: 0.88rem;
+  font-weight: 560;
+  line-height: 1.45;
+}
+
+.decisionIntro {
+  display: grid;
+  margin-bottom: clamp(3.5rem, 7vw, 7rem);
+  grid-template-columns: minmax(14rem, 0.5fr) minmax(22rem, 1.5fr);
+  gap: clamp(2rem, 7vw, 8rem);
+}
+
+.decisionIntro h2 {
+  max-width: 13ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: var(--type-heading-2);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.decisionIntro > div:last-child {
+  align-self: end;
+}
+
+.decisionIntro p {
+  max-width: 43rem;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-large);
+  line-height: 1.5;
+}
+
+.decisionGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  border: 1px solid var(--color-border-default);
+}
+
+.existingPanel,
+.customPanel {
+  min-width: 0;
+  padding: clamp(1.5rem, 3vw, 3.5rem);
+}
+
+.existingPanel {
+  display: flex;
+  min-height: 35rem;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 4rem;
+  color: var(--color-text-inverse);
+  background: var(--color-surface-accent);
+}
+
+.decisionLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.decisionLabel span:last-child {
+  opacity: 0.65;
+}
+
+.existingPanel h3,
+.customPanel h3 {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.4rem, 4.5vw, 5.2rem);
+  font-weight: 520;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.existingPanel p {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--color-text-accent-secondary);
+  font-size: var(--type-body-large);
+  line-height: 1.5;
+}
+
+.existingChecks {
+  display: grid;
+  border-top: 1px solid var(--color-border-inverse);
+}
+
+.existingChecks span {
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--color-border-inverse);
+  color: var(--color-text-accent-secondary);
+  font-size: 0.82rem;
+}
+
+.customPanel {
+  background: var(--color-surface-elevated);
+}
+
+.customPanel h3 {
+  margin-top: clamp(3rem, 6vw, 7rem);
+}
+
+.customSignals {
+  display: grid;
+  margin-top: clamp(3rem, 5vw, 5rem);
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.customSignals li {
+  display: grid;
+  min-height: 4.5rem;
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  grid-template-columns: 2.5rem 1fr;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body);
+}
+
+.customSignals span {
+  color: var(--color-text-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+}
+
+.decisionPrinciple {
+  display: grid;
+  margin-top: clamp(2.5rem, 4vw, 4rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-default);
+  grid-template-columns: 0.5fr 1.5fr;
+  gap: 2rem;
+}
+
+.decisionPrinciple span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.decisionPrinciple p {
+  max-width: 45rem;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+.finalCta {
+  padding-block: clamp(5rem, 10vw, 10rem);
+}
+
+.finalCta h2 {
+  max-width: 15ch;
+  margin: 0;
+  font-family: var(--font-space), var(--font-geist-sans), sans-serif;
+  font-size: clamp(3.4rem, 7.25vw, 8rem);
+  font-weight: 520;
+  letter-spacing: -0.068em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.finalCtaAction {
+  display: grid;
+  margin-top: clamp(3rem, 6vw, 6rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-inverse);
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(18rem, 1.3fr);
+  align-items: start;
+  gap: 3rem;
+}
+
+.finalCtaAction p {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+.finalCtaAction a {
+  width: min(100%, 24rem);
+  justify-self: end;
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 70rem) {
+  .hero {
+    background: var(--color-bg-primary);
+  }
+
+  .heroGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(21rem, 0.72fr);
+    gap: 3rem;
+  }
+
+  .heroSupport {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisIntro,
+  .decisionIntro {
+    grid-template-columns: minmax(12rem, 0.45fr) minmax(20rem, 1.55fr);
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 56rem) {
+  .heroGrid,
+  .sectionHeader,
+  .analysisIntro,
+  .decisionIntro,
+  .decisionGrid,
+  .finalCtaAction {
+    grid-template-columns: 1fr;
+  }
+
+  .heroGrid {
+    min-height: auto;
+  }
+
+  .heroTitle {
+    max-width: 10ch;
+  }
+
+  .heroBlueprint {
+    min-height: 36rem;
+  }
+
+  .heroSystemMap {
+    min-height: 0;
+  }
+
+  .sectionHeader,
+  .analysisIntro,
+  .decisionIntro {
+    gap: 1.5rem;
+  }
+
+  .sectionHeader p {
+    margin-top: 1rem;
+  }
+
+  .analysisLead {
+    padding-top: 1rem;
+  }
+
+  .analysisSteps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .analysisOutputs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .analysisOutputs > p {
+    min-height: auto;
+    padding-bottom: 1rem;
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+
+  .existingPanel {
+    min-height: 30rem;
+  }
+
+  .finalCtaAction {
+    gap: 2rem;
+  }
+
+  .finalCtaAction a {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 42rem) {
+  .hero {
+    min-height: auto;
+    padding-block: 4.5rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(3.45rem, 16vw, 5.2rem);
+  }
+
+  .heroSupport {
+    margin-top: 2.75rem;
+  }
+
+  .heroBlueprint {
+    min-height: 31rem;
+  }
+
+  .blueprintCanvas {
+    min-height: 24rem;
+    padding: 0.75rem;
+    grid-template-columns: minmax(3.7rem, 1fr) 1.1fr 1.1fr minmax(3.7rem, 1fr);
+    grid-template-rows: repeat(4, minmax(4.5rem, 1fr));
+    gap: 0.45rem;
+  }
+
+  .blueprintDomain {
+    padding: 0.35rem;
+    font-size: 0.5rem;
+  }
+
+  .blueprintCore {
+    padding: 0.75rem;
+  }
+
+  .blueprintCore strong {
+    font-size: 1.45rem;
+  }
+
+  .blueprintHeader,
+  .blueprintFooter {
+    font-size: 0.55rem;
+  }
+
+  .buildGrid,
+  .analysisSteps {
+    grid-template-columns: 1fr;
+  }
+
+  .buildItem,
+  .buildGrid > div:nth-child(even) .buildItem {
+    min-height: 14rem;
+    border-right: 0;
+  }
+
+  .analysisStep {
+    min-height: 10rem;
+  }
+
+  .analysisOutputs {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisOutputs > div,
+  .analysisOutputs > div:last-child {
+    min-height: auto;
+    padding: 1rem 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-inverse);
+  }
+
+  .analysisOutputs > div:last-child {
+    border-bottom: 0;
+  }
+
+  .existingPanel,
+  .customPanel {
+    padding: 1.25rem;
+  }
+
+  .existingPanel {
+    min-height: 29rem;
+  }
+
+  .decisionPrinciple {
+    grid-template-columns: 1fr;
+  }
+
+  .finalCta h2 {
+    font-size: clamp(3.2rem, 15vw, 5.25rem);
+  }
+
+  .finalCtaAction a,
+  .heroAction {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blueprintFooter strong::before {
+    animation: none;
+  }
+}

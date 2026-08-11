@@ -1,0 +1,85 @@
+.page {
+  display: grid;
+  min-height: 100svh;
+  padding: clamp(1.25rem, 4vw, 4rem);
+  place-items: center;
+  color: #171914;
+  background: #f1f0eb;
+}
+
+.panel {
+  width: min(100%, 62rem);
+  padding-block: clamp(2rem, 8vw, 6rem);
+  border-block: 1px solid #c9cbc2;
+}
+
+.eyebrow {
+  margin: 0 0 1.5rem;
+  color: #61645c;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel h1 {
+  max-width: 15ch;
+  margin: 0;
+  font-family: var(--font-space), sans-serif;
+  font-size: clamp(2.8rem, 8vw, 7rem);
+  font-weight: 520;
+  letter-spacing: -0.065em;
+  line-height: 0.94;
+}
+
+.description {
+  max-width: 42rem;
+  margin: clamp(1.5rem, 4vw, 3rem) 0 0;
+  color: #4b4e47;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.actions {
+  display: flex;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.actions a,
+.actions button {
+  display: inline-flex;
+  min-height: 3rem;
+  padding-inline: 1.2rem;
+  border: 1px solid #171914;
+  align-items: center;
+  justify-content: center;
+  color: #f1f0eb;
+  background: #171914;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+.actions a:last-child:not(:first-child) {
+  color: #171914;
+  background: transparent;
+}
+
+.actions a:hover,
+.actions button:hover {
+  transform: translateY(-2px);
+}
+
+.actions :is(a, button):focus-visible {
+  outline: 3px solid #4d573e;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actions a,
+  .actions button {
+    transition: none;
+  }
+}
