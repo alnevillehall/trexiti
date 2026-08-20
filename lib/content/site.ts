@@ -34,7 +34,6 @@ export const primaryNavigation = [
   { label: "Systems Review", href: "/systems-review" },
   { label: "About", href: "/about" },
   { label: "Insights", href: "/insights" },
-  { label: "Discover", href: trexitiDiscoverUrl },
 ] as const satisfies readonly NavigationItem[];
 
 export const footerNavigation = {
