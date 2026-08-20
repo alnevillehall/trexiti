@@ -78,7 +78,7 @@ export const defaultBrandAssetDraft: BrandAssetDraft = {
   slideCount: 1,
   slides: [],
   systemNodes: ["CUSTOMER", "SALES", "OPERATIONS", "FINANCE"],
-  destinationUrl: "https://www.trexiti.com/start-a-project",
+  destinationUrl: "https://trexiti.com/start-a-project",
   campaignId: "",
   contentId: "",
   notes: "",

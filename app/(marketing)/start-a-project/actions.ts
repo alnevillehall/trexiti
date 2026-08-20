@@ -276,7 +276,7 @@ export async function submitProjectLead(
     const currentState = plainText(value.currentState);
     const friction = plainText(value.friction);
     const qualificationSummary = [
-      `Change: ${value.projectType}`,
+      `Primary need: ${value.projectType}`,
       `Objectives: ${objectives.join("; ")}`,
       `Engagement shape: ${value.engagementShape}`,
       `Company stage: ${value.companyStage}${value.teamSize ? ` / ${plainText(value.teamSize)}` : ""}`,
@@ -348,7 +348,9 @@ export async function submitProjectLead(
           isReturning: value.isReturning,
           qualificationSummary,
           nextAction:
-            "Review the qualification summary and prepare discovery questions.",
+            value.projectType === "Customer Visibility / Trexiti Discover"
+              ? "Assess marketplace fit and permission requirements before any Trexiti Discover onboarding."
+              : "Review the qualification summary and prepare Studio discovery questions.",
           requestFingerprint: fingerprint,
         },
       });

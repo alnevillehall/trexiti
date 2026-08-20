@@ -130,7 +130,7 @@ export function FrictionChecklist({
         (action, index) => `${index + 1}. ${action}`,
       ),
       "",
-      "Systems Review: https://www.trexiti.com/systems-review",
+      "Systems Review: https://trexiti.com/systems-review",
     ].join("\n");
 
     window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("My Business Systems Friction Checklist result")}&body=${encodeURIComponent(body)}`;

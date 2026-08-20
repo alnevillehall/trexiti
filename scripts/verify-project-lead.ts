@@ -10,7 +10,7 @@ import { projectLeadSubmissionSchema } from "../lib/validation/project-lead";
 const validSubmission = {
   formToken: "x".repeat(50),
   companyFax: "",
-  projectType: "Business System",
+  projectType: "Operations / Automation",
   objectives: ["Replace a manual process", "Improve operational visibility"],
   otherObjective: "",
   companyName: "Trexiti QA Company",
@@ -49,6 +49,16 @@ const validSubmission = {
 
 const validResult = projectLeadSubmissionSchema.safeParse(validSubmission);
 assert.equal(validResult.success, true, "A complete project lead should validate.");
+
+const discoverLeadResult = projectLeadSubmissionSchema.safeParse({
+  ...validSubmission,
+  projectType: "Customer Visibility / Trexiti Discover",
+});
+assert.equal(
+  discoverLeadResult.success,
+  true,
+  "A visibility-led enquiry should have an explicit Discover classification.",
+);
 
 const focusedBuildWithoutPriceResult = projectLeadSubmissionSchema.safeParse({
   ...validSubmission,

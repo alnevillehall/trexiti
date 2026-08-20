@@ -190,7 +190,7 @@ assert.equal(
   sitemap().some(
     (entry) =>
       entry.url ===
-      "https://www.trexiti.com/resources/business-systems-friction-checklist",
+      "https://trexiti.com/resources/business-systems-friction-checklist",
   ),
   true,
 );

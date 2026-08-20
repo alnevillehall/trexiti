@@ -125,13 +125,13 @@ assert.equal(
 assert.equal(normalizeUtmValue(" Your Employees Shouldn't Be Your API "), "your-employees-shouldnt-be-your-api");
 assert.equal(
   buildTaggedUrl({
-    destination: "https://www.trexiti.com/systems-review?ref=launch",
+    destination: "https://trexiti.com/systems-review?ref=launch",
     source: "LinkedIn Founder",
     medium: "Organic Social",
     campaign: "Trexiti Systems Review",
     content: "Direct Offer",
   }),
-  "https://www.trexiti.com/systems-review?ref=launch&utm_source=linkedin-founder&utm_medium=organic-social&utm_campaign=trexiti-systems-review&utm_content=direct-offer",
+  "https://trexiti.com/systems-review?ref=launch&utm_source=linkedin-founder&utm_medium=organic-social&utm_campaign=trexiti-systems-review&utm_content=direct-offer",
 );
 assert.throws(() =>
   buildTaggedUrl({

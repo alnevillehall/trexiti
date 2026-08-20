@@ -23,7 +23,6 @@ const staticRoutes = [
   "/resources/business-systems-friction-checklist",
   "/insights",
   "/propertyos",
-  "/service-businesses",
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

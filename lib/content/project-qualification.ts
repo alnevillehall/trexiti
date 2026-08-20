@@ -1,5 +1,5 @@
 export const qualificationSteps = [
-  { number: "01", label: "Change" },
+  { number: "01", label: "Primary need" },
   { number: "02", label: "Objective" },
   { number: "03", label: "Business" },
   { number: "04", label: "Current state" },
@@ -12,13 +12,10 @@ export const qualificationSteps = [
 ] as const;
 
 export const projectTypeOptions = [
-  "Website / Digital Experience",
-  "One Focused Business Improvement",
-  "Business System",
+  "Customer Visibility / Trexiti Discover",
+  "Website / Customer Experience",
+  "Operations / Automation",
   "Custom Software",
-  "Customer / Staff / Vendor Portal",
-  "Automation / Integration",
-  "Systems Review",
   "Not Sure Yet",
 ] as const;
 

@@ -22,7 +22,7 @@ export default function SignInPage() {
         <SignIn
           routing="hash"
           fallbackRedirectUrl="/admin"
-          signUpUrl="/sign-up"
+          withSignUp={false}
         />
       </main>
     );

@@ -105,7 +105,6 @@ export function MarketingFooter() {
           <Link href="/systems-review">Systems Review</Link>
           <Link href="/work">Selected Work</Link>
           <Link href="/insights">Insights</Link>
-          <Link href="/service-businesses">ServiceOS</Link>
           <Link href="/propertyos">PropertyOS</Link>
           {publicContactLinks.map((link) => (
             <a href={link.href} key={link.kind}>

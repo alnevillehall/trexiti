@@ -24,7 +24,6 @@ const propertyOsDemoUrl = `mailto:${TREXITI_CONTACT_EMAIL}?subject=PropertyOS%20
 
 const navItems: readonly MarketingNavItem[] = [
   { label: "Home", href: "/" },
-  { label: "ServiceOS", href: "/service-businesses" },
   { label: "PropertyOS", href: "/propertyos" },
   { label: "Features", href: "#features" },
   { label: "Roles", href: "#roles" },

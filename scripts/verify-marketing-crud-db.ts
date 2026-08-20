@@ -107,7 +107,7 @@ async function main() {
         const preset = await transaction.marketingUtmPreset.create({
           data: {
             name: `CRUD preset ${suffix}`,
-            destination: "https://www.trexiti.com/systems-review",
+            destination: "https://trexiti.com/systems-review",
             source: "linkedin",
             medium: "organic_social",
             campaign: `crud_${suffix}`,

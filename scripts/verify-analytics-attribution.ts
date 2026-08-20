@@ -13,15 +13,15 @@ import {
 } from "../lib/marketing/analytics-schema";
 
 const firstTouch = createAttributionTouch({
-  url: "https://www.trexiti.com/insights/your-employees-shouldnt-be-your-api?utm_source=linkedin&utm_medium=founder-organic&utm_campaign=employees-shouldnt-be-api&utm_content=carousel&utm_term=operations",
+  url: "https://trexiti.com/insights/your-employees-shouldnt-be-your-api?utm_source=linkedin&utm_medium=founder-organic&utm_campaign=employees-shouldnt-be-api&utm_content=carousel&utm_term=operations",
   referrer: "https://www.linkedin.com/feed/",
   timestamp: "2026-08-11T12:00:00.000Z",
 });
 let state = updateAttributionState(null, firstTouch, { newSession: true });
 
 const sameSessionPage = createAttributionTouch({
-  url: "https://www.trexiti.com/services/business-systems",
-  referrer: "https://www.trexiti.com/insights/your-employees-shouldnt-be-your-api",
+  url: "https://trexiti.com/services/business-systems",
+  referrer: "https://trexiti.com/insights/your-employees-shouldnt-be-your-api",
   timestamp: "2026-08-11T12:05:00.000Z",
 });
 state = updateAttributionState(state, sameSessionPage, { newSession: false });
@@ -35,7 +35,7 @@ assert.equal(state.lastTouch.timestamp, "2026-08-11T12:05:00.000Z");
 assert.equal(state.isReturning, false);
 
 const returnVisit = createAttributionTouch({
-  url: "https://www.trexiti.com/start-a-project",
+  url: "https://trexiti.com/start-a-project",
   timestamp: "2026-08-13T09:00:00.000Z",
 });
 state = updateAttributionState(state, returnVisit, { newSession: true });
@@ -48,7 +48,7 @@ assert.equal(leadAttribution.landingPage, "/insights/your-employees-shouldnt-be-
 assert.equal(leadAttribution.isReturning, true);
 
 const direct = createAttributionTouch({
-  url: "https://www.trexiti.com/",
+  url: "https://trexiti.com/",
   timestamp: "2026-08-11T12:00:00.000Z",
 });
 const directState = updateAttributionState(null, direct, { newSession: true });

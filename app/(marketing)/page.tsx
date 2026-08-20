@@ -28,7 +28,7 @@ import {
 } from "@/lib/content/home";
 import { industryLinks } from "@/lib/content/industries";
 import { services } from "@/lib/content/services";
-import { siteConfig } from "@/lib/content/site";
+import { siteConfig, trexitiDiscoverUrl } from "@/lib/content/site";
 import { organizationSocialProfileUrls } from "@/lib/marketing/contact";
 
 export const metadata: Metadata = {
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     description:
       "Trexiti designs and engineers websites, software, operational systems, and automation around how ambitious businesses actually work.",
     type: "website",
-    siteName: "Trexiti",
+    siteName: siteConfig.name,
     url: "/",
     images: ["/brand/trexiti_social_banner_1500x500.png"],
   },
@@ -133,6 +133,34 @@ export default function HomePage() {
           </Reveal>
         </Container>
       </section>
+
+      <Section tone="secondary">
+        <Container className={styles.positioningGrid}>
+          <div className={styles.positioningStatement}>
+            <Eyebrow>One Trexiti ecosystem</Eyebrow>
+            <h2>
+              Get found—or build what the business needs next.
+            </h2>
+          </div>
+          <div className={styles.positioningDetail}>
+            <p>
+              Consumer-facing businesses seeking visibility can be assessed for
+              Trexiti Discover. Businesses that need a website, customer
+              experience, automation, integration, or custom software work with
+              Trexiti.
+            </p>
+            <p>
+              Discover remains a curated, permissioned marketplace. A Trexiti
+              enquiry does not automatically create an account or publish a
+              business profile.
+            </p>
+            <div className={styles.heroActions}>
+              <a href={trexitiDiscoverUrl}>Learn about Trexiti Discover</a>
+              <TextLink href="/start-a-project">Work with Trexiti</TextLink>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
       <Section tone="inverse">
         <Container>

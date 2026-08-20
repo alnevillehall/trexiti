@@ -27,14 +27,14 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  applicationName: "Trexiti",
+  applicationName: siteConfig.name,
   title: {
     default: "Trexiti — Digital systems for ambitious businesses",
     template: "%s | Trexiti",
   },
   description: siteConfig.description,
-  authors: [{ name: "Trexiti", url: siteConfig.url }],
-  creator: "Trexiti",
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
   category: "technology",
   keywords: [
     "digital systems",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     description:
       "We understand how your business works, identify what is slowing it down, and build the systems it needs to operate better.",
     url: "/",
-    siteName: "Trexiti",
+    siteName: siteConfig.name,
     images: [
       {
         url: "/brand/trexiti_social_banner_1500x500.png",

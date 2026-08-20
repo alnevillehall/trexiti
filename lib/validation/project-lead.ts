@@ -50,7 +50,7 @@ export const projectLeadSubmissionSchema = z
     formToken: z.string().min(40).max(500),
     companyFax: z.string().max(200).default(""),
     projectType: z.enum(projectTypeOptions, {
-      error: "Choose what should be improved, replaced, or built.",
+      error: "Choose the business's primary need.",
     }),
     objectives: z
       .array(z.enum(projectObjectiveOptions))

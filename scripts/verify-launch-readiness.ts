@@ -78,7 +78,16 @@ assert.equal(
   1,
   "AI should appear only as an optional capability in core public brand copy.",
 );
-assert.match(read("lib/content/site.ts"), /label: "PropertyOS"[\s\S]*label: "ServiceOS"/);
+assert.match(read("lib/content/site.ts"), /label: "PropertyOS"/);
+assert.doesNotMatch(read("lib/content/site.ts"), /label: "ServiceOS"/);
+assert.doesNotMatch(
+  read("components/marketing/marketing-chrome.tsx"),
+  /href="\/service-businesses"/,
+);
+assert.match(
+  read("app/service-businesses/page.tsx"),
+  /!isServiceOsEnabled\(\)[\s\S]*notFound\(\)/,
+);
 assert.match(read("lib/content/projects.ts"), /conceptDisclaimer/);
 assert.match(read("app/(marketing)/about/page.tsx"), /founder-led/i);
 
@@ -194,6 +203,11 @@ for (const route of [
 }
 
 const sitemapUrls = sitemap().map((entry) => entry.url);
+assert.equal(
+  sitemapUrls.includes("https://trexiti.com/service-businesses"),
+  false,
+  "Dormant ServiceOS must not be published in the sitemap.",
+);
 for (const path of [
   "/capabilities/overview",
   "/media-kit",
@@ -203,7 +217,7 @@ for (const path of [
   "/insights",
 ]) {
   assert.equal(
-    sitemapUrls.includes(`https://www.trexiti.com${path}`),
+    sitemapUrls.includes(`https://trexiti.com${path}`),
     true,
     `${path} must be present in the sitemap.`,
   );

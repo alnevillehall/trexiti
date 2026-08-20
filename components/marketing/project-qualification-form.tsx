@@ -98,9 +98,9 @@ const initialValues: QualificationValues = {
 
 const stepContent = [
   {
-    title: "What are you looking to improve, replace or build?",
+    title: "What does the business need most right now?",
     description:
-      "Choose the closest fit. Discovery can refine the right solution and boundary.",
+      "Choose the closest fit. Visibility-led enquiries can be assessed for Trexiti Discover; systems and software needs stay with Studio.",
   },
   {
     title: "What should the work make better?",

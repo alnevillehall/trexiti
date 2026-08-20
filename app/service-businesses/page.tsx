@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { ServiceBusinessesPage } from "@/components/marketing/service-businesses-page";
+import { isServiceOsEnabled } from "@/lib/auth/config";
 import { legacyMarketingFont } from "@/lib/legacy-marketing-font";
 
 const title =
@@ -38,6 +40,10 @@ export const metadata: Metadata = {
 };
 
 export default function ServiceBusinessesRoute() {
+  if (!isServiceOsEnabled()) {
+    notFound();
+  }
+
   return (
     <div className={legacyMarketingFont.variable}>
       <ServiceBusinessesPage />

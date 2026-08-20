@@ -20,7 +20,7 @@ type Preset = {
 };
 
 const empty = {
-  destination: "https://www.trexiti.com/",
+  destination: "https://trexiti.com/",
   source: "linkedin",
   medium: "founder-organic",
   campaign: "",
