@@ -3,6 +3,17 @@ import type { CaseStudyProject } from "@/lib/content/projects";
 import styles from "./case-study-screen.module.css";
 
 const screenLabels = {
+  amanda: {
+    primary: ["Counsel", "Practice", "Perspective", "Contact"],
+    workflow: [
+      "Matter",
+      "Context",
+      "Disclosures",
+      "Conflict check",
+      "Next step",
+    ],
+    detail: ["Focus", "Approach", "Questions", "Consultation"],
+  },
   marbella: {
     primary: ["The development", "Residences", "Location"],
     workflow: [

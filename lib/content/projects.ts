@@ -8,7 +8,7 @@ export const workFilters = [
 
 export type WorkFilter = (typeof workFilters)[number];
 export type ProjectCategory = Exclude<WorkFilter, "All">;
-export type ProjectVisual = "marbella" | "delta" | "aster";
+export type ProjectVisual = "amanda" | "marbella" | "delta" | "aster";
 
 export type ProjectEvidence = {
   label: "Live Website" | "Private Client System" | "Concept Project";
@@ -160,6 +160,189 @@ const conceptDisclaimer =
 export const projects: readonly CaseStudyProject[] = [
   {
     index: "01",
+    title: "Amanda Myers Law",
+    slug: "amanda-myers",
+    year: "2026",
+    industry: "Legal services",
+    projectType: "Boutique Law Firm Website",
+    descriptor: "Boutique Law Firm Website",
+    category: "Digital Experience / Professional Services",
+    categories: ["Digital Experiences", "Platforms"],
+    summary:
+      "A refined digital concept for a boutique law firm, balancing quiet authority, human reassurance, and a clear path from an important legal question to a considered consultation.",
+    visual: "amanda",
+    evidence: {
+      label: "Concept Project",
+      description:
+        "An original Trexiti concept for a fictional boutique law firm. It demonstrates brand, content, experience, and platform thinking and does not represent a commissioned client engagement or operating legal practice.",
+    },
+    services: [
+      "Digital brand direction",
+      "Content strategy",
+      "Information architecture",
+      "Interface design",
+      "Responsive development",
+      "Consultation journey design",
+    ],
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Responsive web",
+      "Accessible interface patterns",
+      "Content management",
+      "Secure form architecture",
+      "Search metadata",
+    ],
+    overview: [
+      "Amanda Myers Law is a concept for a modern boutique legal practice whose digital presence needs to feel composed, capable, and personal. The experience pairs an editorial visual language with direct explanations of how a prospective client could understand the firm, its focus, and the next step.",
+      "The concept treats trust as a product of structure as much as aesthetics: restrained typography, clear content boundaries, careful language, and a consultation pathway that sets expectations without presenting a form submission as legal advice or an established attorney-client relationship.",
+    ],
+    challenge: [
+      "A law-firm website must communicate authority without becoming distant, and warmth without weakening professional credibility. People may arrive during consequential or stressful moments, so the experience needs to make information easy to assess without relying on aggressive promises or generic legal imagery.",
+      "The digital journey also needs responsible boundaries around confidentiality, conflicts, jurisdiction, and the point at which a professional relationship may begin. Those requirements cannot be solved by visual polish alone and would need to be defined with the firm before launch.",
+    ],
+    understandingBusiness: {
+      introduction:
+        "Trexiti would begin by mapping the practice model, ideal matters, enquiry risks, decision journey, and the information a prospective client needs before deciding whether to request a consultation.",
+      findings: [
+        {
+          title: "Trust precedes contact",
+          description:
+            "Voice, presentation, service clarity, and transparent expectations work together to help a prospective client decide whether the practice may be an appropriate fit.",
+        },
+        {
+          title: "Legal needs are personal",
+          description:
+            "The experience should acknowledge the human context of a matter while avoiding assumptions, guarantees, or language that turns reassurance into an outcome claim.",
+        },
+        {
+          title: "Intake needs boundaries",
+          description:
+            "A consultation request should collect only appropriate preliminary information, explain confidentiality limits, and support a deliberate conflict-check and follow-up process.",
+        },
+      ],
+    },
+    strategy: {
+      statement:
+        "Create a digital front door that feels quietly distinctive, explains the practice in plain language, and moves an interested visitor toward a responsible human conversation with clarity and care.",
+      principles: [
+        {
+          title: "Authority without theatre",
+          description:
+            "Use precise language, strong hierarchy, and considered restraint instead of visual clichés, inflated claims, or unnecessary complexity.",
+        },
+        {
+          title: "Warmth with boundaries",
+          description:
+            "Make the experience approachable while keeping disclaimers, expectations, and the limits of online communication visible and understandable.",
+        },
+        {
+          title: "Guide the next decision",
+          description:
+            "Help each visitor understand the practice, assess possible fit, and choose an appropriate next step without pressure.",
+        },
+      ],
+    },
+    architecture: {
+      summary:
+        "The proposed website separates editorial positioning, practice information, professional perspective, and consultation intake while joining them in one calm, coherent journey.",
+      layers: [
+        {
+          title: "Brand experience",
+          description:
+            "A distinctive arrival, point of view, firm introduction, and visual system designed to express composure, confidence, and personal attention.",
+        },
+        {
+          title: "Practice content",
+          description:
+            "Structured explanations of focus areas, approach, common questions, process, and jurisdiction-specific information for prospective clients.",
+        },
+        {
+          title: "Consultation pathway",
+          description:
+            "A measured sequence from initial interest to preliminary context, disclosures, conflict checking, and a human response from the practice.",
+        },
+        {
+          title: "Governance layer",
+          description:
+            "Content ownership, accessibility, privacy, security, retention, disclaimers, and approved publishing workflows appropriate to the firm and jurisdiction.",
+        },
+      ],
+    },
+    keyFeatures: [
+      {
+        title: "Editorial introduction",
+        description:
+          "A confident opening that establishes the practice’s character and value without relying on unverified superlatives or outcome promises.",
+      },
+      {
+        title: "Practice focus",
+        description:
+          "Plain-language pathways that explain the types of issues the firm may consider and help visitors identify a relevant starting point.",
+      },
+      {
+        title: "Attorney perspective",
+        description:
+          "A flexible structure for an approved biography, working philosophy, professional background, and credentials supplied and verified by the firm.",
+      },
+      {
+        title: "Insights library",
+        description:
+          "A governed publishing space for educational perspectives, updates, and frequently asked questions with appropriate legal context.",
+      },
+      {
+        title: "Considered consultation",
+        description:
+          "A low-friction request flow that explains what to share, what not to send, what happens next, and that submission alone does not create an attorney-client relationship.",
+      },
+      {
+        title: "Accessible contact paths",
+        description:
+          "Clear options for reaching the practice, with responsive layouts, readable contrast, keyboard support, and understandable status feedback.",
+      },
+    ],
+    screens: [
+      {
+        title: "Firm introduction",
+        description:
+          "An editorial landing experience that combines quiet confidence, a clear point of view, and immediate routes into the practice.",
+        variant: "primary",
+      },
+      {
+        title: "Consultation journey",
+        description:
+          "A staged request experience that gathers preliminary context, presents important boundaries, and prepares a responsible follow-up.",
+        variant: "workflow",
+      },
+      {
+        title: "Practice detail",
+        description:
+          "A structured view of focus, approach, relevant guidance, and the next appropriate contact action.",
+        variant: "detail",
+      },
+    ],
+    engineering: [
+      "The proposed build would use a responsive, component-driven frontend and governed content structure so the practice can maintain focus areas, insights, biographies, disclaimers, and contact information without weakening consistency.",
+      "Consultation intake would require jurisdiction-specific review before implementation, including decisions about data minimization, confidentiality language, conflict checking, retention, secure delivery, accessibility, and who may access or respond to a request.",
+    ],
+    technicalNotes: [
+      "Proposed component-driven responsive frontend",
+      "Structured content model for practice information and insights",
+      "Accessible navigation, typography, forms, and feedback states",
+      "Server-side validation and abuse protection for consultation requests",
+      "Data-minimizing intake with explicit disclosures and retention rules",
+      "Firm and jurisdiction review required before any production launch",
+    ],
+    result: [
+      "The concept establishes a premium but approachable direction for a boutique law firm’s public website, with one coherent system for positioning, practice information, professional perspective, and consultation requests.",
+      "It is not a deployed legal website and makes no claim about an attorney’s credentials, services, clients, case results, regulatory compliance, or commercial performance. Production content and workflows would require verification and review by the operating firm and qualified legal stakeholders.",
+    ],
+    concept: true,
+    disclaimer:
+      "Independent Trexiti concept for a fictional boutique law firm. Amanda Myers Law is not presented as a real practice, commissioned client, or provider of legal services; all names, copy, services, and interface details are illustrative.",
+  },
+  {
+    index: "02",
     title: "Marbella",
     slug: "marbella",
     year: "2026",
@@ -361,7 +544,7 @@ export const projects: readonly CaseStudyProject[] = [
       "Live public website created by Trexiti. Architectural imagery belongs to the Marbella project; no commercial performance claim is made.",
   },
   {
-    index: "02",
+    index: "03",
     title: "Delta Appliances",
     slug: "delta-appliances",
     year: "Private",
@@ -761,7 +944,7 @@ export const projects: readonly CaseStudyProject[] = [
       "Real private client engagement. The live product and client information are withheld; representative visuals and generalized scenarios are clearly labeled and do not claim measured results.",
   },
   {
-    index: "03",
+    index: "04",
     title: "Aster Health",
     slug: "aster-health",
     year: "2026",

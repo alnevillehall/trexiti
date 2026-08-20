@@ -144,6 +144,65 @@
   height: 70%;
 }
 
+.amanda .frame {
+  color: #4a1f37;
+  background: #f7f0e7;
+}
+
+.amanda .frameHeader,
+.amanda .frameFooter {
+  border-color: rgb(255 249 242 / 24%);
+  color: #fff9f2;
+  background: #4a1f37;
+}
+
+.amanda .canvas {
+  background:
+    radial-gradient(circle at 82% 24%, rgb(201 153 168 / 46%), transparent 23%),
+    linear-gradient(90deg, transparent 0 76%, rgb(201 153 168 / 16%) 76%),
+    #f7f0e7;
+}
+
+.amanda .canvas::after {
+  position: absolute;
+  top: 9%;
+  right: 8%;
+  width: min(17%, 10rem);
+  aspect-ratio: 0.72;
+  border: 1px solid rgb(183 144 94 / 72%);
+  border-radius: 50% 50% 0 0;
+  content: "";
+}
+
+.amanda .canvasLead,
+.amanda .screenSequence,
+.amanda .signal {
+  z-index: 1;
+}
+
+.amanda .canvasLead span {
+  color: #8a6573;
+}
+
+.amanda .canvasLead strong {
+  color: #4a1f37;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.amanda .screenSequence > div:nth-child(even) {
+  background: rgb(201 153 168 / 16%);
+}
+
+.amanda .screenSequence i {
+  color: #b7905e;
+}
+
+.amanda .signal {
+  color: #b7905e;
+}
+
 .marbella .frame {
   color: #25221f;
   background: var(--color-project-marbella);

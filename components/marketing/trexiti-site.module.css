@@ -26,6 +26,7 @@
   --color-project-property: #2a2e29;
   --color-project-property-panel: rgba(10, 12, 10, 0.52);
   --color-project-service: #d3d0c2;
+  --color-project-amanda: #4a1f37;
   --color-project-marbella: #cec4b5;
   --color-project-atlas: #31362f;
   --color-project-aster: #d8ded9;
@@ -2063,6 +2064,13 @@
   object-fit: cover;
 }
 
+.flagshipVisualAmanda {
+  color: #fff9f2;
+  background:
+    radial-gradient(circle at 82% 22%, rgb(201 154 169 / 22%), transparent 28%),
+    var(--color-project-amanda);
+}
+
 .flagshipVisualMarbella {
   background: var(--color-project-marbella);
 }
@@ -2096,11 +2104,252 @@
   left: clamp(1rem, 2.25vw, 2.25rem);
 }
 
+.amandaComposition,
 .marbellaComposition,
 .atlasComposition,
 .asterComposition {
   position: absolute;
   inset: 11% 5% 10%;
+}
+
+.amandaComposition {
+  filter: drop-shadow(0 1.75rem 2.5rem rgb(31 9 22 / 28%));
+}
+
+.amandaSite {
+  display: grid;
+  height: 100%;
+  border: 1px solid rgb(183 144 94 / 68%);
+  color: #301826;
+  background: #f7f0e7;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.amandaSiteHeader {
+  display: flex;
+  min-height: clamp(3.9rem, 7vw, 5.6rem);
+  padding-inline: clamp(1rem, 2.4vw, 2.5rem);
+  border-bottom: 1px solid rgb(74 31 55 / 18%);
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.amandaIdentity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.amandaIdentity > span {
+  display: grid;
+  width: clamp(2rem, 3.5vw, 2.8rem);
+  aspect-ratio: 1;
+  border: 1px solid #b7905e;
+  border-radius: 50%;
+  place-items: center;
+  color: #4a1f37;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.7rem, 1vw, 0.95rem);
+}
+
+.amandaIdentity > div {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.amandaIdentity strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.78rem, 1.35vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.amandaIdentity small,
+.amandaNav,
+.amandaHeroCopy > span,
+.amandaHeroCopy > small,
+.amandaHeroCopy > b,
+.amandaPortrait p,
+.amandaPracticeStrip {
+  font-family: var(--font-geist-mono), monospace;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.amandaIdentity small {
+  color: #7b5c69;
+  font-size: clamp(0.42rem, 0.55vw, 0.58rem);
+}
+
+.amandaNav {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2.1vw, 2.2rem);
+  color: #694657;
+  font-size: clamp(0.48rem, 0.62vw, 0.65rem);
+}
+
+.amandaHero {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1.35fr) minmax(12rem, 0.65fr);
+}
+
+.amandaHeroCopy {
+  display: flex;
+  min-width: 0;
+  padding: clamp(1.4rem, 3.8vw, 4rem);
+  flex-direction: column;
+  justify-content: center;
+}
+
+.amandaHeroCopy > span {
+  margin-bottom: clamp(1rem, 2.8vw, 2.75rem);
+  color: #8a6573;
+  font-size: clamp(0.48rem, 0.63vw, 0.66rem);
+}
+
+.amandaHeroCopy > strong {
+  display: grid;
+  max-width: 10ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.35rem, 5.35vw, 5.75rem);
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  line-height: 0.88;
+}
+
+.amandaHeroCopy em {
+  color: #8c435d;
+  font-weight: 400;
+}
+
+.amandaHeroCopy > small {
+  max-width: 34rem;
+  margin-top: clamp(1rem, 2vw, 2rem);
+  color: #6e505d;
+  font-size: clamp(0.46rem, 0.58vw, 0.62rem);
+  line-height: 1.65;
+}
+
+.amandaHeroCopy > b {
+  display: flex;
+  width: fit-content;
+  margin-top: clamp(1.15rem, 2.6vw, 2.8rem);
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #b7905e;
+  align-items: center;
+  gap: 1.5rem;
+  color: #4a1f37;
+  font-size: clamp(0.48rem, 0.62vw, 0.66rem);
+  font-weight: 560;
+}
+
+.amandaHeroCopy > b i {
+  color: #a06a7d;
+  font-size: 0.9rem;
+  font-style: normal;
+}
+
+.amandaPortrait {
+  position: relative;
+  display: flex;
+  padding: clamp(1rem, 2.5vw, 2.5rem);
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    linear-gradient(135deg, rgb(255 249 242 / 26%), transparent 52%),
+    #c999a8;
+  overflow: hidden;
+}
+
+.amandaPortrait::before,
+.amandaPortrait::after {
+  position: absolute;
+  width: 1px;
+  height: 140%;
+  background: rgb(74 31 55 / 18%);
+  content: "";
+  transform: rotate(35deg);
+}
+
+.amandaPortrait::before {
+  left: 18%;
+}
+
+.amandaPortrait::after {
+  right: 18%;
+}
+
+.amandaArch {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(72%, 14rem);
+  aspect-ratio: 0.72;
+  border: 1px solid rgb(74 31 55 / 38%);
+  border-radius: 50% 50% 0 0;
+  place-items: center;
+  background: rgb(247 240 231 / 44%);
+}
+
+.amandaArch::before {
+  position: absolute;
+  border: 1px solid rgb(183 144 94 / 74%);
+  border-radius: inherit;
+  content: "";
+  inset: 9%;
+}
+
+.amandaArch span {
+  color: #4a1f37;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 7vw, 7.5rem);
+  font-style: italic;
+}
+
+.amandaPortrait p {
+  position: relative;
+  z-index: 1;
+  margin: clamp(0.7rem, 1.4vw, 1.25rem) 0 0;
+  color: #4a1f37;
+  font-size: clamp(0.42rem, 0.56vw, 0.58rem);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.amandaPracticeStrip {
+  display: grid;
+  border-top: 1px solid rgb(74 31 55 / 18%);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.amandaPracticeStrip > div {
+  display: flex;
+  min-height: clamp(3.2rem, 5.5vw, 4.6rem);
+  padding-inline: clamp(0.7rem, 1.6vw, 1.5rem);
+  border-right: 1px solid rgb(74 31 55 / 18%);
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #6e505d;
+  font-size: clamp(0.42rem, 0.56vw, 0.58rem);
+}
+
+.amandaPracticeStrip > div:last-child {
+  border-right: 0;
+}
+
+.amandaPracticeStrip span {
+  color: #b7905e;
+}
+
+.amandaPracticeStrip strong {
+  color: #4a1f37;
+  font-weight: 560;
 }
 
 .marbellaComposition {
@@ -3274,6 +3523,72 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 0.3rem;
+  }
+
+  .amandaComposition {
+    inset: 13% 3% 13%;
+  }
+
+  .amandaSiteHeader {
+    min-height: 3.4rem;
+    padding-inline: 0.7rem;
+  }
+
+  .amandaNav {
+    display: none;
+  }
+
+  .amandaHero {
+    grid-template-columns: minmax(0, 1.55fr) minmax(5.2rem, 0.45fr);
+  }
+
+  .amandaHeroCopy {
+    padding: 1rem;
+  }
+
+  .amandaHeroCopy > span {
+    margin-bottom: 0.85rem;
+    font-size: 0.42rem;
+  }
+
+  .amandaHeroCopy > strong {
+    font-size: clamp(1.8rem, 9vw, 3rem);
+  }
+
+  .amandaHeroCopy > small {
+    display: none;
+  }
+
+  .amandaHeroCopy > b {
+    margin-top: 1rem;
+    gap: 0.7rem;
+    font-size: 0.42rem;
+  }
+
+  .amandaPortrait {
+    padding: 0.5rem;
+  }
+
+  .amandaArch {
+    width: 100%;
+  }
+
+  .amandaPortrait p {
+    display: none;
+  }
+
+  .amandaPracticeStrip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .amandaPracticeStrip > div {
+    min-height: 2.8rem;
+    padding-inline: 0.45rem;
+    font-size: 0.4rem;
+  }
+
+  .amandaPracticeStrip > div:nth-child(4) {
+    display: none;
   }
 
   .marbellaWordmark {
