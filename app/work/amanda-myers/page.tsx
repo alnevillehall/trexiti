@@ -5,11 +5,14 @@ import { Manrope, Newsreader } from "next/font/google";
 import {
   ArrowRight,
   ArrowUpRight,
+  BookOpenText,
   BriefcaseBusiness,
   Check,
+  CircleCheckBig,
   Clock3,
   FileText,
   Gavel,
+  HeartHandshake,
   Landmark,
   Mail,
   MapPin,
@@ -17,6 +20,7 @@ import {
   Phone,
   Quote,
   Scale,
+  ScrollText,
   ShieldCheck,
 } from "lucide-react";
 
@@ -39,7 +43,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Amanda Myers — Counsel with clarity and conviction",
   description:
-    "A refined law-firm website concept for Amanda Myers, offering thoughtful counsel across family, estate, business, and civil matters.",
+    "A refined law-firm website concept for Amanda Myers, pairing thoughtful counsel with representative results and practical legal resources.",
   alternates: {
     canonical: "/work/amanda-myers",
   },
@@ -73,6 +77,12 @@ const practiceAreas = [
     title: "Family & matrimonial",
     description:
       "Steady guidance through separation, parenting arrangements, and the decisions that reshape family life.",
+    clients: "Individuals, parents, and families",
+    services: [
+      "Separation and divorce",
+      "Parenting and support arrangements",
+      "Prenuptial and family agreements",
+    ],
     icon: ShieldCheck,
   },
   {
@@ -80,6 +90,12 @@ const practiceAreas = [
     title: "Estate & legacy planning",
     description:
       "Wills, trusts, and succession strategies designed to protect what matters and carry your intentions forward.",
+    clients: "Individuals, families, executors, and trustees",
+    services: [
+      "Wills and estate planning",
+      "Probate and estate administration",
+      "Trust and succession guidance",
+    ],
     icon: Landmark,
   },
   {
@@ -87,6 +103,12 @@ const practiceAreas = [
     title: "Business & contracts",
     description:
       "Practical counsel for founders and established teams navigating agreements, growth, and commercial risk.",
+    clients: "Founders, family businesses, and growing companies",
+    services: [
+      "Commercial agreements",
+      "Business formation and governance",
+      "Negotiation and risk review",
+    ],
     icon: BriefcaseBusiness,
   },
   {
@@ -94,9 +116,24 @@ const practiceAreas = [
     title: "Civil dispute resolution",
     description:
       "Clear-eyed advocacy and strategic negotiation when your rights, reputation, or resources are at stake.",
+    clients: "Individuals, professionals, and businesses",
+    services: [
+      "Pre-action advice and strategy",
+      "Mediation and negotiated resolution",
+      "Civil and commercial proceedings",
+    ],
     icon: Gavel,
   },
 ];
+
+const clientNeeds = [
+  ["Starting or restructuring a business", "Business & contracts"],
+  ["Reviewing or negotiating an agreement", "Business & contracts"],
+  ["Navigating separation or parenting", "Family & matrimonial"],
+  ["Planning a will, trust, or legacy", "Estate planning"],
+  ["Administering a loved one’s estate", "Probate & estates"],
+  ["Resolving a civil or commercial dispute", "Dispute resolution"],
+] as const;
 
 const process = [
   {
@@ -122,6 +159,79 @@ const process = [
   },
 ];
 
+const representativeResults = [
+  {
+    number: "01",
+    category: "Civil & commercial dispute",
+    title: "Resolution reached before trial.",
+    summary:
+      "A focused negotiation strategy created a practical path out of a contract dispute while preserving the client’s commercial relationships.",
+    role: "Lead counsel",
+    resolution: "Negotiated settlement",
+  },
+  {
+    number: "02",
+    category: "Family & matrimonial",
+    title: "A workable family agreement.",
+    summary:
+      "Clear priorities and careful preparation helped move a sensitive family matter toward a private, child-focused agreement.",
+    role: "Negotiating counsel",
+    resolution: "Mediated agreement",
+  },
+  {
+    number: "03",
+    category: "Estate & legacy planning",
+    title: "A complete succession plan.",
+    summary:
+      "Wills, ownership interests, beneficiary intentions, and decision-making documents were brought into one coherent legacy plan.",
+    role: "Private client counsel",
+    resolution: "Plan executed",
+  },
+] as const;
+
+const resources = [
+  {
+    category: "Private client guide",
+    readingTime: "6 min read",
+    title: "Preparing for your first legal consultation",
+    description:
+      "The documents, dates, questions, and practical context that can make an initial legal conversation more useful.",
+    author: "Amanda Myers",
+    published: "March 2026",
+    icon: BookOpenText,
+  },
+  {
+    category: "Business checklist",
+    readingTime: "8 min read",
+    title: "Before you sign a commercial agreement",
+    description:
+      "A plain-language checklist for reviewing obligations, risk, renewal, termination, and dispute terms.",
+    author: "Amanda Myers",
+    published: "February 2026",
+    icon: ScrollText,
+  },
+  {
+    category: "Family law briefing",
+    readingTime: "5 min read",
+    title: "How to prepare for mediation",
+    description:
+      "A calm, practical overview of preparation, priorities, documentation, and what the process can involve.",
+    author: "Amanda Myers",
+    published: "January 2026",
+    icon: HeartHandshake,
+  },
+  {
+    category: "Estate planning note",
+    readingTime: "7 min read",
+    title: "Building a legacy plan that stays useful",
+    description:
+      "Questions to revisit as family, assets, business interests, and personal responsibilities change over time.",
+    author: "Amanda Myers",
+    published: "December 2025",
+    icon: Landmark,
+  },
+] as const;
+
 export default function AmandaMyersPage() {
   return (
     <div
@@ -136,8 +246,8 @@ export default function AmandaMyersPage() {
         <p>
           <strong>Trexiti showcase concept</strong>
           <span aria-hidden="true"> — </span>
-          The name, portrait, credentials, testimonials, and contact details are
-          illustrative template content.
+          The name, portrait, credentials, testimonials, case results, resources,
+          and contact details are illustrative template content.
         </p>
       </div>
 
@@ -155,9 +265,9 @@ export default function AmandaMyersPage() {
 
           <div className={styles.navLinks}>
             <Link href="#expertise">Expertise</Link>
+            <Link href="#results">Results</Link>
+            <Link href="#resources">Resources</Link>
             <Link href="#counsel">Counsel</Link>
-            <Link href="#approach">Approach</Link>
-            <Link href="#insights">Perspectives</Link>
           </div>
 
           <Link className={styles.navCta} href="#consultation">
@@ -264,6 +374,15 @@ export default function AmandaMyersPage() {
                   </div>
                   <h3>{area.title}</h3>
                   <p>{area.description}</p>
+                  <p className={styles.practiceClients}>
+                    <strong>Clients</strong>
+                    {area.clients}
+                  </p>
+                  <ul className={styles.practiceServices}>
+                    {area.services.map((service) => (
+                      <li key={service}>{service}</li>
+                    ))}
+                  </ul>
                   <Link href="#consultation" aria-label={`Discuss ${area.title}`}>
                     Discuss your matter
                     <ArrowUpRight size={17} aria-hidden="true" />
@@ -271,6 +390,40 @@ export default function AmandaMyersPage() {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        <section
+          className={styles.needsSection}
+          aria-labelledby="needs-title"
+        >
+          <div className={styles.needsHeader}>
+            <p className={styles.eyebrow}>
+              <span aria-hidden="true" />
+              How we can help
+            </p>
+            <div>
+              <h2 id="needs-title">Start with what you are facing.</h2>
+              <p>
+                Legal services are easier to navigate when they begin with the
+                client’s situation, not legal terminology.
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.needsGrid}>
+            {clientNeeds.map(([need, area], index) => (
+              <Link
+                className={styles.needCard}
+                href="#consultation"
+                key={need}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{need}</h3>
+                <p>{area}</p>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -332,6 +485,29 @@ export default function AmandaMyersPage() {
               </li>
             </ul>
 
+            <dl className={styles.profileFacts}>
+              <div>
+                <dt>Admissions</dt>
+                <dd>Jamaica Bar · 2011</dd>
+              </div>
+              <div>
+                <dt>Education</dt>
+                <dd>LEC, Norman Manley Law School · LL.B., UWI</dd>
+              </div>
+              <div>
+                <dt>Professional membership</dt>
+                <dd>Jamaican Bar Association · Private Client Committee</dd>
+              </div>
+              <div>
+                <dt>Community</dt>
+                <dd>Pro bono family guidance · Founder mentorship</dd>
+              </div>
+            </dl>
+            <p className={styles.profileDisclaimer}>
+              Sample admissions, education, memberships, and community roles for
+              template demonstration only.
+            </p>
+
             <Link className={styles.aboutLink} href="#approach">
               Discover our approach
               <ArrowRight size={18} aria-hidden="true" />
@@ -372,8 +548,74 @@ export default function AmandaMyersPage() {
         </section>
 
         <section
+          className={styles.resultsSection}
+          id="results"
+          aria-labelledby="results-title"
+        >
+          <div className={styles.resultsIntro}>
+            <div>
+              <p className={styles.eyebrow}>
+                <span aria-hidden="true" />
+                Representative outcomes
+              </p>
+              <h2 id="results-title">
+                Experience made tangible, <em>without overstating it.</em>
+              </h2>
+            </div>
+            <div className={styles.resultsIntroCopy}>
+              <p>
+                Prospective clients want to understand how a firm approaches
+                real-world matters. This format gives lawyers space to present
+                verified, ethically approved outcomes with the context that
+                makes them meaningful.
+              </p>
+              <span>
+                Illustrative matter profiles · Not actual client results
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.resultsGrid}>
+            {representativeResults.map((result) => (
+              <article className={styles.resultCard} key={result.number}>
+                <div className={styles.resultTopline}>
+                  <span>{result.number}</span>
+                  <span>Illustrative result</span>
+                </div>
+                <p className={styles.resultCategory}>{result.category}</p>
+                <h3>{result.title}</h3>
+                <p className={styles.resultSummary}>{result.summary}</p>
+                <dl className={styles.resultMeta}>
+                  <div>
+                    <dt>Matter</dt>
+                    <dd>{result.category}</dd>
+                  </div>
+                  <div>
+                    <dt>Resolution</dt>
+                    <dd>{result.resolution}</dd>
+                  </div>
+                  <div>
+                    <dt>Role</dt>
+                    <dd>{result.role}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+
+          <div className={styles.resultsDisclosure} role="note">
+            <CircleCheckBig size={22} strokeWidth={1.4} aria-hidden="true" />
+            <p>
+              <strong>Designed for responsible proof.</strong> A live firm would
+              replace these examples with verified, jurisdiction-approved matter
+              descriptions. Past results do not guarantee a similar outcome.
+            </p>
+          </div>
+        </section>
+
+        <section
           className={styles.testimonialsSection}
-          id="insights"
+          id="testimonials"
           aria-labelledby="testimonials-title"
         >
           <div className={styles.testimonialIntro}>
@@ -427,6 +669,72 @@ export default function AmandaMyersPage() {
               </figcaption>
             </figure>
           </div>
+        </section>
+
+        <section
+          className={styles.resourcesSection}
+          id="resources"
+          aria-labelledby="resources-title"
+        >
+          <div className={styles.resourcesIntro}>
+            <div>
+              <p className={styles.eyebrowLight}>
+                <span aria-hidden="true" />
+                Resources &amp; perspectives
+              </p>
+              <h2 id="resources-title">
+                Useful answers before the first conversation.
+              </h2>
+            </div>
+            <p>
+              A thoughtful resource library demonstrates expertise, answers the
+              questions prospective clients already have, and gives every
+              practice area a natural path into a consultation.
+            </p>
+          </div>
+
+          <div className={styles.resourcesLayout}>
+            {resources.map((resource, index) => {
+              const Icon = resource.icon;
+
+              return (
+                <article
+                  className={
+                    index === 0
+                      ? styles.featuredResource
+                      : styles.resourceCard
+                  }
+                  key={resource.title}
+                >
+                  <div className={styles.resourceTopline}>
+                    <span>{resource.category}</span>
+                    <span>{resource.readingTime}</span>
+                  </div>
+                  <Icon
+                    className={styles.resourceIcon}
+                    size={index === 0 ? 34 : 25}
+                    strokeWidth={1.25}
+                    aria-hidden="true"
+                  />
+                  <h3>{resource.title}</h3>
+                  <p className={styles.resourceByline}>
+                    By {resource.author} · {resource.published}
+                  </p>
+                  <p>{resource.description}</p>
+                  <div className={styles.resourceFormat}>
+                    <span>Sample resource format</span>
+                    <span>CMS-ready</span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <p className={styles.resourcesDisclosure}>
+            Demonstration content only. A live resource library should be
+            reviewed for accuracy, jurisdiction, currency, and legal-advice
+            boundaries before publication.
+          </p>
         </section>
 
         <section
@@ -523,9 +831,9 @@ export default function AmandaMyersPage() {
           <div>
             <h3>Firm</h3>
             <Link href="#counsel">About Amanda</Link>
-            <Link href="#approach">Our approach</Link>
-            <Link href="#insights">Client experiences</Link>
-            <Link href="#consultation">Contact</Link>
+            <Link href="#results">Representative results</Link>
+            <Link href="#resources">Resources</Link>
+            <Link href="#testimonials">Client experiences</Link>
           </div>
           <div>
             <h3>Office</h3>
@@ -547,9 +855,9 @@ export default function AmandaMyersPage() {
           <p>
             <strong>Portfolio concept disclaimer.</strong> This website is a
             design demonstration created by Trexiti. Amanda Myers, the firm,
-            credentials, address, contact details, client statements, and all
-            related content shown here are fictional sample content and do not
-            represent a real legal practice.
+            credentials, address, contact details, client statements, case
+            results, resources, and all related content shown here are fictional
+            sample content and do not represent a real legal practice.
           </p>
           <p>
             Nothing on this concept website is legal advice. Viewing this page,

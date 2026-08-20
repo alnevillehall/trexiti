@@ -8,9 +8,9 @@ import styles from "./page.module.css";
 
 const links = [
   ["Expertise", "#expertise"],
+  ["Results", "#results"],
+  ["Resources", "#resources"],
   ["Counsel", "#counsel"],
-  ["Approach", "#approach"],
-  ["Perspectives", "#insights"],
 ] as const;
 
 export function MobileMenu() {
