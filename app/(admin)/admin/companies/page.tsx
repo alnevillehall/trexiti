@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { AdminPageHeader, EmptyAdminState, StageBadge } from "@/components/admin/admin-ui";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 import styles from "@/components/admin/admin.module.css";
-import { formatAdminCurrency } from "@/lib/admin/crm";
 import { getAdminCompanies } from "@/lib/admin/queries";
 
 export default async function AdminCompaniesPage() {
@@ -21,7 +21,7 @@ export default async function AdminCompaniesPage() {
           {companies.map((company) => {
             const activeValue = company.opportunities
               .filter((item) => !["WON", "LOST"].includes(item.stage))
-              .reduce((sum, item) => sum + Number(item.estimatedValue), 0);
+              .reduce((totals, item) => ({ ...totals, [item.currency]: totals[item.currency] + Number(item.estimatedValue) }), { JMD: 0, USD: 0 });
             const projects = company.opportunities.filter((item) => item.stage === "WON");
             return (
               <article className={styles.companyCard} key={company.id}>
@@ -34,8 +34,8 @@ export default async function AdminCompaniesPage() {
                 </header>
                 <div className={styles.companyStats}>
                   <div><strong>{company._count.contacts}</strong><span>Contacts</span></div>
-                  <div><strong>{formatAdminCurrency(activeValue)}</strong><span>Open value</span></div>
-                  <div><strong>{formatAdminCurrency(Number(company.lifetimeValue))}</strong><span>Lifetime value</span></div>
+                  <div><strong>{formatMoney(activeValue.JMD, "JMD")}<br />{formatMoney(activeValue.USD, "USD")}</strong><span>Open value · no FX conversion</span></div>
+                  <div><strong>{formatMoney(Number(company.lifetimeValue), company.lifetimeValueCurrency)}</strong><span>Lifetime value · {company.lifetimeValueCurrency}</span></div>
                 </div>
                 <div className={styles.companyBody}>
                   <div>
@@ -47,7 +47,7 @@ export default async function AdminCompaniesPage() {
                   <div>
                     <h3>Opportunities</h3>
                     {company.opportunities.length ? (
-                      <ul>{company.opportunities.slice(0, 4).map((opportunity) => <li key={opportunity.id}><Link href={`/admin/leads/${opportunity.id}`}>{opportunity.reference}</Link><span className={styles.subtle}><StageBadge stage={opportunity.stage} /> · {formatAdminCurrency(Number(opportunity.estimatedValue))}</span></li>)}</ul>
+                      <ul>{company.opportunities.slice(0, 4).map((opportunity) => <li key={opportunity.id}><Link href={`/admin/leads/${opportunity.id}`}>{opportunity.reference}</Link><span className={styles.subtle}><StageBadge stage={opportunity.stage} /> · {formatMoney(Number(opportunity.estimatedValue), opportunity.currency)}</span></li>)}</ul>
                     ) : <p className={styles.subtle}>No opportunities recorded.</p>}
                   </div>
                 </div>

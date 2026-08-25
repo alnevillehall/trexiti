@@ -7,6 +7,10 @@ export type AdminPermission =
   | "opportunity:archive"
   | "task:manage"
   | "company:manage"
+  | "operations:view"
+  | "operations:write"
+  | "operations:approve"
+  | "operations:policy"
   | "marketing:view"
   | "marketing:manage";
 
@@ -18,6 +22,10 @@ const rolePermissions: Record<AdminRole, readonly AdminPermission[]> = {
     "opportunity:archive",
     "task:manage",
     "company:manage",
+    "operations:view",
+    "operations:write",
+    "operations:approve",
+    "operations:policy",
     "marketing:view",
     "marketing:manage",
   ],

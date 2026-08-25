@@ -38,14 +38,19 @@ export async function getAdminDashboard() {
     followUpsCompletedToday,
   ] = await Promise.all([
     prisma.adminOpportunity.groupBy({
-      by: ["stage"],
+      by: ["stage", "currency"],
       where: activeOpportunityWhere,
       _count: { _all: true },
       _sum: { estimatedValue: true },
     }),
     prisma.adminOpportunity.findMany({
       where: activeOpportunityWhere,
-      select: { stage: true, estimatedValue: true, probability: true },
+      select: {
+        stage: true,
+        currency: true,
+        estimatedValue: true,
+        probability: true,
+      },
     }),
     prisma.adminProposal.count({
       where: { status: "SENT" },
@@ -146,19 +151,35 @@ export async function getAdminDashboard() {
   ]);
 
   const countFor = (stage: AdminOpportunityStage) =>
-    stageGroups.find((group) => group.stage === stage)?._count._all ?? 0;
+    stageGroups
+      .filter((group) => group.stage === stage)
+      .reduce((total, group) => total + group._count._all, 0);
   const activePipeline = opportunities.filter(
     (item) => !["WON", "LOST"].includes(item.stage),
   );
   const decided = countFor("WON") + countFor("LOST");
   const totalPipelineValue = activePipeline.reduce(
-    (sum, item) => sum + Number(item.estimatedValue),
-    0,
+    (totals, item) => ({
+      ...totals,
+      [item.currency]: totals[item.currency] + Number(item.estimatedValue),
+    }),
+    { JMD: 0, USD: 0 },
   );
   const expectedRevenue = activePipeline.reduce(
-    (sum, item) =>
-      sum + Number(item.estimatedValue) * (item.probability / 100),
-    0,
+    (totals, item) => ({
+      ...totals,
+      [item.currency]:
+        totals[item.currency] +
+        Number(item.estimatedValue) * (item.probability / 100),
+    }),
+    { JMD: 0, USD: 0 },
+  );
+  const activePipelineCount = activePipeline.reduce(
+    (counts, item) => ({
+      ...counts,
+      [item.currency]: counts[item.currency] + 1,
+    }),
+    { JMD: 0, USD: 0 },
   );
 
   return {
@@ -172,19 +193,29 @@ export async function getAdminDashboard() {
       proposalsSent,
       dealsWon: countFor("WON"),
       pipelineValue: totalPipelineValue,
-      averageProjectValue: activePipeline.length
-        ? totalPipelineValue / activePipeline.length
-        : 0,
+      averageProjectValue: {
+        JMD: activePipelineCount.JMD
+          ? totalPipelineValue.JMD / activePipelineCount.JMD
+          : 0,
+        USD: activePipelineCount.USD
+          ? totalPipelineValue.USD / activePipelineCount.USD
+          : 0,
+      },
       conversionRate: decided ? (countFor("WON") / decided) * 100 : 0,
       expectedRevenue,
     },
     stageGroups: opportunityStages.map((stage) => ({
       stage,
       count: countFor(stage),
-      value: Number(
-        stageGroups.find((group) => group.stage === stage)?._sum
-          .estimatedValue ?? 0,
-      ),
+      value: stageGroups
+        .filter((group) => group.stage === stage)
+        .reduce(
+          (totals, group) => ({
+            ...totals,
+            [group.currency]: Number(group._sum.estimatedValue ?? 0),
+          }),
+          { JMD: 0, USD: 0 },
+        ),
     })),
     dueTasks,
     recentOpportunities,
@@ -231,6 +262,7 @@ export async function getAdminOpportunities(
       ? { company: { industry: filters.industry } }
       : {}),
     ...(filters.country ? { company: { country: filters.country } } : {}),
+    ...(filters.currency ? { currency: filters.currency } : {}),
     ...(filters.minValue
       ? { estimatedValue: { gte: filters.minValue } }
       : {}),
@@ -475,6 +507,7 @@ export async function getTargetAccounts(
     ...(filters.stage ? { stage: filters.stage } : {}),
     ...(filters.industry ? { company: { industry: filters.industry } } : {}),
     ...(filters.country ? { company: { country: filters.country } } : {}),
+    ...(filters.currency ? { currency: filters.currency } : {}),
     ...(filters.minValue ? { estimatedValue: { gte: filters.minValue } } : {}),
     ...(filters.minScore
       ? { research: { totalScore: { gte: filters.minScore } } }

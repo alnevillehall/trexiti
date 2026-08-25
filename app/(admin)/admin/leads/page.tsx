@@ -7,11 +7,11 @@ import {
   StageBadge,
 } from "@/components/admin/admin-ui";
 import styles from "@/components/admin/admin.module.css";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 import {
   convertProjectLeadAction,
 } from "@/app/(admin)/admin/actions";
 import {
-  formatAdminCurrency,
   formatAdminDate,
   opportunityHeat,
   opportunityHeatLabel,
@@ -42,6 +42,7 @@ export default async function AdminLeadsPage({
     stage: first(params.stage) || undefined,
     industry: first(params.industry) || undefined,
     country: first(params.country) || undefined,
+    currency: first(params.currency) || undefined,
     minScore: first(params.minScore) || undefined,
     minValue: first(params.minValue) || undefined,
     followUp: first(params.followUp) || undefined,
@@ -77,7 +78,7 @@ export default async function AdminLeadsPage({
       />
 
       {error ? <Notice tone="error">{error}</Notice> : null}
-      {params.archived ? <Notice tone="success">Opportunity archived with its audit history retained.</Notice> : null}
+      {params.approvalRequested ? <Notice tone="success">Founder approval requested. The opportunity remains unchanged until approval and guarded execution succeed.</Notice> : null}
 
       {inboundLeads.length ? (
         <section className={styles.panel} aria-labelledby="inbound-leads-title" style={{ marginBottom: "0.75rem" }}>
@@ -201,12 +202,20 @@ export default async function AdminLeadsPage({
           </select>
         </label>
         <label>
-          Minimum value
+          Value currency
+          <select name="currency" defaultValue={filters.currency ?? ""}>
+            <option value="">JMD and USD</option>
+            <option value="JMD">JMD only</option>
+            <option value="USD">USD only</option>
+          </select>
+        </label>
+        <label>
+          Minimum recorded value
           <select name="minValue" defaultValue={filters.minValue ?? ""}>
             <option value="">Any value</option>
-            <option value="10000">$10,000+</option>
-            <option value="25000">$25,000+</option>
-            <option value="50000">$50,000+</option>
+            <option value="10000">10,000+</option>
+            <option value="25000">25,000+</option>
+            <option value="50000">50,000+</option>
           </select>
         </label>
         <label>
@@ -264,7 +273,7 @@ export default async function AdminLeadsPage({
                           </span>
                         ) : "—"}
                       </td>
-                      <td>{formatAdminCurrency(Number(item.estimatedValue))}</td>
+                      <td>{formatMoney(Number(item.estimatedValue), item.currency)}</td>
                       <td>{formatAdminDate(item.nextFollowUp)}</td>
                       <td>{item.assignedOwner?.name ?? "Unassigned"}</td>
                     </tr>

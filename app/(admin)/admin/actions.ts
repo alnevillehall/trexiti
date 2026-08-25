@@ -1,6 +1,6 @@
 "use server";
 
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -29,6 +29,7 @@ import {
   updateTaskStatusSchema,
 } from "@/lib/admin/validation";
 import { prisma } from "@/lib/prisma";
+import { requestApproval } from "@/lib/coo/data";
 
 function value(formData: FormData, key: string) {
   return String(formData.get(key) ?? "");
@@ -39,6 +40,19 @@ function safeReturnPath(formData: FormData, fallback: string) {
   return candidate.startsWith("/admin") && !candidate.startsWith("//")
     ? candidate
     : fallback;
+}
+
+function approvalIdempotencyKey(
+  action: string,
+  entityId: string,
+  updatedAt: Date,
+  payload: unknown,
+) {
+  const digest = createHash("sha256")
+    .update(JSON.stringify(payload))
+    .digest("hex")
+    .slice(0, 24);
+  return `admin:${action}:${entityId}:${updatedAt.getTime()}:${digest}`;
 }
 
 function redirectWithError(path: string, message: string): never {
@@ -53,7 +67,12 @@ function nextReference() {
 
 function optionalDate(input: string | undefined) {
   if (!input) return undefined;
-  const date = new Date(input);
+  const zonedInput = /^\d{4}-\d{2}-\d{2}$/.test(input)
+    ? `${input}T00:00:00-05:00`
+    : /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(input)
+      ? `${input}-05:00`
+      : input;
+  const date = new Date(zonedInput);
   return Number.isNaN(date.getTime()) ? undefined : date;
 }
 
@@ -78,6 +97,7 @@ export async function createOpportunityAction(formData: FormData) {
     identifiedProblem: value(formData, "identifiedProblem"),
     opportunity: value(formData, "opportunity"),
     estimatedProjectValue: value(formData, "estimatedProjectValue"),
+    currency: value(formData, "currency"),
     budget: value(formData, "budget"),
     timeline: value(formData, "timeline"),
     source: value(formData, "source"),
@@ -182,6 +202,7 @@ export async function createOpportunityAction(formData: FormData) {
         identifiedProblem: input.identifiedProblem,
         opportunity: input.opportunity,
         estimatedValue: input.estimatedProjectValue,
+        currency: input.currency,
         budget: input.budget,
         timeline: input.timeline,
         probability: stageProbability.RESEARCHING,
@@ -241,6 +262,7 @@ export async function createOpportunityAction(formData: FormData) {
           companyId: company.id,
           stage: opportunity.stage,
           estimatedValue: String(opportunity.estimatedValue),
+          currency: opportunity.currency,
           score: input.totalScore,
         },
       },
@@ -364,6 +386,7 @@ export async function convertProjectLeadAction(formData: FormData) {
         opportunity:
           lead.qualificationSummary ?? lead.objectives.join("; "),
         estimatedValue: estimatedValueFromBudget(lead.budgetRange),
+        currency: "USD",
         budget:
           lead.investmentNotes ??
           lead.investmentContext ??
@@ -412,6 +435,7 @@ export async function updateOpportunityAction(formData: FormData) {
     stage: value(formData, "stage"),
     probability: value(formData, "probability"),
     estimatedProjectValue: value(formData, "estimatedProjectValue"),
+    currency: value(formData, "currency"),
     budget: value(formData, "budget"),
     timeline: value(formData, "timeline"),
     outcomeReason: value(formData, "outcomeReason"),
@@ -430,11 +454,66 @@ export async function updateOpportunityAction(formData: FormData) {
       stage: true,
       probability: true,
       estimatedValue: true,
+      currency: true,
       outcomeReason: true,
+      budget: true,
+      timeline: true,
+      nextAction: true,
+      nextFollowUp: true,
+      assignedOwnerId: true,
+      updatedAt: true,
     },
   });
 
   if (!existing) redirectWithError("/admin/leads", "Opportunity not found.");
+
+  const changes = {
+    stage: parsed.data.stage,
+    probability: parsed.data.probability,
+    estimatedValue: parsed.data.estimatedProjectValue,
+    currency: parsed.data.currency,
+    budget: parsed.data.budget ?? null,
+    timeline: parsed.data.timeline ?? null,
+    outcomeReason: parsed.data.outcomeReason ?? null,
+    nextAction: parsed.data.nextAction ?? null,
+    nextFollowUp: optionalDate(parsed.data.nextFollowUp)?.toISOString() ?? null,
+    assignedOwnerId: parsed.data.assignedOwnerId ?? null,
+  };
+  const changesTerminalStage =
+    existing.stage !== parsed.data.stage &&
+    (["WON", "LOST"].includes(existing.stage) ||
+      ["WON", "LOST"].includes(parsed.data.stage));
+  const changesCommercialValue =
+    Number(existing.estimatedValue) !== parsed.data.estimatedProjectValue ||
+    existing.currency !== parsed.data.currency ||
+    (existing.budget ?? null) !== (parsed.data.budget ?? null);
+
+  if (changesTerminalStage || changesCommercialValue) {
+    const action = ["WON", "LOST"].includes(parsed.data.stage)
+      ? "CLOSE_OPPORTUNITY"
+      : "UPDATE_OPPORTUNITY";
+    const payload = { opportunityId: parsed.data.opportunityId, changes };
+    await requestApproval({
+      actorId: session.id,
+      correlationId: randomUUID(),
+      idempotencyKey: approvalIdempotencyKey(
+        action,
+        parsed.data.opportunityId,
+        existing.updatedAt,
+        payload,
+      ),
+      action,
+      risk: "SENSITIVE",
+      entityType: "AdminOpportunity",
+      entityId: parsed.data.opportunityId,
+      payload,
+      evidence: { source: "admin-opportunity-form" },
+    });
+    revalidatePath("/admin/approvals");
+    redirect(
+      `${returnTo}${returnTo.includes("?") ? "&" : "?"}approvalRequested=1`,
+    );
+  }
 
   await prisma.$transaction(async (transaction) => {
     const updated = await transaction.adminOpportunity.update({
@@ -443,6 +522,7 @@ export async function updateOpportunityAction(formData: FormData) {
         stage: parsed.data.stage,
         probability: parsed.data.probability,
         estimatedValue: parsed.data.estimatedProjectValue,
+        currency: parsed.data.currency,
         budget: parsed.data.budget ?? null,
         timeline: parsed.data.timeline ?? null,
         outcomeReason: parsed.data.outcomeReason ?? null,
@@ -473,12 +553,14 @@ export async function updateOpportunityAction(formData: FormData) {
           stage: existing.stage,
           probability: existing.probability,
           estimatedValue: String(existing.estimatedValue),
+          currency: existing.currency,
           outcomeReason: existing.outcomeReason,
         },
         after: {
           stage: updated.stage,
           probability: updated.probability,
           estimatedValue: String(updated.estimatedValue),
+          currency: updated.currency,
           outcomeReason: updated.outcomeReason,
         },
       },
@@ -504,9 +586,46 @@ export async function moveOpportunityAction(formData: FormData) {
 
   const existing = await prisma.adminOpportunity.findFirst({
     where: { id: parsed.data.opportunityId, archivedAt: null },
-    select: { stage: true },
+    select: { stage: true, updatedAt: true },
   });
   if (!existing) redirectWithError(returnTo, "Opportunity not found.");
+
+  if (
+    existing.stage !== parsed.data.stage &&
+    (["WON", "LOST"].includes(existing.stage) ||
+      ["WON", "LOST"].includes(parsed.data.stage))
+  ) {
+    const approvalAction = ["WON", "LOST"].includes(parsed.data.stage)
+      ? "CLOSE_OPPORTUNITY"
+      : "UPDATE_OPPORTUNITY";
+    const payload = {
+      opportunityId: parsed.data.opportunityId,
+      changes: {
+        stage: parsed.data.stage,
+        probability: stageProbability[parsed.data.stage],
+      },
+    };
+    await requestApproval({
+      actorId: session.id,
+      correlationId: randomUUID(),
+      idempotencyKey: approvalIdempotencyKey(
+        approvalAction,
+        parsed.data.opportunityId,
+        existing.updatedAt,
+        payload,
+      ),
+      action: approvalAction,
+      risk: "SENSITIVE",
+      entityType: "AdminOpportunity",
+      entityId: parsed.data.opportunityId,
+      payload,
+      evidence: { source: "admin-pipeline-move" },
+    });
+    revalidatePath("/admin/approvals");
+    redirect(
+      `${returnTo}${returnTo.includes("?") ? "&" : "?"}approvalRequested=1`,
+    );
+  }
 
   await prisma.$transaction([
     prisma.adminOpportunity.update({
@@ -550,34 +669,34 @@ export async function archiveOpportunityAction(formData: FormData) {
   });
   if (!parsed.success) redirectWithError("/admin/leads", "Invalid archive request.");
 
-  await prisma.$transaction(async (transaction) => {
-    const opportunity = await transaction.adminOpportunity.update({
-      where: { id: parsed.data.opportunityId },
-      data: { archivedAt: new Date() },
-    });
-    await transaction.adminActivity.create({
-      data: {
-        opportunityId: opportunity.id,
-        actorId: session.id,
-        kind: "ARCHIVED",
-        summary: "Opportunity archived.",
-      },
-    });
-    await transaction.adminAuditLog.create({
-      data: {
-        actorId: session.id,
-        action: "ARCHIVE",
-        entityType: "AdminOpportunity",
-        entityId: opportunity.id,
-        summary: `${opportunity.reference} archived.`,
-      },
-    });
+  const opportunity = await prisma.adminOpportunity.findFirst({
+    where: { id: parsed.data.opportunityId, archivedAt: null },
+    select: { id: true, updatedAt: true },
+  });
+  if (!opportunity) redirectWithError("/admin/leads", "Opportunity not found.");
+  const payload = { opportunityId: opportunity.id };
+  await requestApproval({
+    actorId: session.id,
+    correlationId: randomUUID(),
+    idempotencyKey: approvalIdempotencyKey(
+      "ARCHIVE_OPPORTUNITY",
+      opportunity.id,
+      opportunity.updatedAt,
+      payload,
+    ),
+    action: "ARCHIVE_OPPORTUNITY",
+    risk: "DESTRUCTIVE",
+    entityType: "AdminOpportunity",
+    entityId: opportunity.id,
+    payload,
+    evidence: { source: "admin-opportunity-archive" },
   });
 
   revalidatePath("/admin");
   revalidatePath("/admin/leads");
   revalidatePath("/admin/pipeline");
-  redirect("/admin/leads?archived=1");
+  revalidatePath("/admin/approvals");
+  redirect("/admin/leads?approvalRequested=1");
 }
 
 export async function createTaskAction(formData: FormData) {

@@ -38,7 +38,7 @@ export default async function AdminTasksPage({ searchParams }: { searchParams: S
           <input type="hidden" name="returnTo" value={returnTo} />
           <label className={styles.field}>Type<select name="type" defaultValue="FOLLOW_UP">{taskTypes.map((type) => <option key={type} value={type}>{taskTypeLabels[type]}</option>)}</select></label>
           <label className={styles.field}>Priority<select name="priority" defaultValue="MEDIUM">{taskPriorities.map((priority) => <option key={priority} value={priority}>{taskPriorityLabels[priority]}</option>)}</select></label>
-          <label className={styles.field}>Due<input name="dueAt" type="datetime-local" required /></label>
+          <label className={styles.field}>Due · Jamaica<input name="dueAt" type="datetime-local" required /></label>
           <label className={styles.field}>Opportunity<select name="opportunityId" defaultValue=""><option value="">No linked opportunity</option>{data.opportunities.map((item) => <option key={item.id} value={item.id}>{item.reference} · {item.title}</option>)}</select></label>
           <label className={styles.field}>Company<select name="companyId" defaultValue=""><option value="">Use opportunity company</option>{data.companies.map((company) => <option key={company.id} value={company.id}>{company.name}</option>)}</select></label>
           <label className={styles.field}>Title<input name="title" required maxLength={180} /></label>

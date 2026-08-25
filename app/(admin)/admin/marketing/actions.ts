@@ -1,7 +1,10 @@
 "use server";
 
+import { createHash, randomUUID } from "node:crypto";
+
 import type { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { requireAdminSession } from "@/lib/admin/auth";
 import { getBrandAssetFormat, brandAssetTemplates } from "@/lib/admin/brand-assets";
@@ -19,6 +22,7 @@ import {
   marketingUtmPresetSchema,
 } from "@/lib/admin/marketing-validation";
 import { prisma } from "@/lib/prisma";
+import { requestApproval } from "@/lib/coo/data";
 
 const marketingPaths = [
   "/admin/marketing",
@@ -70,6 +74,55 @@ async function audit(
   });
 }
 
+type MarketingRemovalRecordType =
+  | "MarketingContent"
+  | "MarketingCampaign"
+  | "MarketingAsset"
+  | "MarketingWeeklyMetric"
+  | "MarketingUtmPreset";
+
+async function requestMarketingRemoval(input: {
+  actorId: string;
+  recordType: MarketingRemovalRecordType;
+  recordId: string;
+  operation: "archive" | "delete";
+}) {
+  const record =
+    input.recordType === "MarketingContent"
+      ? await prisma.marketingContent.findUnique({ where: { id: input.recordId }, select: { id: true, updatedAt: true, status: true } })
+      : input.recordType === "MarketingCampaign"
+        ? await prisma.marketingCampaign.findUnique({ where: { id: input.recordId }, select: { id: true, updatedAt: true, status: true } })
+        : input.recordType === "MarketingAsset"
+          ? await prisma.marketingAsset.findUnique({ where: { id: input.recordId }, select: { id: true, updatedAt: true, status: true } })
+          : input.recordType === "MarketingWeeklyMetric"
+            ? await prisma.marketingWeeklyMetric.findUnique({ where: { id: input.recordId }, select: { id: true, updatedAt: true } })
+            : await prisma.marketingUtmPreset.findUnique({ where: { id: input.recordId }, select: { id: true, updatedAt: true } });
+  if (!record) throw new Error("The marketing record no longer exists.");
+
+  const payload = {
+    recordType: input.recordType,
+    recordId: input.recordId,
+    operation: input.operation,
+  };
+  const digest = createHash("sha256")
+    .update(JSON.stringify({ payload, updatedAt: record.updatedAt.toISOString() }))
+    .digest("hex")
+    .slice(0, 24);
+  await requestApproval({
+    actorId: input.actorId,
+    correlationId: randomUUID(),
+    idempotencyKey: `admin:marketing-removal:${input.recordType}:${input.recordId}:${digest}`,
+    action: "DELETE_RECORD",
+    risk: "DESTRUCTIVE",
+    entityType: input.recordType,
+    entityId: input.recordId,
+    targetSnapshot: record,
+    payload,
+    evidence: { source: "admin-marketing" },
+  });
+  revalidatePath("/admin/approvals");
+}
+
 export async function saveMarketingContentAction(formData: FormData) {
   const session = await requireAdminSession("marketing:manage");
   const value = marketingContentSchema.parse({
@@ -97,6 +150,14 @@ export async function saveMarketingContentAction(formData: FormData) {
 
   if (value.id && value.parentContentId === value.id) {
     throw new Error("A content record cannot be its own parent.");
+  }
+  if (value.id && value.status === "ARCHIVED") {
+    const existing = await prisma.marketingContent.findUnique({ where: { id: value.id }, select: { status: true } });
+    if (existing?.status !== "ARCHIVED") {
+      await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingContent", recordId: value.id, operation: "archive" });
+      revalidateMarketing();
+      redirect("/admin/approvals?requested=1");
+    }
   }
 
   const data = {
@@ -135,13 +196,9 @@ export async function saveMarketingContentAction(formData: FormData) {
 export async function archiveMarketingContentAction(formData: FormData) {
   const session = await requireAdminSession("marketing:manage");
   const id = text(formData, "id");
-  const record = await prisma.marketingContent.update({
-    where: { id },
-    data: { status: "ARCHIVED" },
-    select: { title: true },
-  });
-  await audit(session.id, "ARCHIVE", "MarketingContent", id, `Archived ${record.title}`);
+  await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingContent", recordId: id, operation: "archive" });
   revalidateMarketing();
+  redirect("/admin/approvals?requested=1");
 }
 
 export async function saveMarketingCampaignAction(formData: FormData) {
@@ -166,6 +223,14 @@ export async function saveMarketingCampaignAction(formData: FormData) {
     actualMetrics: text(formData, "actualMetrics"),
     notes: text(formData, "notes"),
   });
+  if (value.id && value.status === "ARCHIVED") {
+    const existing = await prisma.marketingCampaign.findUnique({ where: { id: value.id }, select: { status: true } });
+    if (existing?.status !== "ARCHIVED") {
+      await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingCampaign", recordId: value.id, operation: "archive" });
+      revalidateMarketing();
+      redirect("/admin/approvals?requested=1");
+    }
+  }
   const data = {
     name: value.name,
     objective: value.objective,
@@ -199,13 +264,9 @@ export async function saveMarketingCampaignAction(formData: FormData) {
 export async function archiveMarketingCampaignAction(formData: FormData) {
   const session = await requireAdminSession("marketing:manage");
   const id = text(formData, "id");
-  const record = await prisma.marketingCampaign.update({
-    where: { id },
-    data: { status: "ARCHIVED" },
-    select: { name: true },
-  });
-  await audit(session.id, "ARCHIVE", "MarketingCampaign", id, `Archived ${record.name}`);
+  await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingCampaign", recordId: id, operation: "archive" });
   revalidateMarketing();
+  redirect("/admin/approvals?requested=1");
 }
 
 export async function saveMarketingAssetAction(formData: FormData) {
@@ -224,6 +285,14 @@ export async function saveMarketingAssetAction(formData: FormData) {
     campaignId: text(formData, "campaignId"),
     contentId: text(formData, "contentId"),
   });
+  if (value.id && value.status === "ARCHIVED") {
+    const existing = await prisma.marketingAsset.findUnique({ where: { id: value.id }, select: { status: true } });
+    if (existing?.status !== "ARCHIVED") {
+      await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingAsset", recordId: value.id, operation: "archive" });
+      revalidateMarketing();
+      redirect("/admin/approvals?requested=1");
+    }
+  }
   const data = {
     name: value.name,
     kind: value.kind,
@@ -250,6 +319,14 @@ export async function saveMarketingAssetAction(formData: FormData) {
 export async function saveBrandAssetDesignAction(input: unknown) {
   const session = await requireAdminSession("marketing:manage");
   const value = brandAssetDesignSchema.parse(input);
+  if (value.id && value.status === "ARCHIVED") {
+    const existing = await prisma.marketingAsset.findUnique({ where: { id: value.id }, select: { status: true } });
+    if (existing?.status !== "ARCHIVED") {
+      await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingAsset", recordId: value.id, operation: "archive" });
+      revalidateMarketing();
+      return { id: value.id, approvalRequested: true };
+    }
+  }
   const dimensions = getBrandAssetFormat(value.format);
   const templateLabel = brandAssetTemplates.find((template) => template.id === value.template)?.label ?? "Brand asset";
   const data = {
@@ -281,13 +358,13 @@ export async function saveBrandAssetDesignAction(input: unknown) {
     await audit(session.id, "UPDATE", "MarketingAsset", value.id, `Updated ${value.name}`);
     revalidateMarketing();
     revalidatePath(`/admin/marketing/assets/${value.id}`);
-    return { id: value.id };
+    return { id: value.id, approvalRequested: false };
   }
 
   const record = await prisma.marketingAsset.create({ data });
   await audit(session.id, "CREATE", "MarketingAsset", record.id, `Created ${value.name}`);
   revalidateMarketing();
-  return { id: record.id };
+  return { id: record.id, approvalRequested: false };
 }
 
 export async function markBrandAssetExportedAction(id: string) {
@@ -305,13 +382,9 @@ export async function markBrandAssetExportedAction(id: string) {
 export async function archiveMarketingAssetAction(formData: FormData) {
   const session = await requireAdminSession("marketing:manage");
   const id = text(formData, "id");
-  const record = await prisma.marketingAsset.update({
-    where: { id },
-    data: { status: "ARCHIVED" },
-    select: { name: true },
-  });
-  await audit(session.id, "ARCHIVE", "MarketingAsset", id, `Archived ${record.name}`);
+  await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingAsset", recordId: id, operation: "archive" });
   revalidateMarketing();
+  redirect("/admin/approvals?requested=1");
 }
 
 export async function updateMarketingChannelAction(formData: FormData) {
@@ -367,6 +440,7 @@ export async function saveMarketingMetricAction(formData: FormData) {
     qualifiedConversations: text(formData, "qualifiedConversations"),
     discoveryCalls: text(formData, "discoveryCalls"),
     opportunities: text(formData, "opportunities"),
+    currency: text(formData, "currency"),
     wonRevenue: text(formData, "wonRevenue"),
     notes: text(formData, "notes"),
   });
@@ -386,6 +460,7 @@ export async function saveMarketingMetricAction(formData: FormData) {
     qualifiedConversations: value.qualifiedConversations,
     discoveryCalls: value.discoveryCalls,
     opportunities: value.opportunities,
+    currency: value.currency,
     wonRevenue: value.wonRevenue,
     notes: optional(value.notes),
   };
@@ -402,9 +477,9 @@ export async function saveMarketingMetricAction(formData: FormData) {
 export async function deleteMarketingMetricAction(formData: FormData) {
   const session = await requireAdminSession("marketing:manage");
   const id = text(formData, "id");
-  await prisma.marketingWeeklyMetric.delete({ where: { id } });
-  await audit(session.id, "ARCHIVE", "MarketingWeeklyMetric", id, "Deleted weekly metric entry");
+  await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingWeeklyMetric", recordId: id, operation: "delete" });
   revalidateMarketing();
+  redirect("/admin/approvals?requested=1");
 }
 
 export async function saveMarketingUtmPresetAction(formData: FormData) {
@@ -441,9 +516,9 @@ export async function saveMarketingUtmPresetAction(formData: FormData) {
 export async function deleteMarketingUtmPresetAction(formData: FormData) {
   const session = await requireAdminSession("marketing:manage");
   const id = text(formData, "id");
-  await prisma.marketingUtmPreset.delete({ where: { id } });
-  await audit(session.id, "ARCHIVE", "MarketingUtmPreset", id, "Deleted UTM preset");
+  await requestMarketingRemoval({ actorId: session.id, recordType: "MarketingUtmPreset", recordId: id, operation: "delete" });
   revalidateMarketing();
+  redirect("/admin/approvals?requested=1");
 }
 
 export async function logMarketingOutboundAction(formData: FormData) {

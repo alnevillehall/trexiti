@@ -13,10 +13,10 @@ import {
   updateResearchChecklistAction,
 } from "@/app/(admin)/admin/actions";
 import { Notice, PriorityBadge, StageBadge, TaskStatus } from "@/components/admin/admin-ui";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 import styles from "@/components/admin/admin.module.css";
 import { requireAdminSession } from "@/lib/admin/auth";
 import {
-  formatAdminCurrency,
   formatAdminDate,
   formatAdminDateTime,
   opportunityHeat,
@@ -43,8 +43,8 @@ function first(value: string | string[] | undefined) {
 
 function dateTimeLocal(value: Date | null) {
   if (!value) return "";
-  const offset = value.getTimezoneOffset() * 60_000;
-  return new Date(value.getTime() - offset).toISOString().slice(0, 16);
+  const jamaicaOffset = 5 * 60 * 60_000;
+  return new Date(value.getTime() - jamaicaOffset).toISOString().slice(0, 16);
 }
 
 export default async function AdminLeadDetailPage({ params, searchParams }: PageProps) {
@@ -76,14 +76,15 @@ export default async function AdminLeadDetailPage({ params, searchParams }: Page
           </div>
         </div>
         <div className={styles.detailValue}>
-          <strong>{formatAdminCurrency(Number(opportunity.estimatedValue))}</strong>
-          <span>{opportunity.probability}% probability · {formatAdminCurrency(expectedValue)} expected</span>
+          <strong>{formatMoney(Number(opportunity.estimatedValue), opportunity.currency)}</strong>
+          <span>{opportunity.probability}% probability · {formatMoney(expectedValue, opportunity.currency)} expected</span>
         </div>
       </header>
 
       {first(query.error) ? <Notice tone="error">{first(query.error)}</Notice> : null}
       {query.created ? <Notice tone="success">Opportunity created and audit history started.</Notice> : null}
       {query.saved ? <Notice tone="success">Commercial details saved.</Notice> : null}
+      {query.approvalRequested ? <Notice tone="success">Founder approval requested. Sensitive commercial changes have not been applied.</Notice> : null}
       {query.noteAdded ? <Notice tone="success">Internal note added.</Notice> : null}
       {query.messageAdded ? <Notice tone="success">Message activity recorded.</Notice> : null}
       {query.taskCreated ? <Notice tone="success">Follow-up task created.</Notice> : null}
@@ -233,7 +234,7 @@ export default async function AdminLeadDetailPage({ params, searchParams }: Page
           <section className={styles.panel} aria-labelledby="proposal-title">
             <div className={styles.panelHeader}><h2 id="proposal-title">Proposal details</h2><span>{opportunity.proposals.length} versions</span></div>
             {opportunity.proposals.length ? (
-              <div className={styles.tableWrap}><table className={styles.table}><thead><tr><th>Version</th><th>Title</th><th>Amount</th><th>Status</th><th>Sent</th><th>Valid until</th></tr></thead><tbody>{opportunity.proposals.map((proposal) => <tr key={proposal.id}><td>v{proposal.version}</td><td>{proposal.title}</td><td>{formatAdminCurrency(Number(proposal.amount))}</td><td>{proposal.status}</td><td>{formatAdminDate(proposal.sentAt)}</td><td>{formatAdminDate(proposal.validUntil)}</td></tr>)}</tbody></table></div>
+              <div className={styles.tableWrap}><table className={styles.table}><thead><tr><th>Version</th><th>Title</th><th>Amount</th><th>Status</th><th>Sent</th><th>Valid until</th></tr></thead><tbody>{opportunity.proposals.map((proposal) => <tr key={proposal.id}><td>v{proposal.version}</td><td>{proposal.title}</td><td>{formatMoney(Number(proposal.amount), proposal.currency)}</td><td>{proposal.status}</td><td>{formatAdminDate(proposal.sentAt)}</td><td>{formatAdminDate(proposal.validUntil)}</td></tr>)}</tbody></table></div>
             ) : <div className={styles.emptyState}>No proposal prepared.</div>}
           </section>
         </div>
@@ -246,13 +247,14 @@ export default async function AdminLeadDetailPage({ params, searchParams }: Page
               <input type="hidden" name="returnTo" value={returnTo} />
               <label className={styles.fieldFull}>Stage<select name="stage" defaultValue={opportunity.stage}>{opportunityStages.map((stage) => <option key={stage} value={stage}>{opportunityStageLabels[stage]}</option>)}</select></label>
               <label className={styles.fieldFull}>Probability<input name="probability" type="number" min={0} max={100} defaultValue={opportunity.probability} /></label>
+              <label className={styles.fieldFull}>Value currency<select name="currency" defaultValue={opportunity.currency}><option value="JMD">JMD</option><option value="USD">USD</option></select></label>
               <label className={styles.fieldFull}>Estimated value<input name="estimatedProjectValue" type="number" min={0} step={500} defaultValue={Number(opportunity.estimatedValue)} /></label>
               <label className={styles.fieldFull}>Budget<input name="budget" defaultValue={opportunity.budget ?? ""} /></label>
               <label className={styles.fieldFull}>Timeline<input name="timeline" defaultValue={opportunity.timeline ?? ""} /></label>
               <label className={styles.fieldFull}>Won / lost reason<textarea aria-describedby="outcome-reason-help" name="outcomeReason" defaultValue={opportunity.outcomeReason ?? ""} /></label>
               <p className={styles.fieldFull} id="outcome-reason-help">Required when the stage is Won or Lost. Use the real decision reason; do not infer it.</p>
               <label className={styles.fieldFull}>Assigned owner<select name="assignedOwnerId" defaultValue={opportunity.assignedOwnerId ?? ""}><option value="">Unassigned</option>{owners.map((owner) => <option key={owner.id} value={owner.id}>{owner.name} · {owner.role}</option>)}</select></label>
-              <label className={styles.fieldFull}>Next follow-up<input name="nextFollowUp" type="datetime-local" defaultValue={dateTimeLocal(opportunity.nextFollowUp)} /></label>
+              <label className={styles.fieldFull}>Next follow-up · Jamaica<input name="nextFollowUp" type="datetime-local" defaultValue={dateTimeLocal(opportunity.nextFollowUp)} /></label>
               <label className={styles.fieldFull}>Next action<textarea name="nextAction" defaultValue={opportunity.nextAction ?? ""} /></label>
               <div className={styles.formActions}><button className={styles.primaryButton} type="submit">Save changes</button></div>
             </form>
@@ -268,7 +270,7 @@ export default async function AdminLeadDetailPage({ params, searchParams }: Page
               <label className={styles.fieldFull}>Task type<select name="type" defaultValue="FOLLOW_UP">{taskTypes.map((type) => <option key={type} value={type}>{taskTypeLabels[type]}</option>)}</select></label>
               <label className={styles.fieldFull}>Priority<select name="priority" defaultValue="MEDIUM">{taskPriorities.map((priority) => <option key={priority} value={priority}>{taskPriorityLabels[priority]}</option>)}</select></label>
               <label className={styles.fieldFull}>Title<input name="title" required /></label>
-              <label className={styles.fieldFull}>Due<input name="dueAt" type="datetime-local" required /></label>
+              <label className={styles.fieldFull}>Due · Jamaica<input name="dueAt" type="datetime-local" required /></label>
               <label className={styles.fieldFull}>Notes<textarea name="notes" /></label>
               <div className={styles.formActions}><button className={styles.secondaryButton} type="submit">Add task</button></div>
             </form>

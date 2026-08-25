@@ -8,6 +8,7 @@ import { requireAdminSession } from "@/lib/admin/auth";
 import { formatJamaicaDateTime, marketingLabel } from "@/lib/admin/marketing";
 import { getMarketingDashboard } from "@/lib/admin/marketing-queries";
 import { hasAdminPermission } from "@/lib/admin/permissions";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 
 export default async function MarketingDashboardPage() {
   const [session, data] = await Promise.all([
@@ -43,7 +44,7 @@ export default async function MarketingDashboardPage() {
         <div className={styles.stat}><span>Scheduled</span><strong>{data.scheduledCount}</strong></div>
         <div className={styles.stat}><span>Active campaigns</span><strong>{data.activeCampaigns.length}</strong></div>
         <div className={styles.stat}><span>Qualified / manual</span><strong>{data.manualMetricTotals.qualifiedConversations}</strong></div>
-        <div className={styles.stat}><span>Won revenue / manual</span><strong>${data.manualMetricTotals.wonRevenue.toLocaleString()}</strong></div>
+        <div className={styles.stat}><span>Won revenue / manual</span><strong>{formatMoney(data.manualMetricTotals.wonRevenue.JMD, "JMD")}<br />{formatMoney(data.manualMetricTotals.wonRevenue.USD, "USD")}</strong></div>
       </section>
 
       <div className={styles.dashboardGrid}>
@@ -126,7 +127,7 @@ export default async function MarketingDashboardPage() {
                     <td>{row.qualifiedLeads}</td>
                     <td>{row.discoveryConversations}</td>
                     <td>{row.opportunities}</td>
-                    <td>${row.wonRevenue.toLocaleString()}</td>
+                    <td>{formatMoney(row.wonRevenue.JMD, "JMD")}<br />{formatMoney(row.wonRevenue.USD, "USD")}</td>
                   </tr>
                 ))}
               </tbody>

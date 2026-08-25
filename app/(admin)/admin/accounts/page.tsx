@@ -2,9 +2,9 @@ import Link from "next/link";
 
 import { createOpportunityAction } from "@/app/(admin)/admin/actions";
 import { AdminPageHeader, EmptyAdminState, Notice, StageBadge } from "@/components/admin/admin-ui";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 import styles from "@/components/admin/admin.module.css";
 import {
-  formatAdminCurrency,
   formatAdminDate,
   opportunityHeat,
   opportunityHeatLabel,
@@ -33,6 +33,7 @@ export default async function AdminTargetAccountsPage({ searchParams }: { search
     stage: first(params.stage) || undefined,
     industry: first(params.industry) || undefined,
     country: first(params.country) || undefined,
+    currency: first(params.currency) || undefined,
     minScore: first(params.minScore) || undefined,
     minValue: first(params.minValue) || undefined,
     followUp: first(params.followUp) || undefined,
@@ -72,7 +73,8 @@ export default async function AdminTargetAccountsPage({ searchParams }: { search
         <label>Country<select name="country" defaultValue={filters.country ?? ""}><option value="">All countries</option>{data.countries.map((country) => <option key={country}>{country}</option>)}</select></label>
         <label>Score<select name="minScore" defaultValue={filters.minScore ?? ""}><option value="">Any</option><option value="20">Hot · 20+</option><option value="15">Warm · 15+</option></select></label>
         <label>Research status<select name="readiness" defaultValue={filters.readiness ?? ""}><option value="">Any status</option><option value="ready">Ready for outreach</option><option value="incomplete">Research incomplete</option></select></label>
-        <label>Project range<select name="minValue" defaultValue={filters.minValue ?? ""}><option value="">Any</option><option value="10000">$10,000+</option><option value="25000">$25,000+</option><option value="50000">$50,000+</option></select></label>
+        <label>Value currency<select name="currency" defaultValue={filters.currency ?? ""}><option value="">JMD and USD</option><option value="JMD">JMD only</option><option value="USD">USD only</option></select></label>
+        <label>Minimum recorded value<select name="minValue" defaultValue={filters.minValue ?? ""}><option value="">Any</option><option value="10000">10,000+</option><option value="25000">25,000+</option><option value="50000">50,000+</option></select></label>
         <label>Follow-up<select name="followUp" defaultValue={filters.followUp ?? ""}><option value="">Any date</option><option value="overdue">Overdue</option><option value="today">Today</option><option value="upcoming">Next 7 days</option></select></label>
         <button className={styles.secondaryButton} type="submit">Apply</button>
       </form>
@@ -92,7 +94,7 @@ export default async function AdminTargetAccountsPage({ searchParams }: { search
                   <tr key={account.id}>
                     <td><Link href={`/admin/leads/${account.id}`}>{account.company.name}</Link><span className={styles.subtle}>{account.company.website ?? account.company.domain}<br />{account.company.industry} · {account.company.country} · {account.company.estimatedSize ?? "Size unverified"}</span></td>
                     <td>{account.primaryContact?.name ?? "Not identified"}<span className={styles.subtle}>{account.primaryContact?.title ?? "—"}<br />{methods || "No contact method"}</span></td>
-                    <td>{opportunityTypeLabels[account.type]}<span className={styles.subtle}>{formatAdminCurrency(Number(account.estimatedValue))}<br /><StageBadge stage={account.stage} /></span></td>
+                    <td>{opportunityTypeLabels[account.type]}<span className={styles.subtle}>{formatMoney(Number(account.estimatedValue), account.currency)}<br /><StageBadge stage={account.stage} /></span></td>
                     <td>{rating(research?.currentWebsiteQuality)} / {rating(research?.operationalMaturity)}<span className={styles.subtle}>Website quality / operational maturity</span></td>
                     <td><span className={styles.scoreBadge} data-heat={heat.toLowerCase()}>{opportunityHeatLabel(research?.totalScore ?? 0)} · {research?.totalScore ?? 0}/25</span></td>
                     <td>{research?.readyForOutreachAt ? <span className={styles.readinessReady}>Ready for outreach</span> : <span className={styles.readinessLocked}>Research incomplete</span>}</td>
@@ -131,11 +133,12 @@ export default async function AdminTargetAccountsPage({ searchParams }: { search
           <label className={styles.field}>WhatsApp<input name="whatsapp" placeholder="Number or business link" /></label>
           <label className={styles.field}>Other contact method<input name="otherContactMethod" /></label>
           <label className={styles.field}>Opportunity type<select name="opportunityType" defaultValue="BUSINESS_SYSTEM">{opportunityTypes.map((type) => <option key={type} value={type}>{opportunityTypeLabels[type]}</option>)}</select></label>
+          <label className={styles.field}>Value currency<select name="currency" defaultValue="JMD"><option value="JMD">JMD</option><option value="USD">USD</option></select></label>
           <label className={styles.field}>Estimated project value<input name="estimatedProjectValue" type="number" min={0} step={500} required defaultValue={10000} /></label>
-          <label className={styles.field}>Estimated project range<input name="budget" placeholder="$10,000–$25,000" /></label>
+          <label className={styles.field}>Estimated project range<input name="budget" placeholder="10,000–25,000 in selected currency" /></label>
           <label className={styles.field}>Timeline<input name="timeline" placeholder="3–6 months" /></label>
           <label className={styles.field}>Source<input name="source" required defaultValue="Manual research" /></label>
-          <label className={styles.field}>Next follow-up<input name="nextFollowUp" type="datetime-local" /></label>
+          <label className={styles.field}>Next follow-up · Jamaica<input name="nextFollowUp" type="datetime-local" /></label>
           <label className={styles.field}>Current website quality<select name="currentWebsiteQuality" defaultValue=""><option value="">Not assessed</option>{[1,2,3,4,5].map((item) => <option key={item} value={item}>{item} / 5</option>)}</select></label>
           <label className={styles.field}>Operational maturity<select name="operationalMaturity" defaultValue=""><option value="">Not assessed</option>{[1,2,3,4,5].map((item) => <option key={item} value={item}>{item} / 5</option>)}</select></label>
           <label className={styles.fieldFull}>Identified problem summary<textarea name="identifiedProblem" required minLength={10} /></label>

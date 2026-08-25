@@ -73,3 +73,15 @@ export async function requireAdminSession(
 
   return admin;
 }
+
+export async function requireFounderSession(
+  permission: AdminPermission = "operations:view",
+): Promise<AdminSession> {
+  const admin = await requireAdminSession(permission);
+
+  if (admin.role !== "OWNER") {
+    notFound();
+  }
+
+  return admin;
+}

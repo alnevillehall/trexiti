@@ -94,7 +94,7 @@ export default async function MarketingAssetsPage() {
             <details className={adminStyles.formPanel} key={asset.id}>
               <summary>Edit · {asset.name}</summary>
               <AssetForm asset={asset} campaigns={campaigns} content={content} />
-              <form action={archiveMarketingAssetAction} className={styles.actionForm}><input name="id" type="hidden" value={asset.id} /><button className={adminStyles.dangerButton} type="submit">Archive asset</button></form>
+              <form action={archiveMarketingAssetAction} className={styles.actionForm}><input name="id" type="hidden" value={asset.id} /><button className={adminStyles.dangerButton} type="submit">Request archive</button></form>
             </details>
           ))}
         </div>

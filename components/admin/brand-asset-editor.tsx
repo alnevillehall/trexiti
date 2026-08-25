@@ -118,7 +118,12 @@ export function BrandAssetEditor({ initialDraft, campaigns, content, canManage }
       try {
         const result = await saveBrandAssetDesignAction(draft);
         setDraft((current) => ({ ...current, id: result.id }));
-        setMessage({ tone: "success", text: "Asset configuration saved to the Marketing OS library." });
+        setMessage({
+          tone: "success",
+          text: result.approvalRequested
+            ? "Archive approval requested. The asset remains unchanged until founder approval executes."
+            : "Asset configuration saved to the Marketing OS library.",
+        });
         if (!draft.id) router.replace(`/admin/marketing/assets/${result.id}`);
         else router.refresh();
       } catch (error) {

@@ -335,6 +335,149 @@ enum AdminAuditAction {
   RESTORE
 }
 
+enum AdminCurrency {
+  JMD
+  USD
+}
+
+enum AdminProspectClassification {
+  UNCLASSIFIED
+  QUALIFIED
+  NURTURE
+  NOT_A_FIT
+}
+
+enum AdminProjectStatus {
+  PLANNED
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum AdminProjectHealth {
+  ON_TRACK
+  ATTENTION
+  AT_RISK
+}
+
+enum AdminMilestoneStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  BLOCKED
+  COMPLETED
+  CANCELLED
+}
+
+enum AdminInvoiceStatus {
+  DRAFT
+  ISSUED
+  PARTIALLY_PAID
+  PAID
+  VOID
+}
+
+enum AdminPaymentStatus {
+  PENDING
+  CLEARED
+  FAILED
+  REFUNDED
+}
+
+enum AdminPaymentMethod {
+  CASH
+  BANK_TRANSFER
+  CARD
+  CHEQUE
+  MOBILE_MONEY
+  OTHER
+}
+
+enum AdminTaskSource {
+  HUMAN
+  AUTOMATION
+  AI
+  MCP
+}
+
+enum CooAutomationMode {
+  OFF
+  SHADOW
+  GUARDED
+}
+
+enum CooAutomationRunType {
+  PROSPECTING
+  DAILY_BRIEF
+  RUN_OPERATIONS
+  APPROVAL_EXECUTION
+}
+
+enum CooAutomationStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  PARTIAL
+  FAILED
+  CANCELLED
+}
+
+enum CooAutomationStepStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  SKIPPED
+  FAILED
+}
+
+enum CooBriefStatus {
+  READY
+  DEGRADED
+  FAILED
+}
+
+enum CooBriefItemKind {
+  DECISION
+  ACTION
+  ALERT
+  COMPLETED
+}
+
+enum CooPrioritySeverity {
+  INFO
+  ATTENTION
+  HIGH
+  CRITICAL
+}
+
+enum CooApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+  EXECUTING
+  EXECUTED
+  FAILED
+}
+
+enum CooApprovalRisk {
+  SENSITIVE
+  DESTRUCTIVE
+}
+
+enum CooInteractionChannel {
+  ADMIN
+  MCP
+  WORKFLOW
+  CHAT
+}
+
+enum CooInteractionStatus {
+  SUCCEEDED
+  PARTIAL
+  FAILED
+}
+
 enum MarketingContentStatus {
   IDEA
   DRAFTING
@@ -557,32 +700,44 @@ model AdminUser {
   proposals             AdminProposal[]
   auditLogs             AdminAuditLog[]
   dailyTargetConfig     AdminDailyTargetConfig?
+  ownedProjects         AdminProject[]          @relation("AdminProjectOwner")
+  projectUpdates        AdminProjectUpdate[]
+  createdCooPolicies    CooPolicy[]             @relation("CooPolicyCreator")
+  requestedCooRuns      CooAutomationRun[]      @relation("CooRunRequester")
+  requestedApprovals    CooApprovalRequest[]    @relation("CooApprovalRequester")
+  decidedApprovals      CooApprovalRequest[]    @relation("CooApprovalDecider")
+  interactionSummaries  CooInteractionSummary[]
 
   @@index([active, role])
 }
 
 model AdminCompany {
-  id            String             @id @default(cuid())
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-  archivedAt    DateTime?
-  status        AdminCompanyStatus @default(TARGET)
-  name          String
-  domain        String             @unique
-  website       String?
-  industry      String
-  country       String
-  estimatedSize String?
-  phone         String?
-  notes         String?            @db.Text
-  lifetimeValue Decimal            @default(0) @db.Decimal(14, 2)
-  contacts      AdminContact[]
-  opportunities AdminOpportunity[]
-  tasks         AdminTask[]
+  id                    String             @id @default(cuid())
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  archivedAt            DateTime?
+  status                AdminCompanyStatus @default(TARGET)
+  name                  String
+  domain                String             @unique
+  website               String?
+  industry              String
+  country               String
+  estimatedSize         String?
+  phone                 String?
+  notes                 String?            @db.Text
+  lifetimeValue         Decimal            @default(0) @db.Decimal(18, 2)
+  lifetimeValueCurrency AdminCurrency      @default(USD)
+  contacts              AdminContact[]
+  opportunities         AdminOpportunity[]
+  tasks                 AdminTask[]
+  projects              AdminProject[]
+  invoices              AdminInvoice[]
+  payments              AdminPayment[]
 
   @@index([industry, country])
   @@index([status, createdAt])
   @@index([archivedAt])
+  @@index([lifetimeValueCurrency])
 }
 
 model AdminContact {
@@ -642,7 +797,8 @@ model AdminOpportunity {
   source               String
   identifiedProblem    String                    @db.Text
   opportunity          String                    @db.Text
-  estimatedValue       Decimal                   @db.Decimal(14, 2)
+  estimatedValue       Decimal                   @db.Decimal(18, 2)
+  currency             AdminCurrency             @default(USD)
   budget               String?
   timeline             String?
   outcomeReason        String?                   @db.Text
@@ -662,69 +818,89 @@ model AdminOpportunity {
   proposals            AdminProposal[]
   tasks                AdminTask[]
   outreachSequence     AdminOutreachSequence?
+  projects             AdminProject[]
 
   @@index([stage, nextFollowUp])
   @@index([assignedOwnerId, stage])
   @@index([companyId, stage])
   @@index([direction, createdAt])
   @@index([estimatedValue])
+  @@index([currency, stage])
   @@index([archivedAt])
 }
 
 model AdminProspectResearch {
-  id                        String           @id @default(cuid())
-  createdAt                 DateTime         @default(now())
-  updatedAt                 DateTime         @updatedAt
-  opportunityId             String           @unique
+  id                        String                      @id @default(cuid())
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @updatedAt
+  opportunityId             String                      @unique
   currentWebsiteQuality     Int?
   operationalMaturity       Int?
-  observedProblems          String?          @db.Text
-  recentBusinessActivity    String?          @db.Text
-  notes                     String?          @db.Text
-  financialCapacityScore    Int              @default(1)
-  problemSeverityScore      Int              @default(1)
-  strategicFitScore         Int              @default(1)
-  urgencyScore              Int              @default(1)
-  decisionMakerAccessScore  Int              @default(1)
-  totalScore                Int              @default(5)
-  websiteReviewed           Boolean          @default(false)
-  mobileReviewed            Boolean          @default(false)
-  businessModelUnderstood   Boolean          @default(false)
-  decisionMakerIdentified   Boolean          @default(false)
-  specificProblemIdentified Boolean          @default(false)
-  personalizationPrepared   Boolean          @default(false)
-  contactMethodFound        Boolean          @default(false)
+  observedProblems          String?                     @db.Text
+  recentBusinessActivity    String?                     @db.Text
+  notes                     String?                     @db.Text
+  classification            AdminProspectClassification @default(UNCLASSIFIED)
+  financialCapacityScore    Int                         @default(1)
+  problemSeverityScore      Int                         @default(1)
+  strategicFitScore         Int                         @default(1)
+  urgencyScore              Int                         @default(1)
+  decisionMakerAccessScore  Int                         @default(1)
+  totalScore                Int                         @default(5)
+  websiteReviewed           Boolean                     @default(false)
+  mobileReviewed            Boolean                     @default(false)
+  businessModelUnderstood   Boolean                     @default(false)
+  decisionMakerIdentified   Boolean                     @default(false)
+  specificProblemIdentified Boolean                     @default(false)
+  personalizationPrepared   Boolean                     @default(false)
+  contactMethodFound        Boolean                     @default(false)
   readyForOutreachAt        DateTime?
-  opportunity               AdminOpportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  sourceUrls                String[]                    @default([])
+  verifiedAt                DateTime?
+  automationRunId           String?
+  opportunity               AdminOpportunity            @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  automationRun             CooAutomationRun?           @relation(fields: [automationRunId], references: [id], onDelete: SetNull)
 
   @@index([totalScore])
+  @@index([classification])
   @@index([readyForOutreachAt])
+  @@index([automationRunId])
 }
 
 model AdminTask {
-  id            String            @id @default(cuid())
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  completedAt   DateTime?
-  archivedAt    DateTime?
-  opportunityId String?
-  companyId     String?
-  contactId     String?
-  ownerId       String
-  type          AdminTaskType
-  priority      AdminTaskPriority @default(MEDIUM)
-  status        AdminTaskStatus   @default(TODO)
-  title         String
-  dueAt         DateTime
-  notes         String?           @db.Text
-  opportunity   AdminOpportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
-  company       AdminCompany?     @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  contact       AdminContact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  owner         AdminUser         @relation("AdminTaskOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  completedAt     DateTime?
+  archivedAt      DateTime?
+  opportunityId   String?
+  companyId       String?
+  contactId       String?
+  projectId       String?
+  milestoneId     String?
+  automationRunId String?
+  ownerId         String
+  type            AdminTaskType
+  priority        AdminTaskPriority @default(MEDIUM)
+  status          AdminTaskStatus   @default(TODO)
+  title           String
+  dueAt           DateTime
+  notes           String?           @db.Text
+  source          AdminTaskSource   @default(HUMAN)
+  idempotencyKey  String?           @unique
+  opportunity     AdminOpportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  company         AdminCompany?     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contact         AdminContact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  project         AdminProject?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  milestone       AdminMilestone?   @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  automationRun   CooAutomationRun? @relation(fields: [automationRunId], references: [id], onDelete: SetNull)
+  owner           AdminUser         @relation("AdminTaskOwner", fields: [ownerId], references: [id], onDelete: Restrict)
 
   @@index([ownerId, status, dueAt])
   @@index([opportunityId, status])
   @@index([companyId])
+  @@index([projectId, status, dueAt])
+  @@index([milestoneId, status])
+  @@index([automationRunId])
   @@index([priority, dueAt])
   @@index([archivedAt])
 }
@@ -842,7 +1018,8 @@ model AdminProposal {
   createdById   String?
   version       Int                 @default(1)
   title         String
-  amount        Decimal             @db.Decimal(14, 2)
+  amount        Decimal             @db.Decimal(18, 2)
+  currency      AdminCurrency       @default(USD)
   status        AdminProposalStatus @default(DRAFT)
   documentUrl   String?
   notes         String?             @db.Text
@@ -854,23 +1031,363 @@ model AdminProposal {
   @@unique([opportunityId, version])
   @@index([status, sentAt])
   @@index([createdById])
+  @@index([currency, status])
 }
 
 model AdminAuditLog {
-  id         String           @id @default(cuid())
-  createdAt  DateTime         @default(now())
-  actorId    String?
-  action     AdminAuditAction
-  entityType String
-  entityId   String
-  summary    String
-  before     Json?
-  after      Json?
-  metadata   Json?
-  actor      AdminUser?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  id             String           @id @default(cuid())
+  createdAt      DateTime         @default(now())
+  actorId        String?
+  correlationId  String?
+  idempotencyKey String?          @unique
+  action         AdminAuditAction
+  entityType     String
+  entityId       String
+  summary        String
+  before         Json?
+  after          Json?
+  metadata       Json?
+  actor          AdminUser?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
 
   @@index([entityType, entityId, createdAt])
   @@index([actorId, createdAt])
+  @@index([correlationId, createdAt])
+}
+
+model AdminProject {
+  id                   String               @id @default(cuid())
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  archivedAt           DateTime?
+  companyId            String
+  opportunityId        String?
+  ownerId              String?
+  title                String
+  description          String?              @db.Text
+  status               AdminProjectStatus   @default(PLANNED)
+  healthOverride       AdminProjectHealth?
+  healthOverrideReason String?              @db.Text
+  startAt              DateTime?
+  targetEndAt          DateTime?
+  completedAt          DateTime?
+  lastProgressAt       DateTime?
+  activeBlocker        String?              @db.Text
+  progressPercent      Int                  @default(0)
+  version              Int                  @default(1)
+  idempotencyKey       String?              @unique
+  company              AdminCompany         @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  opportunity          AdminOpportunity?    @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  owner                AdminUser?           @relation("AdminProjectOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  milestones           AdminMilestone[]
+  updates              AdminProjectUpdate[]
+  tasks                AdminTask[]
+  invoices             AdminInvoice[]
+
+  @@index([status, targetEndAt])
+  @@index([companyId, status])
+  @@index([ownerId, status])
+  @@index([archivedAt])
+}
+
+model AdminMilestone {
+  id                    String               @id @default(cuid())
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  projectId             String
+  dependencyMilestoneId String?
+  title                 String
+  description           String?              @db.Text
+  status                AdminMilestoneStatus @default(NOT_STARTED)
+  dueAt                 DateTime?
+  completedAt           DateTime?
+  blockedAt             DateTime?
+  blocker               String?              @db.Text
+  sortOrder             Int                  @default(0)
+  version               Int                  @default(1)
+  idempotencyKey        String?              @unique
+  project               AdminProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  dependency            AdminMilestone?      @relation("AdminMilestoneDependency", fields: [dependencyMilestoneId], references: [id], onDelete: SetNull)
+  dependents            AdminMilestone[]     @relation("AdminMilestoneDependency")
+  tasks                 AdminTask[]
+
+  @@index([projectId, status, dueAt])
+  @@index([dependencyMilestoneId])
+}
+
+model AdminProjectUpdate {
+  id              String       @id @default(cuid())
+  createdAt       DateTime     @default(now())
+  projectId       String
+  authorId        String?
+  summary         String       @db.Text
+  progressPercent Int?
+  blockers        Json?
+  metadata        Json?
+  idempotencyKey  String?      @unique
+  project         AdminProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author          AdminUser?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model AdminInvoice {
+  id                String                   @id @default(cuid())
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  archivedAt        DateTime?
+  companyId         String
+  projectId         String?
+  invoiceNumber     String                   @unique
+  status            AdminInvoiceStatus       @default(DRAFT)
+  currency          AdminCurrency
+  amount            Decimal                  @db.Decimal(18, 2)
+  issuedAt          DateTime?
+  dueAt             DateTime?
+  notes             String?                  @db.Text
+  externalReference String?
+  version           Int                      @default(1)
+  idempotencyKey    String?                  @unique
+  company           AdminCompany             @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  project           AdminProject?            @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  allocations       AdminPaymentAllocation[]
+
+  @@index([status, dueAt])
+  @@index([companyId, status])
+  @@index([projectId])
+  @@index([currency, status, dueAt])
+  @@index([archivedAt])
+}
+
+model AdminPayment {
+  id             String                   @id @default(cuid())
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  companyId      String
+  status         AdminPaymentStatus       @default(CLEARED)
+  method         AdminPaymentMethod
+  currency       AdminCurrency
+  amount         Decimal                  @db.Decimal(18, 2)
+  paidAt         DateTime
+  reference      String?
+  notes          String?                  @db.Text
+  version        Int                      @default(1)
+  idempotencyKey String?                  @unique
+  company        AdminCompany             @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  allocations    AdminPaymentAllocation[]
+
+  @@index([companyId, status, paidAt])
+  @@index([currency, status, paidAt])
+  @@index([reference])
+}
+
+model AdminPaymentAllocation {
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now())
+  paymentId      String
+  invoiceId      String
+  currency       AdminCurrency
+  amount         Decimal       @db.Decimal(18, 2)
+  idempotencyKey String?       @unique
+  payment        AdminPayment  @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  invoice        AdminInvoice  @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, invoiceId])
+  @@index([invoiceId, createdAt])
+  @@index([paymentId, createdAt])
+  @@index([currency, createdAt])
+}
+
+model CooPolicy {
+  id                   String               @id @default(cuid())
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  createdById          String?
+  version              Int                  @unique
+  active               Boolean              @default(false)
+  activatedAt          DateTime?
+  name                 String
+  automationMode       CooAutomationMode    @default(SHADOW)
+  projectDeadlineHours Int                  @default(72)
+  staleProgressDays    Int                  @default(7)
+  approvalExpiryHours  Int                  @default(24)
+  safeBatchLimit       Int                  @default(25)
+  prospectDailyMinimum Int                  @default(40)
+  prospectDailyMaximum Int                  @default(50)
+  maxFounderPriorities Int                  @default(5)
+  freshnessMinutes     Int                  @default(90)
+  rules                Json?
+  createdBy            AdminUser?           @relation("CooPolicyCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  briefs               CooBrief[]
+  automationRuns       CooAutomationRun[]
+  approvalRequests     CooApprovalRequest[]
+
+  @@index([active, version])
+  @@index([createdById, createdAt])
+}
+
+model CooBrief {
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  businessDate    DateTime          @unique @db.Date
+  status          CooBriefStatus
+  headline        String
+  summary         String            @db.Text
+  asOf            DateTime
+  dataAsOf        DateTime?
+  degradedReason  String?           @db.Text
+  model           String?
+  policyId        String
+  automationRunId String?           @unique
+  evidence        Json?
+  policy          CooPolicy         @relation(fields: [policyId], references: [id], onDelete: Restrict)
+  automationRun   CooAutomationRun? @relation(fields: [automationRunId], references: [id], onDelete: SetNull)
+  items           CooBriefItem[]
+
+  @@index([status, businessDate])
+  @@index([policyId, businessDate])
+}
+
+model CooBriefItem {
+  id         String              @id @default(cuid())
+  createdAt  DateTime            @default(now())
+  briefId    String
+  rank       Int
+  kind       CooBriefItemKind
+  severity   CooPrioritySeverity
+  title      String
+  rationale  String              @db.Text
+  nextAction String?             @db.Text
+  recordType String?
+  recordId   String?
+  recordUrl  String?
+  evidence   Json?
+  currency   AdminCurrency?
+  amount     Decimal?            @db.Decimal(18, 2)
+  brief      CooBrief            @relation(fields: [briefId], references: [id], onDelete: Cascade)
+
+  @@unique([briefId, rank])
+  @@index([kind, severity])
+  @@index([recordType, recordId])
+}
+
+model CooAutomationRun {
+  id               String                  @id @default(cuid())
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  type             CooAutomationRunType
+  status           CooAutomationStatus     @default(QUEUED)
+  mode             CooAutomationMode
+  policyId         String?
+  requestedById    String?
+  correlationId    String                  @unique
+  idempotencyKey   String                  @unique
+  scheduledFor     DateTime?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  model            String?
+  input            Json?
+  outputSummary    Json?
+  error            String?                 @db.Text
+  usage            Json?
+  estimatedCostUsd Decimal?                @db.Decimal(18, 6)
+  policy           CooPolicy?              @relation(fields: [policyId], references: [id], onDelete: SetNull)
+  requestedBy      AdminUser?              @relation("CooRunRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+  steps            CooAutomationStep[]
+  brief            CooBrief?
+  prospectResearch AdminProspectResearch[]
+  tasks            AdminTask[]
+  approvalRequests CooApprovalRequest[]
+  interactions     CooInteractionSummary[]
+
+  @@index([type, status, createdAt])
+  @@index([status, scheduledFor])
+  @@index([requestedById, createdAt])
+  @@index([policyId, createdAt])
+}
+
+model CooAutomationStep {
+  id             String                  @id @default(cuid())
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  runId          String
+  key            String
+  label          String
+  status         CooAutomationStepStatus @default(QUEUED)
+  attempt        Int                     @default(1)
+  startedAt      DateTime?
+  completedAt    DateTime?
+  input          Json?
+  output         Json?
+  error          String?                 @db.Text
+  idempotencyKey String                  @unique
+  run            CooAutomationRun        @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, key, attempt])
+  @@index([runId, status])
+}
+
+model CooApprovalRequest {
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  expiresAt       DateTime
+  status          CooApprovalStatus @default(PENDING)
+  risk            CooApprovalRisk
+  action          String
+  entityType      String
+  entityId        String
+  targetVersion   Int?
+  targetSnapshot  Json?
+  payload         Json
+  evidence        Json?
+  requestedById   String?
+  decidedById     String?
+  decidedAt       DateTime?
+  decisionReason  String?           @db.Text
+  executedAt      DateTime?
+  executionResult Json?
+  executionError  String?           @db.Text
+  safeBatchKey    String?
+  idempotencyKey  String            @unique
+  correlationId   String
+  version         Int               @default(1)
+  policyId        String?
+  automationRunId String?
+  policy          CooPolicy?        @relation(fields: [policyId], references: [id], onDelete: SetNull)
+  automationRun   CooAutomationRun? @relation(fields: [automationRunId], references: [id], onDelete: SetNull)
+  requestedBy     AdminUser?        @relation("CooApprovalRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+  decidedBy       AdminUser?        @relation("CooApprovalDecider", fields: [decidedById], references: [id], onDelete: SetNull)
+
+  @@index([status, expiresAt])
+  @@index([entityType, entityId, createdAt])
+  @@index([safeBatchKey, status])
+  @@index([correlationId])
+  @@index([requestedById, createdAt])
+  @@index([decidedById, decidedAt])
+}
+
+model CooInteractionSummary {
+  id              String                @id @default(cuid())
+  createdAt       DateTime              @default(now())
+  channel         CooInteractionChannel
+  status          CooInteractionStatus
+  actorId         String?
+  automationRunId String?
+  correlationId   String                @unique
+  model           String?
+  summary         String                @db.Text
+  conclusions     Json?
+  citations       Json?
+  toolCalls       Json?
+  outcomes        Json?
+  actor           AdminUser?            @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  automationRun   CooAutomationRun?     @relation(fields: [automationRunId], references: [id], onDelete: SetNull)
+
+  @@index([channel, createdAt])
+  @@index([actorId, createdAt])
+  @@index([automationRunId, createdAt])
 }
 
 model MarketingCampaign {
@@ -1018,10 +1535,12 @@ model MarketingWeeklyMetric {
   discoveryCalls         Int                        @default(0)
   opportunities          Int                        @default(0)
   wonRevenue             Decimal                    @default(0) @db.Decimal(14, 2)
+  currency               AdminCurrency              @default(USD)
   notes                  String?                    @db.Text
   campaign               MarketingCampaign?         @relation(fields: [campaignId], references: [id], onDelete: SetNull)
 
   @@index([weekStarting, channel])
+  @@index([weekStarting, currency])
   @@index([campaignId, weekStarting])
 }
 

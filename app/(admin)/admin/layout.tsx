@@ -6,8 +6,8 @@ import { requireAdminSession } from "@/lib/admin/auth";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Opportunity System",
-  description: "Restricted Trexiti commercial operations system.",
+  title: "Trexiti Operations Centre",
+  description: "Restricted founder command centre for Trexiti operations.",
   robots: { index: false, follow: false, nocache: true },
 };
 

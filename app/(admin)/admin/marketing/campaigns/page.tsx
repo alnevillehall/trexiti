@@ -117,7 +117,7 @@ export default async function MarketingCampaignsPage({ searchParams }: { searchP
             <details className={adminStyles.formPanel} key={campaign.id}>
               <summary>Edit · {campaign.name}</summary>
               <CampaignForm campaign={campaign} />
-              <form action={archiveMarketingCampaignAction} className={styles.actionForm}><input name="id" type="hidden" value={campaign.id} /><button className={adminStyles.dangerButton} type="submit">Archive campaign</button></form>
+              <form action={archiveMarketingCampaignAction} className={styles.actionForm}><input name="id" type="hidden" value={campaign.id} /><button className={adminStyles.dangerButton} type="submit">Request archive</button></form>
             </details>
           ))}
         </div>

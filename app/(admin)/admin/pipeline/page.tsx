@@ -1,22 +1,24 @@
 import Link from "next/link";
 
 import { moveOpportunityAction } from "@/app/(admin)/admin/actions";
-import { AdminPageHeader, EmptyAdminState } from "@/components/admin/admin-ui";
+import { AdminPageHeader, EmptyAdminState, Notice } from "@/components/admin/admin-ui";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 import styles from "@/components/admin/admin.module.css";
 import {
-  formatAdminCurrency,
   opportunityHeatLabel,
   opportunityStageLabels,
   opportunityStages,
 } from "@/lib/admin/crm";
 import { getAdminPipeline } from "@/lib/admin/queries";
 
-const quickMoveStages = opportunityStages.filter(
-  (stage) => !["WON", "LOST"].includes(stage),
-);
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-export default async function AdminPipelinePage() {
-  const columns = await getAdminPipeline();
+export default async function AdminPipelinePage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const [columns, query] = await Promise.all([getAdminPipeline(), searchParams]);
 
   return (
     <>
@@ -25,6 +27,7 @@ export default async function AdminPipelinePage() {
         title="Pipeline board"
         description="A stage-based operating view for moving opportunities deliberately—from research and contact through decision, win, or loss."
       />
+      {query.approvalRequested ? <Notice tone="success">Founder approval requested. Terminal-stage changes remain pending until guarded execution succeeds.</Notice> : null}
       <div className={styles.kanban} aria-label="Opportunity pipeline">
         {columns.map((column) => (
           <section className={styles.kanbanColumn} key={column.stage} aria-labelledby={`stage-${column.stage}`}>
@@ -40,7 +43,7 @@ export default async function AdminPipelinePage() {
                     <Link href={`/admin/leads/${opportunity.id}`}>{opportunity.company.name}</Link>
                     <p>{opportunity.title}</p>
                     <div className={styles.kanbanCardMeta}>
-                      <span>{formatAdminCurrency(Number(opportunity.estimatedValue))}</span>
+                      <span>{formatMoney(Number(opportunity.estimatedValue), opportunity.currency)}</span>
                       <span>{score ? `${opportunityHeatLabel(score)} · ${score}/25` : `${opportunity.probability}%`}</span>
                     </div>
                     <form className={styles.kanbanMove} action={moveOpportunityAction}>
@@ -48,10 +51,13 @@ export default async function AdminPipelinePage() {
                       <input type="hidden" name="returnTo" value="/admin/pipeline" />
                       <label className="sr-only" htmlFor={`move-${opportunity.id}`}>Move {opportunity.company.name}</label>
                       <select id={`move-${opportunity.id}`} name="stage" defaultValue={opportunity.stage}>
-                        {opportunity.stage === "WON" || opportunity.stage === "LOST" ? (
-                          <option value={opportunity.stage}>{opportunityStageLabels[opportunity.stage]}</option>
-                        ) : null}
-                        {quickMoveStages.map((stage) => <option key={stage} value={stage}>{opportunityStageLabels[stage]}</option>)}
+                        {opportunityStages
+                          .filter(
+                            (stage) =>
+                              stage === opportunity.stage ||
+                              !["WON", "LOST"].includes(stage),
+                          )
+                          .map((stage) => <option key={stage} value={stage}>{opportunityStageLabels[stage]}</option>)}
                       </select>
                       <button type="submit">Move</button>
                     </form>

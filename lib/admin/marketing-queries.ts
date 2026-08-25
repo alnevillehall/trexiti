@@ -102,7 +102,8 @@ export async function getMarketingDashboard() {
       include: { _count: { select: { content: true, outboundActivities: true } } },
     }),
     prisma.projectLead.count({ where: { source: "systems_review_page" } }),
-    prisma.marketingWeeklyMetric.aggregate({
+    prisma.marketingWeeklyMetric.groupBy({
+      by: ["currency"],
       _sum: {
         websiteClicks: true,
         qualifiedConversations: true,
@@ -152,7 +153,7 @@ export async function getMarketingDashboard() {
         utmMedium: true,
         landingPage: true,
         opportunity: {
-          select: { stage: true, estimatedValue: true },
+          select: { stage: true, estimatedValue: true, currency: true },
         },
       },
     }),
@@ -182,7 +183,7 @@ export async function getMarketingDashboard() {
     qualifiedLeads: number;
     discoveryConversations: number;
     opportunities: number;
-    wonRevenue: number;
+    wonRevenue: { JMD: number; USD: number };
   };
   const sourceFunnelMap = new Map<string, SourceFunnel>();
   const qualifiedLandingPages = new Map<string, number>();
@@ -197,7 +198,7 @@ export async function getMarketingDashboard() {
       qualifiedLeads: 0,
       discoveryConversations: 0,
       opportunities: 0,
-      wonRevenue: 0,
+      wonRevenue: { JMD: 0, USD: 0 },
     };
     const opportunityStage = lead.opportunity?.stage;
     const isQualified =
@@ -215,7 +216,8 @@ export async function getMarketingDashboard() {
     if (reachedDiscovery) row.discoveryConversations += 1;
     if (lead.opportunity) row.opportunities += 1;
     if (opportunityStage === "WON") {
-      row.wonRevenue += Number(lead.opportunity?.estimatedValue ?? 0);
+      const currency = lead.opportunity?.currency ?? "USD";
+      row.wonRevenue[currency] += Number(lead.opportunity?.estimatedValue ?? 0);
     }
     sourceFunnelMap.set(sourceKey, row);
   }
@@ -238,13 +240,29 @@ export async function getMarketingDashboard() {
     scheduledCount,
     activeCampaigns,
     systemsReviewConversions,
-    manualMetricTotals: {
-      websiteClicks: metricTotals._sum.websiteClicks ?? 0,
-      qualifiedConversations: metricTotals._sum.qualifiedConversations ?? 0,
-      discoveryCalls: metricTotals._sum.discoveryCalls ?? 0,
-      opportunities: metricTotals._sum.opportunities ?? 0,
-      wonRevenue: Number(metricTotals._sum.wonRevenue ?? 0),
-    },
+    manualMetricTotals: metricTotals.reduce(
+      (totals, metric) => ({
+        websiteClicks: totals.websiteClicks + (metric._sum.websiteClicks ?? 0),
+        qualifiedConversations:
+          totals.qualifiedConversations +
+          (metric._sum.qualifiedConversations ?? 0),
+        discoveryCalls:
+          totals.discoveryCalls + (metric._sum.discoveryCalls ?? 0),
+        opportunities:
+          totals.opportunities + (metric._sum.opportunities ?? 0),
+        wonRevenue: {
+          ...totals.wonRevenue,
+          [metric.currency]: Number(metric._sum.wonRevenue ?? 0),
+        },
+      }),
+      {
+        websiteClicks: 0,
+        qualifiedConversations: 0,
+        discoveryCalls: 0,
+        opportunities: 0,
+        wonRevenue: { JMD: 0, USD: 0 },
+      },
+    ),
     outboundActivity,
     profileTasks,
     assetTasks,

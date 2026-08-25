@@ -156,6 +156,7 @@ export const marketingMetricSchema = z.object({
   qualifiedConversations: metricCount,
   discoveryCalls: metricCount,
   opportunities: metricCount,
+  currency: z.enum(["JMD", "USD"]),
   wonRevenue: z.coerce.number().min(0).max(1_000_000_000),
   notes: optionalText(10_000),
 });

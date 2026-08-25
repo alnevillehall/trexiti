@@ -1,265 +1,187 @@
 import Link from "next/link";
 
+import { OperationsControls } from "@/components/admin/operations-controls";
 import {
-  markMessageActionedAction,
-  updateDailyTargetsAction,
-} from "@/app/(admin)/admin/actions";
-import { AdminPageHeader, EmptyAdminState, Notice, PriorityBadge, StageBadge } from "@/components/admin/admin-ui";
+  EmptyOperationsState,
+  FreshnessStatus,
+  OperationsBadge,
+  OperationsPageIntro,
+  QueueItem,
+  formatMoney,
+  formatOperationsDate,
+  readableStatus,
+  statusTone,
+} from "@/components/admin/coo-admin-ui";
 import styles from "@/components/admin/admin.module.css";
-import {
-  formatAdminCurrency,
-  formatAdminDate,
-  opportunityStageLabels,
-} from "@/lib/admin/crm";
-import { getAdminDashboard } from "@/lib/admin/queries";
+import { requireFounderSession } from "@/lib/admin/auth";
+import { getFollowUpsDue, getOperationsDashboard, getUpcomingDeadlines } from "@/lib/coo/data";
+import type { QueueItemView } from "@/lib/coo/domain/types";
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+function queue(items: QueueItemView[], emptyTitle: string, emptyDescription: string) {
+  if (!items.length) {
+    return <EmptyOperationsState title={emptyTitle} description={emptyDescription} />;
+  }
 
-export default async function AdminDashboardPage({ searchParams }: { searchParams: SearchParams }) {
-  const [query, dashboard] = await Promise.all([
-    searchParams,
-    getAdminDashboard(),
+  return (
+    <ul className={styles.queueList}>
+      {items.slice(0, 5).map((item) => (
+        <QueueItem
+          key={item.id}
+          href={item.record.href}
+          title={item.title}
+          description={item.detail}
+          meta={item.dueAt ? `Due ${formatOperationsDate(item.dueAt)}` : item.record.label}
+          badge={readableStatus(item.status)}
+          tone={item.severity === "CRITICAL" || item.severity === "HIGH" ? "danger" : item.severity === "ATTENTION" ? "warning" : "neutral"}
+        />
+      ))}
+    </ul>
+  );
+}
+
+function automationSummary(output: unknown) {
+  if (!output || typeof output !== "object" || Array.isArray(output)) return null;
+  const values = output as Record<string, unknown>;
+  if (typeof values.accepted === "number" && typeof values.rejected === "number") {
+    return `${values.accepted} accepted · ${values.rejected} rejected`;
+  }
+  if (typeof values.processed === "number") return `${values.processed} safe actions processed`;
+  if (typeof values.priorities === "number") return `${values.priorities} founder priorities stored`;
+  return null;
+}
+
+export default async function AdminOperationsPage() {
+  await requireFounderSession();
+  const now = new Date();
+  const [dashboard, upcoming, followUps] = await Promise.all([
+    getOperationsDashboard({ now }),
+    getUpcomingDeadlines({ now, days: 14 }),
+    getFollowUpsDue(now),
   ]);
-  const {
-    metrics,
-    stageGroups,
-    dueTasks,
-    recentOpportunities,
-    dailySales,
-    dailyTarget,
-    repliesNeedingAction,
-  } = dashboard;
-  const maxStageCount = Math.max(...stageGroups.map((item) => item.count), 1);
-
-  const metricItems = [
-    ["New leads", metrics.newLeads.toLocaleString()],
-    ["Qualified leads", metrics.qualifiedLeads.toLocaleString()],
-    ["Discovery calls", metrics.discoveryCalls.toLocaleString()],
-    ["Proposals sent", metrics.proposalsSent.toLocaleString()],
-    ["Deals won", metrics.dealsWon.toLocaleString()],
-    ["Pipeline value", formatAdminCurrency(metrics.pipelineValue)],
-    ["Average project value", formatAdminCurrency(metrics.averageProjectValue)],
-    ["Conversion rate", `${metrics.conversionRate.toFixed(1)}%`],
-    ["Expected revenue", formatAdminCurrency(metrics.expectedRevenue)],
-  ] as const;
-  const dailyMetricItems = [
-    ["Today’s follow-ups", dailySales.todaysFollowUps.toLocaleString()],
-    ["New target accounts", dailySales.newTargetAccounts.toLocaleString()],
-    ["Hot opportunities", dailySales.hotOpportunities.toLocaleString()],
-    ["Replies needing action", dailySales.repliesNeedingAction.toLocaleString()],
-    ["Upcoming meetings", dailySales.upcomingMeetings.toLocaleString()],
-    ["Proposals awaiting decision", dailySales.proposalsAwaitingDecision.toLocaleString()],
-    ["Pipeline value", formatAdminCurrency(dailySales.pipelineValue)],
-  ] as const;
-  const targetItems = [
-    {
-      label: "Research",
-      completed: dailyTarget.researchCompleted,
-      target: dailyTarget.researchTarget,
-    },
-    {
-      label: "New personalized outreach",
-      completed: dailyTarget.personalizedOutreachCompleted,
-      target: dailyTarget.personalizedOutreachTarget,
-    },
-    {
-      label: "Follow-ups",
-      completed: dailyTarget.followUpsCompleted,
-      target: dailyTarget.followUpTarget,
-    },
-  ] as const;
+  const brief = dashboard.brief;
+  const priorities = brief?.priorities.slice(0, 5) ?? [];
+  const freshnessUnknown = dashboard.freshness.state === "UNKNOWN";
+  const degraded = brief?.status === "DEGRADED" || brief?.status === "FAILED" || freshnessUnknown;
 
   return (
     <>
-      <AdminPageHeader
-        eyebrow="Daily sales command centre"
-        title="Quality outreach, worked deliberately."
-        description="Today’s researched accounts, personalized outreach, follow-ups, replies, meetings, proposals, and pipeline—without bulk-send mechanics."
-        action={{ href: "/admin/accounts#new-prospect", label: "Research target account" }}
+      <OperationsPageIntro
+        eyebrow="Trexiti COO · Founder command"
+        title="Operate from the exceptions."
+        description="A shared operating picture for decisions, safe execution, delivery risk, cash, and the work Trexiti completed on your behalf. Every signal links back to its source record."
+        meta={
+          <FreshnessStatus
+            asOf={dashboard.freshness.asOf ?? dashboard.asOf}
+            stale={dashboard.freshness.state === "STALE"}
+            degraded={degraded}
+            detail={`${dashboard.freshness.thresholdMinutes} minute freshness policy`}
+          />
+        }
       />
 
-      {query.targetsSaved ? <Notice tone="success">Daily targets updated.</Notice> : null}
-
-      <dl className={styles.metricsGrid}>
-        {dailyMetricItems.map(([label, number]) => (
-          <div className={styles.metric} key={label}>
-            <dt>{label}</dt>
-            <dd>{number}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className={styles.dashboardGrid}>
-        <section className={styles.panel} aria-labelledby="daily-target-title">
-          <div className={styles.panelHeader}>
-            <h2 id="daily-target-title">Daily target</h2>
-            <span>Configured per operator</span>
-          </div>
-          <div className={styles.chart}>
-            {targetItems.map((item) => (
-              <div className={styles.chartRow} key={item.label}>
-                <span>{item.label}</span>
-                <div className={styles.chartTrack} aria-hidden="true">
-                  <div
-                    className={styles.chartBar}
-                    style={{ width: `${Math.min(100, (item.completed / item.target) * 100)}%` }}
-                  />
-                </div>
-                <strong>{item.completed}/{item.target}</strong>
-              </div>
-            ))}
-          </div>
-          <details className={styles.inlineDetails}>
-            <summary>Configure targets</summary>
-            <form action={updateDailyTargetsAction} className={styles.compactForm}>
-              <label>Research<input name="researchTarget" type="number" min={1} max={100} defaultValue={dailyTarget.researchTarget} /></label>
-              <label>New personalized outreach<input name="personalizedOutreachTarget" type="number" min={1} max={100} defaultValue={dailyTarget.personalizedOutreachTarget} /></label>
-              <label>Follow-ups<input name="followUpTarget" type="number" min={1} max={100} defaultValue={dailyTarget.followUpTarget} /></label>
-              <button className={styles.secondaryButton} type="submit">Save targets</button>
-            </form>
-          </details>
-        </section>
-
-        <section className={styles.panel} aria-labelledby="replies-title">
-          <div className={styles.panelHeader}>
-            <h2 id="replies-title">Replies needing action</h2>
-            <span>{repliesNeedingAction.length}</span>
-          </div>
-          {repliesNeedingAction.length ? (
-            <div className={styles.tableWrap}>
-              <table className={styles.table}>
-                <thead><tr><th>Account</th><th>Reply</th><th>Action</th></tr></thead>
-                <tbody>{repliesNeedingAction.map((message) => (
-                  <tr key={message.id}>
-                    <td><Link href={`/admin/leads/${message.opportunity.id}`}>{message.opportunity.company.name}</Link><span className={styles.subtle}>{message.channel}</span></td>
-                    <td>{message.response ?? message.body}<span className={styles.subtle}>{message.nextAction ?? "Review and decide next action"}</span></td>
-                    <td><form action={markMessageActionedAction}><input type="hidden" name="messageId" value={message.id} /><input type="hidden" name="returnTo" value="/admin" /><button className={styles.textButton} type="submit">Mark actioned</button></form></td>
-                  </tr>
-                ))}</tbody>
-              </table>
-            </div>
-          ) : <EmptyAdminState>No replies are waiting for action.</EmptyAdminState>}
-        </section>
-      </div>
-
-      <div className={styles.panelHeader} style={{ marginTop: "1rem", border: "1px solid var(--admin-line)" }}>
-        <h2>Commercial totals</h2><span>All active opportunities</span>
-      </div>
-
-      <dl className={styles.metricsGrid}>
-        {metricItems.map(([label, number]) => (
-          <div className={styles.metric} key={label}>
-            <dt>{label}</dt>
-            <dd>{number}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className={styles.dashboardGrid}>
-        <section className={styles.panel} aria-labelledby="pipeline-health-title">
-          <div className={styles.panelHeader}>
-            <h2 id="pipeline-health-title">Pipeline distribution</h2>
-            <Link href="/admin/pipeline">Open board</Link>
-          </div>
-          <div className={styles.chart}>
-            {stageGroups.map((item) => (
-              <div className={styles.chartRow} key={item.stage}>
-                <span>{opportunityStageLabels[item.stage]}</span>
-                <div className={styles.chartTrack} aria-hidden="true">
-                  <div
-                    className={styles.chartBar}
-                    style={{ width: `${(item.count / maxStageCount) * 100}%` }}
-                  />
-                </div>
-                <strong>{item.count}</strong>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.panel} aria-labelledby="follow-ups-title">
-          <div className={styles.panelHeader}>
-            <h2 id="follow-ups-title">Follow-ups due</h2>
-            <Link href="/admin/tasks">All tasks</Link>
-          </div>
-          {dueTasks.length ? (
-            <div className={styles.tableWrap}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Task</th>
-                    <th>Due</th>
-                    <th>Priority</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dueTasks.map((task) => (
-                    <tr key={task.id}>
-                      <td>
-                        {task.opportunity ? (
-                          <Link href={`/admin/leads/${task.opportunity.id}`}>
-                            {task.title}
-                          </Link>
-                        ) : (
-                          task.title
-                        )}
-                        <span className={styles.subtle}>
-                          {task.company?.name ?? task.opportunity?.reference ?? "Internal"}
-                        </span>
-                      </td>
-                      <td>{formatAdminDate(task.dueAt)}</td>
-                      <td><PriorityBadge priority={task.priority} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <EmptyAdminState>No overdue or due-today follow-ups.</EmptyAdminState>
-          )}
-        </section>
-      </div>
-
-      <section className={styles.panel} aria-labelledby="recent-opportunities-title" style={{ marginTop: "1rem" }}>
-        <div className={styles.panelHeader}>
-          <h2 id="recent-opportunities-title">Recently active opportunities</h2>
-          <Link href="/admin/leads">View register</Link>
+      <section className={styles.briefStrip} aria-labelledby="daily-brief-title">
+        <div className={styles.briefLead}>
+          <h2 id="daily-brief-title">{brief?.headline ?? "The first stored COO brief is waiting to run."}</h2>
+          <p>{brief?.summary ?? "Live operational metrics are available below. The 07:00 Jamaica workflow will create a durable, evidence-backed brief here and expose the identical version to the COO conversation."}</p>
+          {brief?.degradedReason ? <p role="alert">Partial data: {brief.degradedReason}</p> : null}
         </div>
-        {recentOpportunities.length ? (
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Reference</th>
-                  <th>Company / opportunity</th>
-                  <th>Stage</th>
-                  <th>Score</th>
-                  <th>Value</th>
-                  <th>Owner</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentOpportunities.map((opportunity) => (
-                  <tr key={opportunity.id}>
-                    <td>{opportunity.reference}</td>
-                    <td>
-                      <Link href={`/admin/leads/${opportunity.id}`}>
-                        {opportunity.company.name}
-                      </Link>
-                      <span className={styles.subtle}>{opportunity.title}</span>
-                    </td>
-                    <td><StageBadge stage={opportunity.stage} /></td>
-                    <td>{opportunity.research?.totalScore ?? "—"}/25</td>
-                    <td>{formatAdminCurrency(Number(opportunity.estimatedValue))}</td>
-                    <td>{opportunity.assignedOwner?.name ?? "Unassigned"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <EmptyAdminState>Add the first qualified account to start the pipeline.</EmptyAdminState>
-        )}
+        <div className={styles.briefMeta}>
+          <OperationsBadge tone={brief?.status === "READY" ? "success" : "warning"}>{brief ? readableStatus(brief.status) : "Awaiting first run"}</OperationsBadge>
+          <span>{brief ? `Business date · ${formatOperationsDate(brief.businessDate, false)}` : "Next scheduled brief · 07:00 Jamaica"}</span>
+          <span>Policy v{brief?.policyVersion ?? dashboard.policy.version} · {dashboard.policy.name}</span>
+          <span>Automation · {readableStatus(dashboard.policy.automationMode)} effective</span>
+          {brief?.model ? <span>Model · {brief.model}</span> : null}
+        </div>
+      </section>
+
+      <dl className={styles.operationsKpiGrid} aria-label="Executive metrics">
+        <div className={styles.operationsKpi}>
+          <dt><Link href="/admin/pipeline">Pipeline</Link></dt>
+          <dd><Link href="/admin/pipeline">{formatMoney(dashboard.metrics.pipeline.JMD, "JMD")}</Link><Link href="/admin/pipeline">{formatMoney(dashboard.metrics.pipeline.USD, "USD")}</Link><small>No currency conversion</small></dd>
+        </div>
+        <div className={styles.operationsKpi}>
+          <dt><Link href="/admin/pipeline">Weighted pipeline</Link></dt>
+          <dd><Link href="/admin/pipeline">{formatMoney(dashboard.metrics.weightedPipeline.JMD, "JMD")}</Link><Link href="/admin/pipeline">{formatMoney(dashboard.metrics.weightedPipeline.USD, "USD")}</Link><small>Probability weighted</small></dd>
+        </div>
+        <div className={styles.operationsKpi}>
+          <dt><Link href="/admin/finance">Outstanding</Link></dt>
+          <dd><Link href="/admin/finance">{formatMoney(dashboard.metrics.outstanding.JMD, "JMD")}</Link><Link href="/admin/finance">{formatMoney(dashboard.metrics.outstanding.USD, "USD")}</Link><small>Overdue: {formatMoney(dashboard.metrics.overdue.JMD, "JMD")} · {formatMoney(dashboard.metrics.overdue.USD, "USD")}</small></dd>
+        </div>
+        <div className={styles.operationsKpi}>
+          <dt><Link href="/admin/finance">Expected cash · 30 days</Link></dt>
+          <dd><Link href="/admin/finance">{formatMoney(dashboard.metrics.expectedCash.JMD, "JMD")}</Link><Link href="/admin/finance">{formatMoney(dashboard.metrics.expectedCash.USD, "USD")}</Link><small>Issued, non-overdue balances due in window</small></dd>
+        </div>
+        <div className={styles.operationsKpi}>
+          <dt><Link href="/admin/finance">Invoiced revenue · month</Link></dt>
+          <dd><Link href="/admin/finance">{formatMoney(dashboard.metrics.invoicedRevenue.JMD, "JMD")}</Link><Link href="/admin/finance">{formatMoney(dashboard.metrics.invoicedRevenue.USD, "USD")}</Link><small>Issued invoices · Jamaica calendar month</small></dd>
+        </div>
+        <div className={styles.operationsKpi}>
+          <dt><Link href="/admin/finance">Received this month</Link></dt>
+          <dd><Link href="/admin/finance">{formatMoney(dashboard.metrics.received.JMD, "JMD")}</Link><Link href="/admin/finance">{formatMoney(dashboard.metrics.received.USD, "USD")}</Link><small>Cleared receipts · Jamaica calendar month</small></dd>
+        </div>
+        <div className={styles.operationsKpi}>
+          <dt>Operational exceptions</dt>
+          <dd><Link href="/admin/approvals">{dashboard.metrics.pendingApprovals} decisions</Link><Link href="/admin/projects">{dashboard.metrics.atRiskProjects} at-risk projects</Link><small><Link href="/admin/tasks">{dashboard.metrics.followUpsDue} follow-ups due</Link> · <Link href="/admin/clients">{dashboard.metrics.activeClients} active clients</Link></small></dd>
+        </div>
+      </dl>
+
+      <section className={styles.operationsSection} aria-labelledby="founder-priorities-title">
+        <div className={styles.operationsSectionHeader}>
+          <div><h2 id="founder-priorities-title">Founder priorities</h2><p>Maximum five, ranked from deterministic exceptions</p></div>
+          <span>{priorities.length} of {Math.min(dashboard.policy.maxFounderPriorities, 5)}</span>
+        </div>
+        {priorities.length ? (
+          <ol className={styles.priorityList}>
+            {priorities.map((item) => (
+              <li className={styles.priorityItem} key={item.id}>
+                <span className={styles.priorityRank}>{item.rank}</span>
+                <div>
+                  {item.record ? <Link href={item.record.href}>{item.title}</Link> : <strong>{item.title}</strong>}
+                  <p>{item.rationale}</p>
+                  {item.nextAction ? <span>Next · {item.nextAction}</span> : null}
+                  {item.currency && item.amount !== null ? <span>Impact · {formatMoney(item.amount, item.currency)}</span> : null}
+                </div>
+                <OperationsBadge tone={item.severity === "CRITICAL" || item.severity === "HIGH" ? "danger" : item.severity === "ATTENTION" ? "warning" : "info"}>{readableStatus(item.severity)}</OperationsBadge>
+              </li>
+            ))}
+          </ol>
+        ) : <EmptyOperationsState title="No founder exception is waiting" description="Trexiti places only decisions and high-impact exceptions here after a brief run." />}
+      </section>
+
+      <div className={styles.queueGrid}>
+        <section className={styles.queueColumn} data-queue="decide" aria-labelledby="decide-queue-title">
+          <div className={styles.queueColumnHeader}><div><h2 id="decide-queue-title">Al must decide</h2><p>Sensitive or judgment-heavy</p></div><span className={styles.queueCount}>{dashboard.queues.founderDecisions.length}</span></div>
+          {queue(dashboard.queues.founderDecisions, "Decision queue clear", "Approval requests and high-impact decisions will appear here.")}
+        </section>
+        <section className={styles.queueColumn} data-queue="execute" aria-labelledby="execute-queue-title">
+          <div className={styles.queueColumnHeader}><div><h2 id="execute-queue-title">AI can execute</h2><p>Allow-listed internal work</p></div><span className={styles.queueCount}>{dashboard.queues.aiCanExecute.length}</span></div>
+          {queue(dashboard.queues.aiCanExecute, "No safe work queued", "Run Operations will show what Trexiti can execute without approval.")}
+        </section>
+        <section className={styles.queueColumn} data-queue="completed" aria-labelledby="completed-queue-title">
+          <div className={styles.queueColumnHeader}><div><h2 id="completed-queue-title">Completed</h2><p>Audited automation outcomes</p></div><span className={styles.queueCount}>{dashboard.queues.completed.length}</span></div>
+          {queue(dashboard.queues.completed, "No automation has completed", "Successful actions will appear with a run and audit link.")}
+        </section>
+      </div>
+
+      <OperationsControls />
+
+      <div className={styles.operationsColumnsWide}>
+        <section className={styles.operationsSection} aria-labelledby="risk-panel-title">
+          <div className={styles.operationsSectionHeader}><div><h2 id="risk-panel-title">Delivery and client risk</h2><p>Rule-based signals, then AI rationale</p></div><Link href="/admin/projects">Open projects</Link></div>
+          {dashboard.projects.length ? <ul className={styles.compactRecordList}>{dashboard.projects.slice(0, 6).map((project) => <QueueItem key={project.id} href={project.record.href} title={project.title} description={project.riskReasons.length ? project.riskReasons.map(readableStatus).join(" · ") : `${project.progressPercent}% complete`} meta={`${project.companyName} · ${project.targetEndAt ? `Target ${formatOperationsDate(project.targetEndAt, false)}` : "No target date"}`} badge={readableStatus(project.health)} tone={project.health === "AT_RISK" ? "danger" : project.health === "ATTENTION" ? "warning" : "success"} />)}</ul> : <EmptyOperationsState title="No delivery records yet" description="Add active clients, projects, milestones, and blockers to activate risk monitoring." />}
+        </section>
+        <section className={styles.operationsSection} aria-labelledby="run-panel-title">
+          <div className={styles.operationsSectionHeader}><div><h2 id="run-panel-title">Automation health</h2><p>Prospecting · brief · operations · approvals</p></div><Link href="/admin/automations">Open runs</Link></div>
+          {dashboard.automationRuns.length ? <ul className={styles.compactRecordList}>{dashboard.automationRuns.slice(0, 6).map((run) => <QueueItem key={run.id} href={run.record.href} title={readableStatus(run.type)} description={run.error ?? automationSummary(run.outputSummary) ?? `Correlation ${run.correlationId}`} meta={formatOperationsDate(run.completedAt ?? run.startedAt ?? run.createdAt)} badge={readableStatus(run.status)} tone={statusTone(run.status)} />)}</ul> : <EmptyOperationsState title="Waiting for the first workflow" description="Failures, partial runs, duration, steps, and model usage will be visible here." />}
+        </section>
+      </div>
+
+      <section className={styles.operationsSection} aria-labelledby="deadline-panel-title">
+        <div className={styles.operationsSectionHeader}><div><h2 id="deadline-panel-title">Deadlines and follow-ups</h2><p>Overdue follow-up work plus the next 14 days of milestones and tasks</p></div><Link href="/admin/tasks">Open task register</Link></div>
+        {followUps.items.length || upcoming.milestones.length || upcoming.tasks.length ? <ul className={styles.compactRecordList}>
+          {followUps.items.slice(0, 5).map((item) => <QueueItem key={`follow-up-${item.id}`} href={item.href} title={item.title} description={item.companyName ?? "Internal follow-up"} meta={`Due ${formatOperationsDate(item.dueAt)}`} badge="Follow-up due" tone={item.priority === "URGENT" || item.priority === "HIGH" ? "danger" : "warning"} />)}
+          {[...upcoming.milestones.map((item) => ({ ...item, kind: "Milestone", context: item.projectTitle })), ...upcoming.tasks.map((item) => ({ ...item, kind: "Task", context: "Internal work" }))].sort((left, right) => left.dueAt.localeCompare(right.dueAt)).slice(0, 7).map((item) => <QueueItem key={`${item.kind}-${item.id}`} href={item.href} title={item.title} description={item.context} meta={`Due ${formatOperationsDate(item.dueAt)}`} badge={item.kind} tone="neutral" />)}
+        </ul> : <EmptyOperationsState title="No immediate deadline pressure" description="Upcoming milestones, tasks, and overdue follow-ups will appear here with source links." />}
       </section>
     </>
   );

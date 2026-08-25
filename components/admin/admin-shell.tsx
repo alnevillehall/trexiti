@@ -22,7 +22,7 @@ export function AdminShell({ children, session }: AdminShellProps) {
             <small>Operating system</small>
           </span>
         </div>
-        <AdminNavigation />
+        <AdminNavigation role={session.role} />
         <div className={styles.identityBlock}>
           <span className={styles.avatar} aria-hidden="true">
             {session.name
@@ -42,11 +42,11 @@ export function AdminShell({ children, session }: AdminShellProps) {
         <header className={styles.topbar}>
           <div>
             <span className={styles.topbarLabel}>Internal · Restricted</span>
-            <strong>Commercial &amp; marketing operations</strong>
+            <strong>{session.role === "OWNER" ? "Founder operations centre" : "Trexiti CRM"}</strong>
           </div>
           <div className={styles.topbarMeta}>
-            <span>USD</span>
-            <span>Live pipeline</span>
+            <span>JMD · USD</span>
+            <span>Trexiti is the system of record</span>
           </div>
         </header>
         <main id="admin-content" tabIndex={-1} className={styles.main}>

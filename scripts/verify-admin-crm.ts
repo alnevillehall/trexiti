@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import {
   calculateOpportunityScore,
@@ -8,6 +9,10 @@ import {
   opportunityHeatLabel,
 } from "../lib/admin/crm";
 import { hasAdminPermission } from "../lib/admin/permissions";
+import {
+  CooRateLimitError,
+  SlidingWindowRateLimiter,
+} from "../lib/coo/rate-limit";
 import {
   archiveOpportunitySchema,
   createOpportunitySchema,
@@ -36,6 +41,7 @@ const createPayload = {
   identifiedProblem: "Customer and job information is fragmented across several tools.",
   opportunity: "Create one operational system around the company’s real workflow.",
   estimatedProjectValue: "25000",
+  currency: "USD",
   budget: "$10,000–$25,000",
   timeline: "3–6 months",
   source: "Manual research",
@@ -111,6 +117,7 @@ const updateResult = updateOpportunitySchema.safeParse({
   stage: "PROPOSAL",
   probability: "65",
   estimatedProjectValue: "30000",
+  currency: "USD",
   budget: "$25,000–$50,000",
   timeline: "3–6 months",
   outcomeReason: "",
@@ -125,6 +132,7 @@ const closeWithoutReason = updateOpportunitySchema.safeParse({
   stage: "LOST",
   probability: "0",
   estimatedProjectValue: "30000",
+  currency: "USD",
   budget: "",
   timeline: "",
   outcomeReason: "",
@@ -143,6 +151,7 @@ const closeWithReason = updateOpportunitySchema.safeParse({
   stage: "WON",
   probability: "100",
   estimatedProjectValue: "30000",
+  currency: "USD",
   budget: "",
   timeline: "",
   outcomeReason: "Scope and commercial terms approved by the decision maker.",
@@ -242,9 +251,125 @@ assert.equal(
 );
 
 assert.equal(hasAdminPermission("OWNER", "opportunity:archive"), true);
+assert.equal(hasAdminPermission("OWNER", "operations:view"), true);
+assert.equal(hasAdminPermission("OWNER", "operations:write"), true);
+assert.equal(hasAdminPermission("OWNER", "operations:approve"), true);
+assert.equal(hasAdminPermission("OWNER", "operations:policy"), true);
 assert.equal(hasAdminPermission("ADMIN", "company:manage"), true);
+assert.equal(hasAdminPermission("ADMIN", "operations:view"), false);
+assert.equal(hasAdminPermission("ADMIN", "operations:write"), false);
+assert.equal(hasAdminPermission("ADMIN", "operations:approve"), false);
+assert.equal(hasAdminPermission("ADMIN", "operations:policy"), false);
 assert.equal(hasAdminPermission("SALES", "opportunity:update"), true);
 assert.equal(hasAdminPermission("SALES", "opportunity:archive"), false);
 assert.equal(hasAdminPermission("SALES", "company:manage"), false);
+assert.equal(hasAdminPermission("SALES", "operations:view"), false);
+
+const operationsPages = [
+  "../app/(admin)/admin/page.tsx",
+  "../app/(admin)/admin/clients/page.tsx",
+  "../app/(admin)/admin/clients/[id]/page.tsx",
+  "../app/(admin)/admin/projects/page.tsx",
+  "../app/(admin)/admin/projects/[id]/page.tsx",
+  "../app/(admin)/admin/finance/page.tsx",
+  "../app/(admin)/admin/finance/invoices/[id]/page.tsx",
+  "../app/(admin)/admin/approvals/page.tsx",
+  "../app/(admin)/admin/approvals/[id]/page.tsx",
+  "../app/(admin)/admin/automations/page.tsx",
+  "../app/(admin)/admin/automations/[id]/page.tsx",
+  "../app/(admin)/admin/operations-policy/page.tsx",
+];
+for (const page of operationsPages) {
+  assert.match(
+    readFileSync(new URL(page, import.meta.url), "utf8"),
+    /await requireFounderSession\(/,
+    `${page} must enforce the founder boundary before loading operations data`,
+  );
+}
+const adminLayoutSource = readFileSync(
+  new URL("../app/(admin)/admin/layout.tsx", import.meta.url),
+  "utf8",
+);
+assert.match(adminLayoutSource, /await requireAdminSession\(\)/);
+assert.doesNotMatch(adminLayoutSource, /requireFounderSession/);
+for (const legacyPage of [
+  "../app/(admin)/admin/leads/page.tsx",
+  "../app/(admin)/admin/accounts/page.tsx",
+  "../app/(admin)/admin/companies/page.tsx",
+  "../app/(admin)/admin/pipeline/page.tsx",
+  "../app/(admin)/admin/tasks/page.tsx",
+  "../app/(admin)/admin/marketing/page.tsx",
+]) {
+  assert.doesNotMatch(
+    readFileSync(new URL(legacyPage, import.meta.url), "utf8"),
+    /requireFounderSession/,
+    `${legacyPage} must remain available under the established CRM permissions`,
+  );
+}
+const operationsActionsSource = readFileSync(
+  new URL("../app/(admin)/admin/coo-actions.ts", import.meta.url),
+  "utf8",
+);
+assert.doesNotMatch(operationsActionsSource, /requireAdminSession\(/);
+assert.match(operationsActionsSource, /requireFounderSession\("operations:view"\)/);
+assert.match(operationsActionsSource, /requireFounderSession\("operations:write"\)/);
+assert.match(operationsActionsSource, /requireFounderSession\("operations:approve"\)/);
+const operationsNavigationSource = readFileSync(
+  new URL("../components/admin/admin-navigation.tsx", import.meta.url),
+  "utf8",
+);
+assert.match(operationsNavigationSource, /founderOnly: true/);
+assert.match(operationsNavigationSource, /role === "OWNER"/);
+const mcpAuthSource = readFileSync(
+  new URL("../lib/coo/mcp/auth.ts", import.meta.url),
+  "utf8",
+);
+assert.match(mcpAuthSource, /admin\.role !== "OWNER"/);
+
+const mcpRegistrySource = readFileSync(
+  new URL("../lib/coo/tools/registry.ts", import.meta.url),
+  "utf8",
+);
+assert.match(mcpRegistrySource, /context\.origin === "mcp"/);
+assert.match(mcpRegistrySource, /bucket: "mcp_total"/);
+assert.match(mcpRegistrySource, /"mcp_run_operations"/);
+const askSource = readFileSync(
+  new URL("../lib/coo/ai/ask.ts", import.meta.url),
+  "utf8",
+);
+assert.match(askSource, /actor\.role !== "OWNER"/);
+assert.match(askSource, /bucket: "ask_trexiti"/);
+const operationsPlannerSource = readFileSync(
+  new URL("../lib/coo/ai/operations-planner.ts", import.meta.url),
+  "utf8",
+);
+assert.match(operationsPlannerSource, /actor\.role !== "OWNER"/);
+assert.match(operationsPlannerSource, /bucket: "operations_planning"/);
+
+const limiter = new SlidingWindowRateLimiter();
+const policy = { limit: 2, windowMs: 1_000 };
+assert.deepEqual(limiter.consume("ask_trexiti:founder-1", policy, 0), {
+  remaining: 1,
+  resetAt: 1_000,
+});
+assert.deepEqual(limiter.consume("ask_trexiti:founder-1", policy, 100), {
+  remaining: 0,
+  resetAt: 1_000,
+});
+assert.throws(
+  () => limiter.consume("ask_trexiti:founder-1", policy, 500),
+  (error: unknown) =>
+    error instanceof CooRateLimitError && error.retryAfterSeconds === 1,
+);
+assert.equal(
+  limiter.consume("ask_trexiti:founder-2", policy, 500).remaining,
+  1,
+  "rate limits must be isolated per authenticated actor",
+);
+assert.equal(
+  limiter.consume("ask_trexiti:founder-1", policy, 1_100).remaining,
+  1,
+  "the actor may retry after the complete sliding window",
+);
 
 console.log("Admin CRM CRUD contracts, scoring, permissions, and validation passed.");

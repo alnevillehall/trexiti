@@ -58,7 +58,7 @@ export default async function MarketingUtmPage() {
                       {canManage ? (
                         <form action={deleteMarketingUtmPresetAction}>
                           <input name="id" type="hidden" value={preset.id} />
-                          <button className={adminStyles.textButton} type="submit">Delete</button>
+                          <button className={adminStyles.textButton} type="submit">Request deletion</button>
                         </form>
                       ) : null}
                     </div>

@@ -139,7 +139,7 @@ export default async function AdminMarketingContentPage({ searchParams }: { sear
               <ContentForm campaigns={campaigns} item={item} possibleParents={content} />
               <form action={archiveMarketingContentAction} className={styles.actionForm}>
                 <input name="id" type="hidden" value={item.id} />
-                <button className={adminStyles.dangerButton} type="submit">Archive content</button>
+                <button className={adminStyles.dangerButton} type="submit">Request archive</button>
               </form>
             </details>
           ))}

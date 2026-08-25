@@ -16,6 +16,7 @@ import {
 } from "@/lib/admin/marketing";
 import { getMarketingCampaigns, getMarketingMetrics } from "@/lib/admin/marketing-queries";
 import { hasAdminPermission } from "@/lib/admin/permissions";
+import { formatMoney } from "@/components/admin/coo-admin-ui";
 
 const sources: MarketingMetricEntrySource[] = ["MANUAL", "IMPORTED"];
 type Metric = Awaited<ReturnType<typeof getMarketingMetrics>>[number];
@@ -38,7 +39,8 @@ function MetricForm({ metric, campaigns }: { metric?: Metric; campaigns: Campaig
       <label className={adminStyles.field}>Campaign<select defaultValue={metric?.campaignId ?? ""} name="campaignId"><option value="">No campaign</option>{campaigns.map((campaign) => <option key={campaign.id} value={campaign.id}>{campaign.name}</option>)}</select></label>
       <label className={adminStyles.field}>Entry source<select defaultValue={metric?.source ?? "MANUAL"} name="source">{sources.map((source) => <option key={source} value={source}>{marketingLabel(source)}</option>)}</select></label>
       {countFields.map(([name, label]) => <label className={adminStyles.field} key={name}>{label}<input defaultValue={metric?.[name] ?? 0} min="0" name={name} required type="number" /></label>)}
-      <label className={adminStyles.field}>Won revenue · USD<input defaultValue={Number(metric?.wonRevenue ?? 0)} min="0" name="wonRevenue" required step="0.01" type="number" /></label>
+      <label className={adminStyles.field}>Revenue currency<select defaultValue={metric?.currency ?? "USD"} name="currency"><option value="JMD">JMD</option><option value="USD">USD</option></select></label>
+      <label className={adminStyles.field}>Won revenue<input defaultValue={Number(metric?.wonRevenue ?? 0)} min="0" name="wonRevenue" required step="0.01" type="number" /></label>
       <label className={adminStyles.fieldFull}>Notes / likely cause<textarea defaultValue={metric?.notes ?? ""} name="notes" placeholder="What likely caused the result? What should change next week?" /></label>
       <div className={adminStyles.formActions}><button className={adminStyles.primaryButton} type="submit">{metric ? "Save metrics" : "Add weekly metrics"}</button></div>
     </form>
@@ -56,9 +58,12 @@ export default async function MarketingMetricsPage() {
     qualifiedConversations: sum.qualifiedConversations + metric.qualifiedConversations,
     discoveryCalls: sum.discoveryCalls + metric.discoveryCalls,
     opportunities: sum.opportunities + metric.opportunities,
-    wonRevenue: sum.wonRevenue + Number(metric.wonRevenue),
+    wonRevenue: {
+      ...sum.wonRevenue,
+      [metric.currency]: sum.wonRevenue[metric.currency] + Number(metric.wonRevenue),
+    },
     websiteClicks: sum.websiteClicks + metric.websiteClicks,
-  }), { qualifiedConversations: 0, discoveryCalls: 0, opportunities: 0, wonRevenue: 0, websiteClicks: 0 });
+  }), { qualifiedConversations: 0, discoveryCalls: 0, opportunities: 0, wonRevenue: { JMD: 0, USD: 0 }, websiteClicks: 0 });
 
   return (
     <>
@@ -72,7 +77,7 @@ export default async function MarketingMetricsPage() {
         <div className={styles.commercialMetric}><span>Qualified conversations</span><strong>{totals.qualifiedConversations}</strong></div>
         <div className={styles.commercialMetric}><span>Discovery calls</span><strong>{totals.discoveryCalls}</strong></div>
         <div className={styles.commercialMetric}><span>Opportunities</span><strong>{totals.opportunities}</strong></div>
-        <div className={styles.commercialMetric}><span>Won revenue</span><strong>${totals.wonRevenue.toLocaleString()}</strong></div>
+        <div className={styles.commercialMetric}><span>Won revenue</span><strong>{formatMoney(totals.wonRevenue.JMD, "JMD")}<br />{formatMoney(totals.wonRevenue.USD, "USD")}</strong></div>
         <div className={styles.commercialMetric}><span>Website clicks</span><strong>{totals.websiteClicks}</strong></div>
       </section>
 
@@ -94,7 +99,7 @@ export default async function MarketingMetricsPage() {
                   <td>{metric.qualifiedConversations}</td>
                   <td>{metric.discoveryCalls}</td>
                   <td>{metric.opportunities}</td>
-                  <td>${Number(metric.wonRevenue).toLocaleString()}</td>
+                  <td>{formatMoney(Number(metric.wonRevenue), metric.currency)}</td>
                 </tr>
               ))}</tbody>
             </table>
@@ -108,7 +113,7 @@ export default async function MarketingMetricsPage() {
             <details className={adminStyles.formPanel} key={metric.id}>
               <summary>Edit · {formatJamaicaDate(metric.weekStarting)} · {metric.campaign?.name ?? "Blended"}</summary>
               <MetricForm campaigns={campaigns} metric={metric} />
-              <form action={deleteMarketingMetricAction} className={styles.actionForm}><input name="id" type="hidden" value={metric.id} /><button className={adminStyles.dangerButton} type="submit">Delete metric entry</button></form>
+              <form action={deleteMarketingMetricAction} className={styles.actionForm}><input name="id" type="hidden" value={metric.id} /><button className={adminStyles.dangerButton} type="submit">Request deletion</button></form>
             </details>
           ))}
         </div>
